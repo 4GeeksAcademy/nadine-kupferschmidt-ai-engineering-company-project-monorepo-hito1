@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="es" data-lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brasaland — El sabor de la brasa, en cada bocado</title>
+  <meta name="description" content="Cadena de restaurantes de comida a la brasa en Colombia y Estados Unidos. 14 ubicaciones, una misma pasión por la calidad y el sabor.">
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              ivory: '#FDF8F0',
+              beige: '#F5EDE0',
+              cream: '#F0E8D8',
+              charcoal: '#2A2A2A',
+              darkbrown: '#1A1410',
+              earth: '#8B7355',
+              ochre: '#C9A96E',
+              gold: '#B8860B',
+              warmgray: '#6B6258',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            serif: ['Playfair Display', 'Georgia', 'serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts: Inter + Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <!-- Inline minimal styles -->
+  <style>
+    html { scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    ::selection { background-color: #C9A96E; color: #1A1410; }
+    :focus-visible { outline: 2px solid #C9A96E; outline-offset: 2px; }
+    #mobile-menu { transition: opacity 0.3s ease, max-height 0.3s ease; }
+    img { transition: opacity 0.5s ease; }
+  </style>
+
+  <!-- Schema.org markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": "Brasaland",
+    "description": "Cadena de restaurantes de comida a la brasa en Colombia y Estados Unidos",
+    "url": "https://brasaland.com",
+    "foundingDate": "2008",
+    "servesCuisine": "Grilled food, Colombian cuisine",
+    "priceRange": "$$",
+    "address": [
+      {
+        "@type": "PostalAddress",
+        "addressCountry": "CO",
+        "addressLocality": "Medellín",
+        "addressRegion": "Antioquia"
+      },
+      {
+        "@type": "PostalAddress",
+        "addressCountry": "US",
+        "addressLocality": "Miami",
+        "addressRegion": "FL"
+      }
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+57-4-123-4567",
+      "contactType": "customer service",
+      "availableLanguage": ["Spanish", "English"]
+    },
+    "sameAs": [
+      "https://instagram.com/brasaland",
+      "https://facebook.com/brasaland"
+    ]
+  }
+  </script>
+</head>
+<body class="bg-brand-ivory text-brand-charcoal font-sans antialiased">
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-brand-darkbrown/95 backdrop-blur-sm border-b border-white/10" role="banner">
+    <nav class="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-16 lg:h-20" aria-label="Navegación principal">
+      <!-- Logo -->
+      <a href="#" class="text-brand-ochre font-serif text-2xl lg:text-3xl font-semibold tracking-wide" aria-label="Brasaland - Inicio">
+        Brasaland
+      </a>
+
+      <!-- Desktop Navigation -->
+      <ul class="hidden lg:flex items-center gap-10 text-sm font-medium uppercase tracking-[0.15em] text-brand-ivory/80">
+        <li><a href="#" class="hover:text-brand-ochre transition-colors duration-300" data-i18n="nav.home">Inicio</a></li>
+        <li><a href="#ubicaciones" class="hover:text-brand-ochre transition-colors duration-300" data-i18n="nav.locations">Ubicaciones</a></li>
+        <li><a href="#" class="hover:text-brand-ochre transition-colors duration-300" data-i18n="nav.menu">Menú</a></li>
+        <li><a href="#brasa-points" class="hover:text-brand-ochre transition-colors duration-300" data-i18n="nav.brasaPoints">Brasa Points</a></li>
+        <li><a href="#contacto" class="hover:text-brand-ochre transition-colors duration-300" data-i18n="nav.contact">Contacto</a></li>
+      </ul>
+
+      <!-- Language Selector + CTA -->
+      <div class="flex items-center gap-4">
+        <div class="flex items-center text-xs font-medium uppercase tracking-wider" role="radiogroup" aria-label="Selector de idioma">
+          <button id="lang-es" class="px-2 py-1 text-brand-ochre border border-brand-ochre rounded-l" aria-pressed="true" data-lang="es" role="radio" aria-checked="true">ES</button>
+          <button id="lang-en" class="px-2 py-1 text-brand-ivory/60 border border-brand-ivory/20 rounded-r hover:text-brand-ochre hover:border-brand-ochre transition-colors duration-300" aria-pressed="false" data-lang="en" role="radio" aria-checked="false">EN</button>
+        </div>
+
+        <!-- Mobile menu button -->
+        <button id="menu-toggle" class="lg:hidden text-brand-ivory/80 hover:text-brand-ochre transition-colors duration-300" aria-label="Abrir menú de navegación" aria-expanded="false">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+
+        <!-- Desktop CTA -->
+        <a href="application.html" class="hidden lg:inline-flex items-center px-5 py-2.5 bg-brand-ochre text-brand-darkbrown text-sm font-semibold uppercase tracking-wider hover:bg-brand-ochre/90 transition-all duration-300" data-i18n="nav.cta">
+          Únete a Brasa Points
+        </a>
+      </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="lg:hidden hidden bg-brand-darkbrown border-t border-white/10" role="navigation" aria-label="Menú móvil">
+      <ul class="px-6 py-6 space-y-5 text-sm font-medium uppercase tracking-[0.15em] text-brand-ivory/80">
+        <li><a href="#" class="block hover:text-brand-ochre transition-colors duration-300" data-i18n="nav.home">Inicio</a></li>
+        <li><a href="#ubicaciones" class="block hover:text-brand-ochre transition-colors duration-300" data-i18n="nav.locations">Ubicaciones</a></li>
+        <li><a href="#" class="block hover:text-brand-ochre transition-colors duration-300" data-i18n="nav.menu">Menú</a></li>
+        <li><a href="#brasa-points" class="block hover:text-brand-ochre transition-colors duration-300" data-i18n="nav.brasaPoints">Brasa Points</a></li>
+        <li><a href="#contacto" class="block hover:text-brand-ochre transition-colors duration-300" data-i18n="nav.contact">Contacto</a></li>
+        <li class="pt-4">
+          <a href="application.html" class="inline-block px-5 py-2.5 bg-brand-ochre text-brand-darkbrown text-sm font-semibold uppercase tracking-wider hover:bg-brand-ochre/90 transition-all duration-300" data-i18n="nav.cta">
+            Únete a Brasa Points
+          </a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ==================== HERO ==================== -->
+    <section class="relative min-h-screen flex items-center bg-brand-darkbrown overflow-hidden" aria-label="Hero principal">
+      <!-- Background image overlay -->
+      <div class="absolute inset-0">
+        <picture>
+          <source srcset="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1920&q=80" media="(min-width: 1024px)">
+          <source srcset="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1024&q=80" media="(min-width: 640px)">
+          <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=640&q=80" alt="Carnes a la brasa en parrilla con llamas y humo, ambiente cálido de restaurante" class="w-full h-full object-cover opacity-50">
+        </picture>
+        <div class="absolute inset-0 bg-gradient-to-b from-brand-darkbrown/70 via-brand-darkbrown/50 to-brand-darkbrown/80"></div>
+      </div>
+
+      <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-32 lg:py-40">
+        <div class="max-w-3xl">
+          <p class="text-brand-ochre text-sm lg:text-base font-medium uppercase tracking-[0.25em] mb-6" data-i18n="hero.since">Desde 2008</p>
+          <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-bold text-brand-ivory leading-tight mb-8">
+            <span data-i18n="hero.title">El sabor de la brasa,</span><br>
+            <span class="text-brand-ochre italic font-normal" data-i18n="hero.title2">en cada bocado</span>
+          </h1>
+          <p class="text-brand-ivory/80 text-base sm:text-lg md:text-xl leading-relaxed max-w-2xl mb-10 font-light" data-i18n="hero.subtitle">
+            Desde 2008 sirviendo las mejores carnes a la brasa en Colombia y Estados Unidos. 14 ubicaciones, una misma pasión por la calidad y el sabor.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="application.html" class="inline-flex items-center justify-center px-8 py-4 bg-brand-ochre text-brand-darkbrown font-semibold uppercase tracking-[0.15em] text-sm hover:bg-brand-ochre/90 transition-all duration-300" data-i18n="hero.cta">
+              Únete a Brasa Points
+            </a>
+            <a href="#historia" class="inline-flex items-center justify-center px-8 py-4 border border-brand-ivory/30 text-brand-ivory font-medium uppercase tracking-[0.15em] text-sm hover:bg-brand-ivory/10 transition-all duration-300" data-i18n="hero.learnMore">
+              Conoce más
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
+        <div class="w-6 h-10 border-2 border-brand-ivory/30 rounded-full flex justify-center">
+          <div class="w-1 h-3 bg-brand-ochre/60 rounded-full mt-2 animate-pulse"></div>
+        </div>
+        <span class="sr-only">Scroll para ver más contenido</span>
+      </div>
+    </section>
+
+    <!-- ==================== NUESTRA HISTORIA ==================== -->
+    <section id="historia" class="py-20 lg:py-32 bg-brand-ivory" aria-label="Nuestra Historia">
+      <div class="max-w-7xl mx-auto px-6 lg:px-12">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <!-- Image -->
+          <div class="relative aspect-[4/5] overflow-hidden order-1 lg:order-2">
+            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80" alt="Plato de carnes a la brasa con vegetales asados, presentación elegante" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-brand-darkbrown/10"></div>
+          </div>
+          <!-- Text -->
+          <div class="order-2 lg:order-1">
+            <p class="text-brand-ochre text-sm font-medium uppercase tracking-[0.25em] mb-4" data-i18n="history.label">Nuestra Historia</p>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-brand-charcoal mb-8">
+              <span data-i18n="history.heading">El origen</span><br>
+              <span class="text-brand-ochre italic font-normal" data-i18n="history.heading2">de Brasaland</span>
+            </h2>
+            <div class="w-12 h-0.5 bg-brand-ochre mb-8"></div>
+            <p class="text-brand-warmgray text-base lg:text-lg leading-relaxed font-light" data-i18n="history.text">
+              Fundada en Medellín en 2008, Brasaland comenzó como un sueño familiar: compartir el auténtico sabor de la carne a la brasa con calidad constante y servicio cálido. Hoy somos 14 restaurantes en dos países, pero mantenemos la misma receta de éxito: productos frescos, técnicas tradicionales, y pasión por cada plato que servimos.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== LO QUE NOS HACE ÚNICOS ==================== -->
+    <section class="py-20 lg:py-32 bg-brand-beige" aria-label="Lo que nos hace únicos">
+      <div class="max-w-7xl mx-auto px-6 lg:px-12">
+        <!-- Section header -->
+        <div class="text-center max-w-2xl mx-auto mb-16 lg:mb-20">
+          <p class="text-brand-ochre text-sm font-medium uppercase tracking-[0.25em] mb-4" data-i18n="unique.label">Nuestra Esencia</p>
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-brand-charcoal mb-6" data-i18n="unique.heading">
+            Lo que nos hace únicos
+          </h2>
+          <div class="w-12 h-0.5 bg-brand-ochre mx-auto"></div>
+        </div>
+
+        <!-- 3 columns -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+          <!-- Column 1: Calidad Consistente -->
+          <article class="bg-brand-ivory p-8 lg:p-10 border border-brand-ochre/10">
+            <div class="w-14 h-14 bg-brand-ochre/10 flex items-center justify-center mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-brand-ochre" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold uppercase tracking-[0.15em] text-brand-charcoal mb-5" data-i18n="unique.col1.title">Calidad Consistente</h3>
+            <ul class="space-y-3 text-brand-warmgray font-light leading-relaxed">
+              <li class="flex items-start gap-3">
+                <span class="text-brand-ochre mt-1.5 flex-shrink-0">—</span>
+                <span data-i18n="unique.col1.item1">Mismas recetas y estándares en todos los locales</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-brand-ochre mt-1.5 flex-shrink-0">—</span>
+                <span data-i18n="unique.col1.item2">Ingredientes frescos seleccionados diariamente</span>
+              </li>
+            </ul>
+          </article>
+
+          <!-- Column 2: Experiencia Cálida -->
+          <article class="bg-brand-ivory p-8 lg:p-10 border border-brand-ochre/10">
+            <div class="w-14 h-14 bg-brand-ochre/10 flex items-center justify-center mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-brand-ochre" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold uppercase tracking-[0.15em] text-brand-charcoal mb-5" data-i18n="unique.col2.title">Experiencia Cálida</h3>
+            <ul class="space-y-3 text-brand-warmgray font-light leading-relaxed">
+              <li class="flex items-start gap-3">
+                <span class="text-brand-ochre mt-1.5 flex-shrink-0">—</span>
+                <span data-i18n="unique.col2.item1">Servicio amable y atento</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-brand-ochre mt-1.5 flex-shrink-0">—</span>
+                <span data-i18n="unique.col2.item2">Ambiente familiar en cada visita</span>
+              </li>
+            </ul>
+          </article>
+
+          <!-- Column 3: Rapidez -->
+          <article class="bg-brand-ivory p-8 lg:p-10 border border-brand-ochre/10">
+            <div class="w-14 h-14 bg-brand-ochre/10 flex items-center justify-center mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-brand-ochre" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold uppercase tracking-[0.15em] text-brand-charcoal mb-5" data-i18n="unique.col3.title">Rapidez</h3>
+            <ul class="space-y-3 text-brand-warmgray font-light leading-relaxed">
+              <li class="flex items-start gap-3">
+                <span class="text-brand-ochre mt-1.5 flex-shrink-0">—</span>
+                <span data-i18n="unique.col3.item1">Tu comida lista en minutos</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-brand-ochre mt-1.5 flex-shrink-0">—</span>
+                <span data-i18n="unique.col3.item2">Sin sacrificar sabor ni calidad</span>
+              </li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== IMAGE BREAK ==================== -->
+    <section class="relative h-[50vh] lg:h-[60vh] overflow-hidden" aria-hidden="true">
+      <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=1920&q=80" alt="Parrilla con brasas y carne asándose, detalle del fuego" class="w-full h-full object-cover">
+      <div class="absolute inset-0 bg-brand-darkbrown/40"></div>
+    </section>
+
+    <!-- ==================== NUESTRAS UBICACIONES ==================== -->
+    <section id="ubicaciones" class="py-20 lg:py-32 bg-brand-ivory" aria-label="Nuestras Ubicaciones">
+      <div class="max-w-7xl mx-auto px-6 lg:px-12">
+        <!-- Section header -->
+        <div class="text-center max-w-2xl mx-auto mb-16 lg:mb-20">
+          <p class="text-brand-ochre text-sm font-medium uppercase tracking-[0.25em] mb-4" data-i18n="locations.label">Presencia Internacional</p>
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-brand-charcoal mb-6" data-i18n="locations.heading">
+            Nuestras Ubicaciones
+          </h2>
+          <div class="w-12 h-0.5 bg-brand-ochre mx-auto"></div>
+        </div>
+
+        <!-- 2 columns -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16">
+          <!-- Colombia -->
+          <article class="relative overflow-hidden bg-brand-darkbrown group">
+            <div class="aspect-[16/10] overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=800&q=80" alt="Vista de Medellín, Colombia, sede principal de Brasaland" class="w-full h-full object-cover opacity-60 group-hover:opacity-70 transition-opacity duration-700">
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-darkbrown/90 via-brand-darkbrown/40 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-8 lg:p-10">
+              <h3 class="text-2xl lg:text-3xl font-serif font-bold text-brand-ivory mb-4" data-i18n="locations.colombia.title">Colombia</h3>
+              <ul class="space-y-2 text-brand-ivory/80 text-sm lg:text-base font-light">
+                <li data-i18n="locations.colombia.count">10 restaurantes en Medellín, Bogotá y Cali</li>
+                <li><span class="text-brand-ochre font-medium uppercase tracking-wider text-xs">Horario:</span> <span data-i18n="locations.colombia.hours">Lun-Dom 11:00 - 22:00</span></li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Estados Unidos -->
+          <article class="relative overflow-hidden bg-brand-darkbrown group">
+            <div class="aspect-[16/10] overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1575881875475-3102326e9fa9?w=800&q=80" alt="Vista de Miami, Florida, sede de Brasaland en Estados Unidos" class="w-full h-full object-cover opacity-60 group-hover:opacity-70 transition-opacity duration-700">
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-darkbrown/90 via-brand-darkbrown/40 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-8 lg:p-10">
+              <h3 class="text-2xl lg:text-3xl font-serif font-bold text-brand-ivory mb-4" data-i18n="locations.usa.title">Estados Unidos (Florida)</h3>
+              <ul class="space-y-2 text-brand-ivory/80 text-sm lg:text-base font-light">
+                <li data-i18n="locations.usa.count">4 restaurantes en Miami y Orlando</li>
+                <li><span class="text-brand-ochre font-medium uppercase tracking-wider text-xs">Horario:</span> <span data-i18n="locations.usa.hours">Mon-Sun 11:00 AM - 10:00 PM</span></li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== BRASA POINTS (sección destacada) ==================== -->
+    <section id="brasa-points" class="relative py-20 lg:py-32 bg-brand-darkbrown overflow-hidden" aria-label="Brasa Points">
+      <!-- Background image -->
+      <div class="absolute inset-0">
+        <img src="https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=1920&q=80" alt="Fuego y brasas incandescentes, ambiente cálido" class="w-full h-full object-cover opacity-20">
+        <div class="absolute inset-0 bg-gradient-to-r from-brand-darkbrown via-brand-darkbrown/90 to-brand-darkbrown"></div>
+      </div>
+
+      <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+          <!-- Left: headings + benefits -->
+          <div>
+            <p class="text-brand-ochre text-sm font-medium uppercase tracking-[0.25em] mb-4" data-i18n="points.label">Programa de Fidelización</p>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-brand-ivory mb-4">
+              <span data-i18n="points.heading1">Brasa</span>
+              <span class="text-brand-ochre italic font-normal" data-i18n="points.heading2">Points</span>
+            </h2>
+            <div class="w-12 h-0.5 bg-brand-ochre mb-8"></div>
+            <ul class="space-y-5 text-brand-ivory/85 font-light leading-relaxed">
+              <li class="flex items-start gap-4">
+                <span class="text-brand-ochre mt-1 flex-shrink-0">✦</span>
+                <span data-i18n="points.item1">Gana puntos con cada visita</span>
+              </li>
+              <li class="flex items-start gap-4">
+                <span class="text-brand-ochre mt-1 flex-shrink-0">✦</span>
+                <span data-i18n="points.item2">Acumula 1 punto por cada $10.000 COP o $5 USD</span>
+              </li>
+              <li class="flex items-start gap-4">
+                <span class="text-brand-ochre mt-1 flex-shrink-0">✦</span>
+                <span data-i18n="points.item3">Canjea tus puntos por descuentos y platos gratis</span>
+              </li>
+              <li class="flex items-start gap-4">
+                <span class="text-brand-ochre mt-1 flex-shrink-0">✦</span>
+                <span data-i18n="points.item4">Ofertas exclusivas para miembros</span>
+              </li>
+              <li class="flex items-start gap-4">
+                <span class="text-brand-ochre mt-1 flex-shrink-0">✦</span>
+                <span data-i18n="points.item5">Registro 100% digital - ¡ya no más tarjetas de papel!</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Right: decorative card (compact) + CTA -->
+          <div class="flex flex-col items-center">
+            <div class="bg-brand-ochre/5 border border-brand-ochre/20 p-6 lg:p-8 w-full max-w-sm">
+              <div class="text-center">
+                <div class="text-4xl font-serif font-bold text-brand-ochre mb-3">✦</div>
+                <p class="text-brand-ivory/60 text-xs uppercase tracking-[0.2em] font-medium" data-i18n="points.decorative">Fuego. Sabor. Recompensa.</p>
+              </div>
+            </div>
+            <div class="mt-8 w-full max-w-sm">
+              <a href="application.html" class="flex items-center justify-center px-8 py-4 w-full bg-brand-ochre text-brand-darkbrown font-semibold uppercase tracking-[0.15em] text-sm hover:bg-brand-ochre/90 transition-all duration-300" data-i18n="points.cta">
+                Únete a Brasa Points
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order message (discreet note below the section) -->
+        <div class="mt-12 text-center">
+          <p class="text-brand-ivory/40 text-xs lg:text-sm font-light max-w-xl mx-auto leading-relaxed" data-i18n="points.orderNote">
+            ¿Quieres hacer un pedido? Llama a tu ubicación favorita o visítanos directamente. ¡Pronto tendremos pedidos en línea!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== IMAGE BREAK 2 ==================== -->
+    <section class="relative h-[40vh] lg:h-[50vh] overflow-hidden" aria-hidden="true">
+      <img src="https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=1920&q=80" alt="Detalle de carne a la brasa siendo preparada con especias" class="w-full h-full object-cover">
+      <div class="absolute inset-0 bg-brand-darkbrown/30"></div>
+    </section>
+
+    <!-- ==================== CONTACTO ==================== -->
+    <section id="contacto" class="py-20 lg:py-32 bg-brand-beige" aria-label="Contacto">
+      <div class="max-w-4xl mx-auto px-6 lg:px-12">
+        <div class="text-center">
+          <p class="text-brand-ochre text-sm font-medium uppercase tracking-[0.25em] mb-4" data-i18n="contact.label">Contacto</p>
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-brand-charcoal mb-10">
+            <span data-i18n="contact.heading">Hablemos</span>
+          </h2>
+          <div class="w-12 h-0.5 bg-brand-ochre mx-auto mb-14"></div>
+
+          <div class="flex flex-col md:flex-row justify-center gap-10 md:gap-16 lg:gap-20">
+            <!-- Email -->
+            <div>
+              <p class="text-brand-ochre text-xs font-semibold uppercase tracking-[0.2em] mb-2" data-i18n="contact.emailLabel">Email</p>
+              <a href="mailto:hola@brasaland.com" class="text-brand-charcoal text-lg lg:text-xl font-light hover:text-brand-ochre transition-colors duration-300">hola@brasaland.com</a>
+            </div>
+            <!-- Colombia -->
+            <div>
+              <p class="text-brand-ochre text-xs font-semibold uppercase tracking-[0.2em] mb-2" data-i18n="contact.colombiaLabel">Colombia</p>
+              <a href="tel:+5741234567" class="text-brand-charcoal text-lg lg:text-xl font-light hover:text-brand-ochre transition-colors duration-300">+57 4 123 4567</a>
+            </div>
+            <!-- Florida -->
+            <div>
+              <p class="text-brand-ochre text-xs font-semibold uppercase tracking-[0.2em] mb-2" data-i18n="contact.floridaLabel">Florida</p>
+              <a href="tel:+13051234567" class="text-brand-charcoal text-lg lg:text-xl font-light hover:text-brand-ochre transition-colors duration-300">+1 305 123 4567</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-brand-darkbrown border-t border-white/5 py-14 lg:py-18" role="contentinfo">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 items-start">
+        <!-- Logo + description -->
+        <div>
+          <a href="#" class="text-brand-ochre font-serif text-2xl font-semibold tracking-wide">Brasaland</a>
+          <p class="text-brand-ivory/50 text-sm italic mt-4 max-w-xs" data-i18n="footer.tagline">
+            El sabor de la brasa,<br>
+            en cada bocado.<br>
+            Desde 2008.
+          </p>
+        </div>
+
+        <!-- Quick links -->
+        <div>
+          <p class="text-brand-ochre text-xs font-semibold uppercase tracking-[0.2em] mb-5" data-i18n="footer.linksTitle">Enlaces</p>
+          <ul class="space-y-3 text-sm text-brand-ivory/60 font-light">
+            <li><a href="#" class="hover:text-brand-ochre transition-colors duration-300" data-i18n="nav.home">Inicio</a></li>
+            <li><a href="#ubicaciones" class="hover:text-brand-ochre transition-colors duration-300" data-i18n="nav.locations">Ubicaciones</a></li>
+            <li><a href="#brasa-points" class="hover:text-brand-ochre transition-colors duration-300" data-i18n="nav.brasaPoints">Brasa Points</a></li>
+            <li><a href="#contacto" class="hover:text-brand-ochre transition-colors duration-300" data-i18n="nav.contact">Contacto</a></li>
+            <li><a href="application.html" class="hover:text-brand-ochre transition-colors duration-300" data-i18n="nav.cta">Únete a Brasa Points</a></li>
+          </ul>
+        </div>
+
+        <!-- Social + Copyright -->
+        <div>
+          <p class="text-brand-ochre text-xs font-semibold uppercase tracking-[0.2em] mb-5" data-i18n="footer.socialTitle">Síguenos</p>
+          <div class="flex flex-wrap gap-5">
+            <a href="https://instagram.com/brasaland" target="_blank" rel="noopener noreferrer" class="text-brand-ivory/60 hover:text-brand-ochre transition-colors duration-300 text-sm font-medium uppercase tracking-wider" aria-label="Instagram de Brasaland">
+              Instagram
+            </a>
+            <a href="https://facebook.com/brasaland" target="_blank" rel="noopener noreferrer" class="text-brand-ivory/60 hover:text-brand-ochre transition-colors duration-300 text-sm font-medium uppercase tracking-wider" aria-label="Facebook de Brasaland">
+              Facebook
+            </a>
+          </div>
+          <div class="mt-16 pt-6 border-t border-white/5">
+            <p class="text-brand-ivory/40 text-xs font-light" data-i18n="footer.copyright">
+              &copy; 2025 Brasaland. Todos los derechos reservados.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== INLINE JAVASCRIPT ==================== -->
+  <script>
+    /* =============================================================
+       Brasaland — i18n Translations
+       Base language: Spanish | Secondary: English
+       ============================================================= */
+
+    const translations = {
+      es: {
+        'nav.home': 'Inicio',
+        'nav.locations': 'Ubicaciones',
+        'nav.menu': 'Menú',
+        'nav.brasaPoints': 'Brasa Points',
+        'nav.contact': 'Contacto',
+        'nav.cta': 'Únete a Brasa Points',
+        'hero.since': 'Desde 2008',
+        'hero.title': 'El sabor de la brasa,',
+        'hero.title2': 'en cada bocado',
+        'hero.subtitle': 'Desde 2008 sirviendo las mejores carnes a la brasa en Colombia y Estados Unidos. 14 ubicaciones, una misma pasión por la calidad y el sabor.',
+        'hero.cta': 'Únete a Brasa Points',
+        'hero.learnMore': 'Conoce más',
+        'history.label': 'Nuestra Historia',
+        'history.heading': 'El origen',
+        'history.heading2': 'de Brasaland',
+        'history.text': 'Fundada en Medellín en 2008, Brasaland comenzó como un sueño familiar: compartir el auténtico sabor de la carne a la brasa con calidad constante y servicio cálido. Hoy somos 14 restaurantes en dos países, pero mantenemos la misma receta de éxito: productos frescos, técnicas tradicionales, y pasión por cada plato que servimos.',
+        'unique.label': 'Nuestra Esencia',
+        'unique.heading': 'Lo que nos hace únicos',
+        'unique.col1.title': 'Calidad Consistente',
+        'unique.col1.item1': 'Mismas recetas y estándares en todos los locales',
+        'unique.col1.item2': 'Ingredientes frescos seleccionados diariamente',
+        'unique.col2.title': 'Experiencia Cálida',
+        'unique.col2.item1': 'Servicio amable y atento',
+        'unique.col2.item2': 'Ambiente familiar en cada visita',
+        'unique.col3.title': 'Rapidez',
+        'unique.col3.item1': 'Tu comida lista en minutos',
+        'unique.col3.item2': 'Sin sacrificar sabor ni calidad',
+        'locations.label': 'Presencia Internacional',
+        'locations.heading': 'Nuestras Ubicaciones',
+        'locations.colombia.title': 'Colombia',
+        'locations.colombia.count': '10 restaurantes en Medellín, Bogotá y Cali',
+        'locations.colombia.hours': 'Lun-Dom 11:00 - 22:00',
+        'locations.usa.title': 'Estados Unidos (Florida)',
+        'locations.usa.count': '4 restaurantes en Miami y Orlando',
+        'locations.usa.hours': 'Mon-Sun 11:00 AM - 10:00 PM',
+        'points.label': 'Programa de Fidelización',
+        'points.heading1': 'Brasa',
+        'points.heading2': 'Points',
+        'points.item1': 'Gana puntos con cada visita',
+        'points.item2': 'Acumula 1 punto por cada $10.000 COP o $5 USD',
+        'points.item3': 'Canjea tus puntos por descuentos y platos gratis',
+        'points.item4': 'Ofertas exclusivas para miembros',
+        'points.item5': 'Registro 100% digital - ¡ya no más tarjetas de papel!',
+        'points.cta': 'Únete a Brasa Points',
+        'points.decorative': 'Fuego. Sabor. Recompensa.',
+        'contact.label': 'Contacto',
+        'contact.heading': 'Hablemos',
+        'contact.emailLabel': 'Email',
+        'contact.colombiaLabel': 'Colombia',
+        'contact.floridaLabel': 'Florida',
+        'points.orderNote': '¿Quieres hacer un pedido? Llama a tu ubicación favorita o visítanos directamente. ¡Pronto tendremos pedidos en línea!',
+        'footer.tagline': 'El sabor de la brasa,<br>en cada bocado.<br>Desde 2008.',
+        'footer.linksTitle': 'Enlaces',
+        'footer.socialTitle': 'Síguenos',
+        'footer.copyright': '&copy; 2025 Brasaland. Todos los derechos reservados.',
+      },
+      en: {
+        'nav.home': 'Home',
+        'nav.locations': 'Locations',
+        'nav.menu': 'Menu',
+        'nav.brasaPoints': 'Brasa Points',
+        'nav.contact': 'Contact',
+        'nav.cta': 'Join Brasa Points',
+        'hero.since': 'Since 2008',
+        'hero.title': 'The taste of the grill,',
+        'hero.title2': 'in every bite',
+        'hero.subtitle': 'Since 2008 serving the best grilled meats in Colombia and the United States. 14 locations, one passion for quality and flavor.',
+        'hero.cta': 'Join Brasa Points',
+        'hero.learnMore': 'Learn more',
+        'history.label': 'Our Story',
+        'history.heading': 'The origin',
+        'history.heading2': 'of Brasaland',
+        'history.text': 'Founded in Medellín in 2008, Brasaland began as a family dream: sharing the authentic taste of grilled meat with consistent quality and warm service. Today we are 14 restaurants in two countries, but we keep the same recipe for success: fresh products, traditional techniques, and passion for every dish we serve.',
+        'unique.label': 'Our Essence',
+        'unique.heading': 'What makes us unique',
+        'unique.col1.title': 'Consistent Quality',
+        'unique.col1.item1': 'Same recipes and standards across all locations',
+        'unique.col1.item2': 'Fresh ingredients selected daily',
+        'unique.col2.title': 'Warm Experience',
+        'unique.col2.item1': 'Friendly and attentive service',
+        'unique.col2.item2': 'Family atmosphere every visit',
+        'unique.col3.title': 'Speed',
+        'unique.col3.item1': 'Your meal ready in minutes',
+        'unique.col3.item2': 'Without sacrificing flavor or quality',
+        'locations.label': 'International Presence',
+        'locations.heading': 'Our Locations',
+        'locations.colombia.title': 'Colombia',
+        'locations.colombia.count': '10 restaurants in Medellín, Bogotá and Cali',
+        'locations.colombia.hours': 'Mon-Sun 11:00 - 22:00',
+        'locations.usa.title': 'United States (Florida)',
+        'locations.usa.count': '4 restaurants in Miami and Orlando',
+        'locations.usa.hours': 'Mon-Sun 11:00 AM - 10:00 PM',
+        'points.label': 'Loyalty Program',
+        'points.heading1': 'Brasa',
+        'points.heading2': 'Points',
+        'points.item1': 'Earn points with every visit',
+        'points.item2': 'Accumulate 1 point per $10,000 COP or $5 USD',
+        'points.item3': 'Redeem your points for discounts and free dishes',
+        'points.item4': 'Exclusive member offers',
+        'points.item5': '100% digital registration - no more paper cards!',
+        'points.cta': 'Join Brasa Points',
+        'points.decorative': 'Fire. Flavor. Reward.',
+        'contact.label': 'Contact',
+        'contact.heading': "Let's talk",
+        'contact.emailLabel': 'Email',
+        'contact.colombiaLabel': 'Colombia',
+        'contact.floridaLabel': 'Florida',
+        'points.orderNote': 'Want to place an order? Call your favorite location or visit us directly. Online ordering coming soon!',
+        'footer.tagline': 'The taste of the grill,<br>in every bite.<br>Since 2008.',
+        'footer.linksTitle': 'Links',
+        'footer.socialTitle': 'Follow us',
+        'footer.copyright': '&copy; 2025 Brasaland. All rights reserved.',
+      }
+    };
+
+    let currentLang = 'es';
+
+    function applyLanguage(lang) {
+      const elements = document.querySelectorAll('[data-i18n]');
+      elements.forEach(el => {
+        const key = el.dataset.i18n;
+        if (translations[lang] && translations[lang][key]) {
+          el.innerHTML = translations[lang][key];
+        }
+      });
+
+      document.documentElement.lang = lang;
+      document.documentElement.dataset.lang = lang;
+
+      document.querySelectorAll('[data-lang]').forEach(btn => {
+        const btnLang = btn.dataset.lang;
+        if (btnLang === lang) {
+          btn.classList.remove('text-brand-ivory/60', 'border-brand-ivory/20');
+          btn.classList.add('text-brand-ochre', 'border-brand-ochre');
+          btn.setAttribute('aria-pressed', 'true');
+          btn.setAttribute('aria-checked', 'true');
+        } else {
+          btn.classList.remove('text-brand-ochre', 'border-brand-ochre');
+          btn.classList.add('text-brand-ivory/60', 'border-brand-ivory/20');
+          btn.setAttribute('aria-pressed', 'false');
+          btn.setAttribute('aria-checked', 'false');
+        }
+      });
+
+      currentLang = lang;
+    }
+
+    function toggleLanguage() {
+      const newLang = currentLang === 'es' ? 'en' : 'es';
+      applyLanguage(newLang);
+    }
+
+    /* =============================================================
+       Brasaland — Main JavaScript (mobile menu, smooth scroll)
+       ============================================================= */
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize language
+      applyLanguage('es');
+
+      // Language toggle
+      document.querySelectorAll('[data-lang]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const lang = btn.dataset.lang;
+          if (lang !== currentLang) {
+            toggleLanguage();
+          }
+        });
+      });
+
+      // Mobile menu toggle
+      const menuToggle = document.getElementById('menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+
+      if (menuToggle && mobileMenu) {
+        menuToggle.addEventListener('click', () => {
+          const isOpen = mobileMenu.classList.toggle('hidden');
+          menuToggle.setAttribute('aria-expanded', !isOpen);
+          menuToggle.setAttribute('aria-label', isOpen ? 'Abrir menú de navegación' : 'Cerrar menú de navegación');
+        });
+
+        mobileMenu.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            menuToggle.setAttribute('aria-expanded', 'false');
+            menuToggle.setAttribute('aria-label', 'Abrir menú de navegación');
+          });
+        });
+      }
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          const targetId = this.getAttribute('href');
+          if (targetId === '#') return;
+          const target = document.querySelector(targetId);
+          if (target) {
+            e.preventDefault();
+            const headerOffset = 80;
+            const elementPosition = target.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>

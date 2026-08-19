@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es" data-lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Únete a Brasa Points — Brasaland</title>
+  <meta name="description" content="Regístrate en el programa de fidelización Brasa Points y empieza a acumular puntos con cada visita a Brasaland.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              ivory: '#F5F0EB',
+              beige: '#EDE5DC',
+              cream: '#E8DDD2',
+              charcoal: '#2C2724',
+              darkbrown: '#1C1816',
+              earth: '#6B5A4E',
+              ochre: '#C6974A',
+              gold: '#B8863C',
+              warmgray: '#8C8279',
+            },
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            serif: ['Playfair Display', 'Georgia', 'serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Restaurant",
+      "name": "Brasaland",
+      "description": "Cadena de restaurantes de comida a la brasa en Colombia y Estados Unidos",
+      "url": "https://brasaland.com",
+      "foundingDate": "2008",
+      "servesCuisine": "Grilled food, Colombian cuisine",
+      "priceRange": "$$",
+      "address": [
+        { "@type": "PostalAddress", "addressCountry": "CO", "addressLocality": "Medellín", "addressRegion": "Antioquia" },
+        { "@type": "PostalAddress", "addressCountry": "US", "addressLocality": "Miami", "addressRegion": "FL" }
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+57-4-123-4567",
+        "contactType": "customer service",
+        "availableLanguage": ["Spanish", "English"]
+      },
+      "sameAs": [
+        "https://instagram.com/brasaland",
+        "https://facebook.com/brasaland"
+      ]
+    }
+  </script>
+  <style>
+    body { background-color: #F5F0EB; font-family: 'Inter', system-ui, sans-serif; }
+    .error-message { color: #B33A3A; font-size: 0.75rem; line-height: 1.25; margin-top: 0.25rem; display: none; }
+    .field-error input, .field-error select { border-color: #B33A3A; }
+    .field-error .error-message { display: block; }
+    .field-success input, .field-success select { border-color: #2E7D32; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid #C6974A; outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-brand-ochre focus:text-brand-darkbrown focus:rounded focus:font-medium">Saltar al contenido principal</a>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="bg-brand-darkbrown border-b border-white/5" role="banner">
+    <div class="max-w-5xl mx-auto px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 lg:h-20">
+        <!-- Logo -->
+        <a href="index.html" class="text-brand-ochre font-serif text-xl lg:text-2xl font-semibold tracking-wide" data-i18n="brand">Brasaland</a>
+
+        <!-- Language selector + back link -->
+        <div class="flex items-center gap-4">
+          <div class="flex border border-brand-ochre/30 rounded" role="radiogroup" aria-label="Seleccionar idioma">
+            <button data-lang="es" aria-pressed="true" aria-checked="true" class="px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-brand-ochre border-brand-ochre bg-brand-ochre/10 transition-all duration-300" onclick="toggleLanguage()">ES</button>
+            <button data-lang="en" aria-pressed="false" aria-checked="false" class="px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-brand-ivory/60 border-l border-brand-ochre/30 bg-transparent transition-all duration-300" onclick="toggleLanguage()">EN</button>
+          </div>
+          <a href="index.html" class="text-brand-ivory/50 hover:text-brand-ochre text-xs uppercase tracking-wider font-medium transition-colors duration-300 hidden sm:inline-block" data-i18n="back">← Volver al inicio</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN ==================== -->
+  <main id="main-content" class="flex-1" role="main">
+    <!-- Hero section -->
+    <section class="relative bg-brand-darkbrown overflow-hidden">
+      <div class="absolute inset-0">
+        <img src="https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=1920&q=80" alt="" class="w-full h-full object-cover opacity-10" aria-hidden="true">
+        <div class="absolute inset-0 bg-gradient-to-b from-brand-darkbrown via-brand-darkbrown/90 to-brand-darkbrown"></div>
+      </div>
+      <div class="relative z-10 max-w-3xl mx-auto px-6 py-20 lg:py-28 text-center">
+        <p class="text-brand-ochre text-sm font-medium uppercase tracking-[0.25em] mb-4" data-i18n="page.label">Programa de Fidelización</p>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-brand-ivory mb-6">
+          <span data-i18n="page.title1">Brasa</span>
+          <span class="text-brand-ochre italic font-normal" data-i18n="page.title2">Points</span>
+        </h1>
+        <p class="text-brand-ivory/60 text-base lg:text-lg font-light max-w-xl mx-auto leading-relaxed" data-i18n="page.subtitle">
+          Regístrate y empieza a acumular puntos con cada visita. Canjea por descuentos y platos gratis en cualquiera de nuestras 14 ubicaciones.
+        </p>
+      </div>
+    </section>
+
+    <!-- Order notice -->
+    <div class="bg-brand-beige border-b border-brand-ochre/10">
+      <div class="max-w-3xl mx-auto px-6 py-4 text-center">
+        <p class="text-brand-charcoal/60 text-xs sm:text-sm font-light" data-i18n="orderNotice">
+          ¿Quieres hacer un pedido? Llama a tu ubicación favorita o visítanos directamente. ¡Pronto tendremos pedidos en línea!
+        </p>
+      </div>
+    </div>
+
+    <!-- Form section -->
+    <section class="py-16 lg:py-24" aria-label="Formulario de registro Brasa Points">
+      <div class="max-w-2xl mx-auto px-6 lg:px-8">
+        <form id="brasaForm" class="space-y-10" novalidate aria-label="Formulario de registro">
+
+          <!-- ======= DATOS PERSONALES ======= -->
+          <fieldset>
+            <legend class="text-lg lg:text-xl font-serif font-semibold text-brand-charcoal mb-6 pb-3 border-b border-brand-ochre/30" data-i18n="section.personal">Datos personales</legend>
+
+            <!-- Nombre completo -->
+            <div class="mb-6">
+              <label for="fullName" class="block text-sm font-medium text-brand-charcoal mb-1.5">
+                <span data-i18n="field.name">Nombre completo</span>
+                <span class="text-brand-ochre" aria-hidden="true">*</span>
+              </label>
+              <input type="text" id="fullName" name="fullName" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal placeholder:text-brand-warmgray/50 text-sm focus:border-brand-ochre transition-colors duration-200" placeholder="Ej: Juan Pérez" required aria-describedby="fullName-error" autocomplete="name">
+              <div id="fullName-error" class="error-message" role="alert" aria-live="polite">Ingresa tu nombre completo (nombre y apellido)</div>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-6">
+              <label for="email" class="block text-sm font-medium text-brand-charcoal mb-1.5">
+                <span data-i18n="field.email">Email</span>
+                <span class="text-brand-ochre" aria-hidden="true">*</span>
+              </label>
+              <input type="email" id="email" name="email" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal placeholder:text-brand-warmgray/50 text-sm focus:border-brand-ochre transition-colors duration-200" placeholder="Ej: nombre@correo.com" required aria-describedby="email-error" autocomplete="email">
+              <div id="email-error" class="error-message" role="alert" aria-live="polite">Ingresa un email válido (ejemplo: nombre@correo.com)</div>
+            </div>
+
+            <!-- Teléfono -->
+            <div class="mb-6">
+              <label for="phone" class="block text-sm font-medium text-brand-charcoal mb-1.5">
+                <span data-i18n="field.phone">Teléfono</span>
+                <span class="text-brand-ochre" aria-hidden="true">*</span>
+              </label>
+              <input type="tel" id="phone" name="phone" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal placeholder:text-brand-warmgray/50 text-sm focus:border-brand-ochre transition-colors duration-200" placeholder="Ej: +57 300 123 4567" required aria-describedby="phone-error" autocomplete="tel">
+              <div id="phone-error" class="error-message" role="alert" aria-live="polite">El teléfono debe incluir código de país (ejemplo: +57 300 123 4567 o +1 305 123 4567)</div>
+            </div>
+
+            <!-- Fecha de nacimiento -->
+            <div class="mb-6">
+              <label for="birthdate" class="block text-sm font-medium text-brand-charcoal mb-1.5">
+                <span data-i18n="field.birthdate">Fecha de nacimiento</span>
+                <span class="text-brand-ochre" aria-hidden="true">*</span>
+              </label>
+              <input type="date" id="birthdate" name="birthdate" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal text-sm focus:border-brand-ochre transition-colors duration-200" required aria-describedby="birthdate-error" autocomplete="bday">
+              <div id="birthdate-error" class="error-message" role="alert" aria-live="polite">Debes ser mayor de 18 años para registrarte en Brasa Points</div>
+            </div>
+          </fieldset>
+
+          <!-- ======= UBICACIÓN ======= -->
+          <fieldset>
+            <legend class="text-lg lg:text-xl font-serif font-semibold text-brand-charcoal mb-6 pb-3 border-b border-brand-ochre/30" data-i18n="section.location">Ubicación</legend>
+
+            <!-- País -->
+            <div class="mb-6">
+              <label for="country" class="block text-sm font-medium text-brand-charcoal mb-1.5">
+                <span data-i18n="field.country">País</span>
+                <span class="text-brand-ochre" aria-hidden="true">*</span>
+              </label>
+              <select id="country" name="country" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal text-sm focus:border-brand-ochre transition-colors duration-200" required aria-describedby="country-error">
+                <option value="" data-i18n="select.placeholder">Selecciona tu país</option>
+                <option value="CO" data-i18n="country.colombia">Colombia</option>
+                <option value="US" data-i18n="country.usa">Estados Unidos</option>
+              </select>
+              <div id="country-error" class="error-message" role="alert" aria-live="polite">Selecciona tu país</div>
+            </div>
+
+            <!-- Ciudad -->
+            <div class="mb-6">
+              <label for="city" class="block text-sm font-medium text-brand-charcoal mb-1.5">
+                <span data-i18n="field.city">Ciudad</span>
+                <span class="text-brand-ochre" aria-hidden="true">*</span>
+              </label>
+              <select id="city" name="city" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal text-sm focus:border-brand-ochre transition-colors duration-200" required aria-describedby="city-error">
+                <option value="" data-i18n="select.city.placeholder">Selecciona tu ciudad</option>
+              </select>
+              <div id="city-error" class="error-message" role="alert" aria-live="polite">Selecciona tu ciudad</div>
+            </div>
+
+            <!-- Ubicación favorita (no obligatorio) -->
+            <div class="mb-6">
+              <label for="favoriteLocation" class="block text-sm font-medium text-brand-charcoal mb-1.5">
+                <span data-i18n="field.favorite">Ubicación favorita de Brasaland</span>
+                <span class="text-brand-ivory/50 text-xs font-light" data-i18n="field.optional">(opcional)</span>
+              </label>
+              <select id="favoriteLocation" name="favoriteLocation" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal text-sm focus:border-brand-ochre transition-colors duration-200" aria-describedby="favoriteLocation-error">
+                <option value="" data-i18n="select.favorite.placeholder">Selecciona tu ubicación favorita</option>
+              </select>
+              <div id="favoriteLocation-error" class="error-message" role="alert" aria-live="polite"></div>
+            </div>
+          </fieldset>
+
+          <!-- ======= PREFERENCIAS Y ORIGEN ======= -->
+          <fieldset>
+            <legend class="text-lg lg:text-xl font-serif font-semibold text-brand-charcoal mb-6 pb-3 border-b border-brand-ochre/30" data-i18n="section.preferences">Preferencias y origen</legend>
+
+            <!-- Preferencias alimentarias (checkboxes, no obligatorio) -->
+            <div class="mb-6">
+              <p class="text-sm font-medium text-brand-charcoal mb-3" id="dietary-label">
+                <span data-i18n="field.dietary">Preferencias alimentarias</span>
+                <span class="text-brand-ivory/50 text-xs font-light" data-i18n="field.optional">(opcional)</span>
+              </p>
+              <div class="space-y-3" role="group" aria-labelledby="dietary-label">
+                <label class="flex items-center gap-3 cursor-pointer group">
+                  <input type="checkbox" name="dietary" value="none" class="w-4 h-4 text-brand-ochre border-brand-warmgray/40 rounded focus:ring-brand-ochre bg-brand-ivory">
+                  <span class="text-sm text-brand-charcoal/80 group-hover:text-brand-charcoal transition-colors" data-i18n="dietary.none">Sin restricciones</span>
+                </label>
+                <label class="flex items-center gap-3 cursor-pointer group">
+                  <input type="checkbox" name="dietary" value="vegetarian" class="w-4 h-4 text-brand-ochre border-brand-warmgray/40 rounded focus:ring-brand-ochre bg-brand-ivory">
+                  <span class="text-sm text-brand-charcoal/80 group-hover:text-brand-charcoal transition-colors" data-i18n="dietary.vegetarian">Vegetariano</span>
+                </label>
+                <label class="flex items-center gap-3 cursor-pointer group">
+                  <input type="checkbox" name="dietary" value="gluten-free" class="w-4 h-4 text-brand-ochre border-brand-warmgray/40 rounded focus:ring-brand-ochre bg-brand-ivory">
+                  <span class="text-sm text-brand-charcoal/80 group-hover:text-brand-charcoal transition-colors" data-i18n="dietary.gluten">Sin gluten</span>
+                </label>
+                <label class="flex items-center gap-3 cursor-pointer group">
+                  <input type="checkbox" name="dietary" value="other" class="w-4 h-4 text-brand-ochre border-brand-warmgray/40 rounded focus:ring-brand-ochre bg-brand-ivory">
+                  <span class="text-sm text-brand-charcoal/80 group-hover:text-brand-charcoal transition-colors" data-i18n="dietary.other">Otro</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Cómo nos conociste -->
+            <div class="mb-6">
+              <label for="referral" class="block text-sm font-medium text-brand-charcoal mb-1.5">
+                <span data-i18n="field.referral">¿Cómo nos conociste?</span>
+                <span class="text-brand-ochre" aria-hidden="true">*</span>
+              </label>
+              <select id="referral" name="referral" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal text-sm focus:border-brand-ochre transition-colors duration-200" required aria-describedby="referral-error">
+                <option value="" data-i18n="select.referral.placeholder">Selecciona una opción</option>
+                <option value="social-media" data-i18n="referral.social">Redes sociales</option>
+                <option value="referral" data-i18n="referral.recommendation">Recomendación</option>
+                <option value="walk-in" data-i18n="referral.walkin">Pasando por el local</option>
+                <option value="search" data-i18n="referral.search">Búsqueda en internet</option>
+                <option value="other" data-i18n="referral.other">Otro</option>
+              </select>
+              <div id="referral-error" class="error-message" role="alert" aria-live="polite">Cuéntanos cómo conociste Brasaland</div>
+            </div>
+          </fieldset>
+
+          <!-- ======= TÉRMINOS ======= -->
+          <fieldset>
+            <legend class="text-lg lg:text-xl font-serif font-semibold text-brand-charcoal mb-6 pb-3 border-b border-brand-ochre/30" data-i18n="section.terms">Términos y condiciones</legend>
+
+            <!-- Acepto términos (obligatorio) -->
+            <div class="mb-5" id="terms-field">
+              <label class="flex items-start gap-3 cursor-pointer group">
+                <input type="checkbox" id="terms" name="terms" class="w-4 h-4 mt-0.5 text-brand-ochre border-brand-warmgray/40 rounded focus:ring-brand-ochre bg-brand-ivory" required aria-describedby="terms-error">
+                <span class="text-sm text-brand-charcoal/80 group-hover:text-brand-charcoal transition-colors leading-relaxed" data-i18n="field.terms">
+                  Acepto términos del programa
+                </span>
+              </label>
+              <div id="terms-error" class="error-message" role="alert" aria-live="polite">Debes aceptar los términos del programa Brasa Points para continuar</div>
+            </div>
+
+            <!-- Ofertas (opcional) -->
+            <div class="mb-2">
+              <label class="flex items-start gap-3 cursor-pointer group">
+                <input type="checkbox" id="offers" name="offers" class="w-4 h-4 mt-0.5 text-brand-ochre border-brand-warmgray/40 rounded focus:ring-brand-ochre bg-brand-ivory">
+                <span class="text-sm text-brand-charcoal/80 group-hover:text-brand-charcoal transition-colors leading-relaxed" data-i18n="field.offers">
+                  Quiero recibir ofertas por email
+                </span>
+              </label>
+            </div>
+          </fieldset>
+
+          <!-- ======= BOTONES ======= -->
+          <div class="flex flex-col sm:flex-row gap-4 pt-4">
+            <button type="submit" class="flex-1 px-8 py-4 bg-brand-ochre text-brand-darkbrown font-semibold uppercase tracking-[0.15em] text-sm hover:bg-brand-ochre/90 transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="form.submit">
+              Registrarme en Brasa Points
+            </button>
+            <button type="reset" class="px-8 py-4 border border-brand-warmgray/40 text-brand-charcoal/70 font-medium uppercase tracking-[0.15em] text-sm hover:bg-brand-charcoal/5 hover:text-brand-charcoal transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="form.clear">
+              Limpiar formulario
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-brand-darkbrown py-10" role="contentinfo">
+    <div class="max-w-5xl mx-auto px-6 lg:px-8 text-center">
+      <a href="index.html" class="text-brand-ochre font-serif text-lg font-semibold tracking-wide">Brasaland</a>
+      <p class="text-brand-ivory/40 text-xs mt-3 font-light" data-i18n="footer.copyright">&copy; 2025 Brasaland. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- ==================== SCRIPTS ==================== -->
+  <script src="validation.js"></script>
+  <script>
+    /* =============================================================
+       Brasaland — i18n Translations (Formulario)
+       ============================================================= */
+    const formTranslations = {
+      es: {
+        'brand': 'Brasaland',
+        'back': '← Volver al inicio',
+        'page.label': 'Programa de Fidelización',
+        'page.title1': 'Brasa',
+        'page.title2': 'Points',
+        'page.subtitle': 'Regístrate y empieza a acumular puntos con cada visita. Canjea por descuentos y platos gratis en cualquiera de nuestras 14 ubicaciones.',
+        'orderNotice': '¿Quieres hacer un pedido? Llama a tu ubicación favorita o visítanos directamente. ¡Pronto tendremos pedidos en línea!',
+        'section.personal': 'Datos personales',
+        'field.name': 'Nombre completo',
+        'field.email': 'Email',
+        'field.phone': 'Teléfono',
+        'field.birthdate': 'Fecha de nacimiento',
+        'section.location': 'Ubicación',
+        'field.country': 'País',
+        'field.city': 'Ciudad',
+        'field.favorite': 'Ubicación favorita de Brasaland',
+        'field.optional': '(opcional)',
+        'section.preferences': 'Preferencias y origen',
+        'field.dietary': 'Preferencias alimentarias',
+        'dietary.none': 'Sin restricciones',
+        'dietary.vegetarian': 'Vegetariano',
+        'dietary.gluten': 'Sin gluten',
+        'dietary.other': 'Otro',
+        'field.referral': '¿Cómo nos conociste?',
+        'section.terms': 'Términos y condiciones',
+        'field.terms': 'Acepto términos del programa',
+        'field.offers': 'Quiero recibir ofertas por email',
+        'form.submit': 'Registrarme en Brasa Points',
+        'form.clear': 'Limpiar formulario',
+        'select.placeholder': 'Selecciona tu país',
+        'select.city.placeholder': 'Selecciona tu ciudad',
+        'select.favorite.placeholder': 'Selecciona tu ubicación favorita',
+        'select.referral.placeholder': 'Selecciona una opción',
+        'country.colombia': 'Colombia',
+        'country.usa': 'Estados Unidos',
+        'referral.social': 'Redes sociales',
+        'referral.recommendation': 'Recomendación',
+        'referral.walkin': 'Pasando por el local',
+        'referral.search': 'Búsqueda en internet',
+        'referral.other': 'Otro',
+        'footer.copyright': '© 2025 Brasaland. Todos los derechos reservados.',
+      },
+      en: {
+        'brand': 'Brasaland',
+        'back': '← Back to home',
+        'page.label': 'Loyalty Program',
+        'page.title1': 'Brasa',
+        'page.title2': 'Points',
+        'page.subtitle': 'Sign up and start earning points with every visit. Redeem for discounts and free dishes at any of our 14 locations.',
+        'orderNotice': 'Want to place an order? Call your favorite location or visit us directly. Online ordering coming soon!',
+        'section.personal': 'Personal Information',
+        'field.name': 'Full name',
+        'field.email': 'Email',
+        'field.phone': 'Phone',
+        'field.birthdate': 'Date of birth',
+        'section.location': 'Location',
+        'field.country': 'Country',
+        'field.city': 'City',
+        'field.favorite': 'Favorite Brasaland location',
+        'field.optional': '(optional)',
+        'section.preferences': 'Preferences & Origin',
+        'field.dietary': 'Dietary preferences',
+        'dietary.none': 'No restrictions',
+        'dietary.vegetarian': 'Vegetarian',
+        'dietary.gluten': 'Gluten-free',
+        'dietary.other': 'Other',
+        'field.referral': 'How did you hear about us?',
+        'section.terms': 'Terms & Conditions',
+        'field.terms': 'I accept the program terms',
+        'field.offers': 'I want to receive offers by email',
+        'form.submit': 'Register for Brasa Points',
+        'form.clear': 'Clear form',
+        'select.placeholder': 'Select your country',
+        'select.city.placeholder': 'Select your city',
+        'select.favorite.placeholder': 'Select your favorite location',
+        'select.referral.placeholder': 'Select an option',
+        'country.colombia': 'Colombia',
+        'country.usa': 'United States',
+        'referral.social': 'Social media',
+        'referral.recommendation': 'Recommendation',
+        'referral.walkin': 'Walk-in',
+        'referral.search': 'Internet search',
+        'referral.other': 'Other',
+        'footer.copyright': '© 2025 Brasaland. All rights reserved.',
+      }
+    };
+
+    let formLang = 'es';
+
+    function applyFormLanguage(lang) {
+      const elements = document.querySelectorAll('[data-i18n]');
+      elements.forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (formTranslations[lang] && formTranslations[lang][key]) {
+          el.innerHTML = formTranslations[lang][key];
+        }
+      });
+
+      // Update placeholder texts for select prompts
+      const countrySelect = document.getElementById('country');
+      const citySelect = document.getElementById('city');
+      const favoriteSelect = document.getElementById('favoriteLocation');
+      const referralSelect = document.getElementById('referral');
+
+      // Only update placeholders if the current selection is the empty default
+      if (countrySelect.value === '') countrySelect.options[0].text = formTranslations[lang]['select.placeholder'];
+      if (citySelect.value === '') citySelect.options[0].text = formTranslations[lang]['select.city.placeholder'];
+      if (favoriteSelect.value === '') favoriteSelect.options[0].text = formTranslations[lang]['select.favorite.placeholder'];
+      if (referralSelect.value === '') referralSelect.options[0].text = formTranslations[lang]['select.referral.placeholder'];
+
+      document.documentElement.lang = lang;
+      document.documentElement.dataset.lang = lang;
+
+      document.querySelectorAll('[data-lang]').forEach(btn => {
+        const btnLang = btn.dataset.lang;
+        if (btnLang === lang) {
+          btn.classList.remove('text-brand-ivory/60', 'border-brand-ivory/20');
+          btn.classList.add('text-brand-ochre', 'border-brand-ochre', 'bg-brand-ochre/10');
+          btn.setAttribute('aria-pressed', 'true');
+          btn.setAttribute('aria-checked', 'true');
+        } else {
+          btn.classList.remove('text-brand-ochre', 'border-brand-ochre', 'bg-brand-ochre/10');
+          btn.classList.add('text-brand-ivory/60', 'border-brand-ivory/20');
+          btn.setAttribute('aria-pressed', 'false');
+          btn.setAttribute('aria-checked', 'false');
+        }
+      });
+
+      formLang = lang;
+    }
+
+    function toggleLanguage() {
+      const newLang = formLang === 'es' ? 'en' : 'es';
+      applyFormLanguage(newLang);
+    }
+  </script>
+</body>
+</html>
