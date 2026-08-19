@@ -9,6 +9,88 @@
   const form = document.getElementById('brasaForm');
   if (!form) return;
 
+  // ---- Multi-step navigation ----
+  let currentStep = 1;
+
+  // Map each step to the fields it contains
+  const stepFields = {
+    1: ['fullName', 'email', 'phone'],
+    2: ['country', 'city'],
+    3: ['referral', 'birthdate'],
+    4: ['terms'],
+  };
+
+  const stepTitles = {
+    1: 'step1.title',
+    2: 'step2.title',
+    3: 'step3.title',
+    4: 'step4.title',
+  };
+
+  function updateStepIndicator(step) {
+    const counter = document.getElementById('step-counter');
+    const titleEl = document.getElementById('step-title');
+    if (counter) {
+      const lang = window.formLang || 'es';
+      const key = 'step.progress';
+      if (window.formTranslations && window.formTranslations[lang] && window.formTranslations[lang][key]) {
+        counter.textContent = window.formTranslations[lang][key].replace('{n}', step);
+      }
+    }
+    if (titleEl) {
+      titleEl.setAttribute('data-i18n', stepTitles[step]);
+      const lang = window.formLang || 'es';
+      if (window.formTranslations && window.formTranslations[lang] && window.formTranslations[lang][stepTitles[step]]) {
+        titleEl.textContent = window.formTranslations[lang][stepTitles[step]];
+      }
+    }
+  }
+
+  function goToStep(step) {
+    // Hide all steps
+    for (let i = 1; i <= 4; i++) {
+      const stepEl = document.getElementById('step-' + i);
+      if (stepEl) {
+        stepEl.classList.add('hidden');
+        stepEl.setAttribute('aria-hidden', 'true');
+        stepEl.setAttribute('inert', '');
+      }
+    }
+    // Show target step
+    const target = document.getElementById('step-' + step);
+    if (target) {
+      target.classList.remove('hidden');
+      target.removeAttribute('aria-hidden');
+      target.removeAttribute('inert');
+      // Focus management: focus first input or button
+      const firstFocusable = target.querySelector('input, select, button');
+      if (firstFocusable) {
+        setTimeout(function () { firstFocusable.focus(); }, 100);
+      }
+    }
+    currentStep = step;
+    updateStepIndicator(step);
+  }
+
+  function validateStep(step) {
+    const fieldKeys = stepFields[step] || [];
+    const validators = {
+      fullName: validateFullName,
+      email: validateEmail,
+      phone: validatePhone,
+      birthdate: validateBirthdate,
+      country: validateCountry,
+      city: validateCity,
+      referral: validateReferral,
+      terms: validateTerms,
+    };
+    const results = fieldKeys.map(function (key) {
+      if (validators[key]) return validators[key]();
+      return true;
+    });
+    return results.every(function (v) { return v === true; });
+  }
+
   // ---- Referencias a campos ----
   const fields = {
     fullName: {
@@ -267,6 +349,93 @@
     }
   }
 
+  // ---- Lógica de exclusividad en checkboxes de preferencias alimentarias ----
+  function setupDietaryCheckboxes() {
+    const checkboxes = document.querySelectorAll('input[name="dietary"]');
+    if (!checkboxes.length) return;
+
+    var byValue = {
+      none: document.querySelector('input[name="dietary"][value="none"]'),
+      vegetarian: document.querySelector('input[name="dietary"][value="vegetarian"]'),
+      'gluten-free': document.querySelector('input[name="dietary"][value="gluten-free"]'),
+      other: document.querySelector('input[name="dietary"][value="other"]')
+    };
+
+    function applyState(mode) {
+      var none = byValue.none;
+      var vegetarian = byValue.vegetarian;
+      var glutenFree = byValue['gluten-free'];
+      var other = byValue.other;
+
+      [none, vegetarian, glutenFree, other].forEach(function (cb) {
+        if (cb) cb.disabled = false;
+      });
+
+      if (mode === 'none') {
+        if (none) none.checked = true;
+        if (vegetarian) { vegetarian.checked = false; vegetarian.disabled = true; }
+        if (glutenFree) { glutenFree.checked = false; glutenFree.disabled = true; }
+        if (other) { other.checked = false; other.disabled = true; }
+        return;
+      }
+
+      if (mode === 'other') {
+        if (other) other.checked = true;
+        if (none) { none.checked = false; none.disabled = true; }
+        if (vegetarian) { vegetarian.checked = false; vegetarian.disabled = true; }
+        if (glutenFree) { glutenFree.checked = false; glutenFree.disabled = true; }
+        return;
+      }
+
+      if (mode === 'veg-gf') {
+        if (none) { none.checked = false; none.disabled = true; }
+        if (other) { other.checked = false; other.disabled = true; }
+      }
+    }
+
+    function handleDietaryChange(e) {
+      var target = e && e.target ? e.target : null;
+      var targetValue = target ? target.value : '';
+      var targetChecked = target ? !!target.checked : false;
+
+      // Dar prioridad al checkbox que el usuario acaba de marcar.
+      if (targetChecked && targetValue === 'none') {
+        applyState('none');
+        return;
+      }
+      if (targetChecked && targetValue === 'other') {
+        applyState('other');
+        return;
+      }
+      if (targetChecked && (targetValue === 'vegetarian' || targetValue === 'gluten-free')) {
+        applyState('veg-gf');
+        return;
+      }
+
+      var noneChecked = !!(byValue.none && byValue.none.checked);
+      var otherChecked = !!(byValue.other && byValue.other.checked);
+      var vegChecked = !!(byValue.vegetarian && byValue.vegetarian.checked);
+      var gfChecked = !!(byValue['gluten-free'] && byValue['gluten-free'].checked);
+
+      if (noneChecked) {
+        applyState('none');
+      } else if (otherChecked) {
+        applyState('other');
+      } else if (vegChecked || gfChecked) {
+        applyState('veg-gf');
+      } else {
+        applyState('all');
+      }
+    }
+
+    checkboxes.forEach(function (cb) {
+      cb.addEventListener('change', handleDietaryChange);
+    });
+
+    // Normalizar estado inicial por si el navegador restaura valores previos.
+    handleDietaryChange();
+  }
+
   // ---- Lógica de campos dependientes (País → Ciudad → Ubicación favorita) ----
   function populateCities() {
     const countryVal = fields.country.el.value;
@@ -337,6 +506,46 @@
     }
   }
 
+  // ---- Navegación entre pasos ----
+  document.getElementById('btn-step1-next').addEventListener('click', function () {
+    if (validateStep(1)) {
+      goToStep(2);
+    } else {
+      var firstErr = document.querySelector('#step-1 .field-error input, #step-1 .field-error select');
+      if (firstErr) firstErr.focus();
+    }
+  });
+
+  document.getElementById('btn-step2-back').addEventListener('click', function () {
+    goToStep(1);
+  });
+
+  document.getElementById('btn-step2-next').addEventListener('click', function () {
+    if (validateStep(2)) {
+      goToStep(3);
+    } else {
+      var firstErr = document.querySelector('#step-2 .field-error input, #step-2 .field-error select');
+      if (firstErr) firstErr.focus();
+    }
+  });
+
+  document.getElementById('btn-step3-back').addEventListener('click', function () {
+    goToStep(2);
+  });
+
+  document.getElementById('btn-step3-next').addEventListener('click', function () {
+    if (validateStep(3)) {
+      goToStep(4);
+    } else {
+      var firstErr = document.querySelector('#step-3 .field-error input, #step-3 .field-error select');
+      if (firstErr) firstErr.focus();
+    }
+  });
+
+  document.getElementById('btn-step4-back').addEventListener('click', function () {
+    goToStep(3);
+  });
+
   // ---- Event listeners para campos dependientes ----
   fields.country.el.addEventListener('change', function () {
     populateCities();
@@ -390,6 +599,9 @@
     document.querySelectorAll('input, select').forEach(el => {
       el._hasBlurred = false;
     });
+
+    // Volver al paso 1
+    goToStep(1);
   });
 
   // ---- Mostrar mensaje de éxito (exactamente del CONTEXT.md) ----
@@ -492,6 +704,16 @@
 
   // ---- Inicializar ----
   setupRealTimeValidation();
+  setupDietaryCheckboxes();
+
+  // Iniciar en primer paso
+  goToStep(1);
+
+  // Exponer currentStep globalmente para applyFormLanguage
+  Object.defineProperty(window, 'currentStep', {
+    get: function () { return currentStep; },
+    configurable: true
+  });
 
   // ---- Inicializar i18n para mensajes de error y placeholders ----
   // Guardar mensajes de error originales para reset
