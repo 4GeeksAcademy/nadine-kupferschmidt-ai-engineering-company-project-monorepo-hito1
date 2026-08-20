@@ -324,6 +324,9 @@
                     Acepto términos del programa
                   </span>
                 </label>
+                <button type="button" id="btn-show-terms" class="text-xs text-brand-ochre hover:text-brand-gold underline underline-offset-2 mt-1.5 ml-7 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory">
+                  Ver términos y condiciones
+                </button>
                 <div id="terms-error" class="error-message" role="alert" aria-live="polite">Debes aceptar los términos del programa Brasa Points para continuar</div>
               </div>
 
@@ -361,6 +364,44 @@
       <p class="text-brand-ivory/40 text-xs mt-3 font-light" data-i18n="footer.copyright">&copy; 2025 Brasaland. Todos los derechos reservados.</p>
     </div>
   </footer>
+
+  <!-- ==================== MODAL TÉRMINOS Y CONDICIONES ==================== -->
+  <div id="terms-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="terms-modal-title">
+    <div class="bg-brand-ivory max-w-2xl mx-6 max-h-[80vh] overflow-y-auto shadow-xl">
+      <div class="sticky top-0 bg-brand-ivory border-b border-brand-beige px-8 py-5 flex items-center justify-between">
+        <h2 id="terms-modal-title" class="text-xl font-serif font-bold text-brand-charcoal">Términos y Condiciones — Brasa Points</h2>
+        <button type="button" id="btn-close-terms-modal" class="text-brand-warmgray hover:text-brand-charcoal transition-colors p-1 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2" aria-label="Cerrar términos y condiciones">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="px-8 py-6 space-y-4 text-sm text-brand-charcoal/80 leading-relaxed">
+        <p><strong>1. Aceptación de los términos.</strong> Al registrarte en el programa de fidelización Brasa Points, aceptas los presentes términos y condiciones. Si no estás de acuerdo con alguno de ellos, no debes completar el registro.</p>
+
+        <p><strong>2. Elegibilidad.</strong> El programa Brasa Points está disponible para personas mayores de 18 años que residan en Colombia o Estados Unidos. Brasaland se reserva el derecho de verificar la edad y los datos proporcionados durante el registro.</p>
+
+        <p><strong>3. Acumulación de puntos.</strong> Los miembros acumularán 1 punto por cada $10.000 COP (o $5 USD) de consumo en cualquiera de los 14 restaurantes Brasaland ubicados en Colombia (Medellín, Bogotá, Cali) y Estados Unidos (Miami, Orlando). Los puntos se acreditarán en la cuenta del miembro dentro de las 48 horas hábiles posteriores a la visita.</p>
+
+        <p><strong>4. Canje de puntos.</strong> Los puntos acumulados pueden canjearse por descuentos en consumos futuros y platos gratis, de acuerdo con la tabla de redención vigente publicada en cada restaurante y en nuestros canales oficiales. Los puntos no tienen valor monetario y no son transferibles.</p>
+
+        <p><strong>5. Programa de fidelización.</strong> Brasa Points es un programa de fidelización y beneficios exclusivo para clientes de Brasaland. No constituye un sistema de pedidos ni reservas en línea. Los miembros deben realizar sus pedidos y reservas directamente en los restaurantes o a través de los canales oficiales de Brasaland.</p>
+
+        <p><strong>6. Privacidad y datos personales.</strong> Los datos proporcionados durante el registro serán tratados conforme a nuestra política de privacidad. Brasaland utilizará esta información para gestionar el programa, enviar comunicaciones relacionadas con el mismo y, previa autorización del miembro, ofrecer promociones y ofertas especiales.</p>
+
+        <p><strong>7. Vigencia y caducidad de puntos.</strong> Los puntos acumulados tienen una vigencia de 12 meses a partir de la fecha de su acreditación. Transcurrido ese período sin ser utilizados, los puntos caducarán automáticamente sin derecho a reclamación.</p>
+
+        <p><strong>8. Modificaciones.</strong> Brasaland se reserva el derecho de actualizar, modificar o suspender los términos del programa Brasa Points en cualquier momento. Los cambios serán comunicados a los miembros a través de los canales habituales (correo electrónico, redes sociales o publicaciones en restaurantes). El uso continuado del programa después de dichas modificaciones constituye la aceptación de los nuevos términos.</p>
+
+        <p><strong>9. Cancelación.</strong> Brasaland se reserva el derecho de cancelar la membresía de cualquier participante que haya violado estos términos o haya proporcionado información falsa durante el registro.</p>
+
+        <p><strong>10. Contacto.</strong> Para cualquier consulta relacionada con el programa Brasa Points, puedes escribirnos a <strong>hola@brasaland.com</strong> o comunicarte con nuestro equipo en cualquiera de nuestras ubicaciones.</p>
+      </div>
+      <div class="sticky bottom-0 bg-brand-ivory border-t border-brand-beige px-8 py-4 flex justify-end">
+        <button type="button" id="btn-close-terms-bottom" class="px-8 py-3 bg-brand-ochre text-brand-darkbrown font-semibold uppercase tracking-[0.15em] text-sm hover:bg-brand-ochre/90 transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- ==================== SCRIPTS ==================== -->
   <script src="validation.js"></script>
@@ -526,6 +567,75 @@
       const newLang = formLang === 'es' ? 'en' : 'es';
       applyFormLanguage(newLang);
     }
+
+    // ---- Modal de Términos y Condiciones ----
+    (function setupTermsModal() {
+      var modal = document.getElementById('terms-modal');
+      var btnOpen = document.getElementById('btn-show-terms');
+      var btnClose1 = document.getElementById('btn-close-terms-modal');
+      var btnClose2 = document.getElementById('btn-close-terms-bottom');
+      var focusableElements;
+      var firstFocusable;
+      var lastFocusable;
+      var previousActiveElement;
+
+      function getFocusable() {
+        if (!modal) return;
+        var all = modal.querySelectorAll('button:not([disabled])');
+        focusableElements = Array.prototype.filter.call(all, function (el) { return el.offsetParent !== null; });
+        firstFocusable = focusableElements[0];
+        lastFocusable = focusableElements[focusableElements.length - 1];
+      }
+
+      function openModal() {
+        previousActiveElement = document.activeElement;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        getFocusable();
+        setTimeout(function () {
+          if (firstFocusable) firstFocusable.focus();
+        }, 100);
+      }
+
+      function closeModal() {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        if (previousActiveElement) previousActiveElement.focus();
+      }
+
+      if (btnOpen) btnOpen.addEventListener('click', openModal);
+      if (btnClose1) btnClose1.addEventListener('click', closeModal);
+      if (btnClose2) btnClose2.addEventListener('click', closeModal);
+
+      // Cerrar con Escape
+      if (modal) {
+        modal.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') closeModal();
+        });
+
+        // Cerrar haciendo clic fuera del contenido
+        modal.addEventListener('click', function (e) {
+          if (e.target === modal) closeModal();
+        });
+
+        // Trampa de foco
+        modal.addEventListener('keydown', function (e) {
+          if (e.key !== 'Tab') return;
+          getFocusable();
+          if (e.shiftKey) {
+            if (document.activeElement === firstFocusable) {
+              e.preventDefault();
+              lastFocusable.focus();
+            }
+          } else {
+            if (document.activeElement === lastFocusable) {
+              e.preventDefault();
+              firstFocusable.focus();
+            }
+          }
+        });
+      }
+    })();
   </script>
 </body>
 </html>

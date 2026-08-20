@@ -12,6 +12,9 @@
   // ---- Multi-step navigation ----
   let currentStep = 1;
 
+  // ---- Estado para evitar reenvío duplicado ----
+  let formSubmittedSuccessfully = false;
+
   // Map each step to the fields it contains
   const stepFields = {
     1: ['fullName', 'email', 'phone'],
@@ -195,9 +198,11 @@
   // ---- Funciones de validación (reglas exactas del CONTEXT.md) ----
   function validateFullName() {
     const val = fields.fullName.el.value.trim();
-    // Mínimo 2 palabras
     const words = val.split(/\s+/).filter(w => w.length > 0);
-    if (val.length === 0 || words.length < 2) {
+    const lettersOnly = /^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+$/;
+    const allWordsAreLetters = words.length > 0 && words.every(function (w) { return lettersOnly.test(w); });
+    const allWordsMinLength = words.length > 0 && words.every(function (w) { return w.length >= 3; });
+    if (val.length === 0 || words.length < 2 || !allWordsAreLetters || !allWordsMinLength) {
       fields.fullName.errorEl.textContent = 'Ingresa tu nombre completo (nombre y apellido)';
       setError(fields.fullName, true);
       return false;
@@ -208,8 +213,7 @@
 
   function validateEmail() {
     const val = fields.email.el.value.trim();
-    // Debe contener @ y dominio (formato válido de email)
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[a-zA-Z]{3,}(\.[a-zA-Z]{2,})+$/;
     if (val.length === 0 || !emailRegex.test(val)) {
       fields.email.errorEl.textContent = 'Ingresa un email válido (ejemplo: nombre@correo.com)';
       setError(fields.email, true);
@@ -221,10 +225,9 @@
 
   function validatePhone() {
     const val = fields.phone.el.value.trim();
-    // Debe comenzar con + seguido del código de país
-    // Acepta: +57, +1, seguido de dígitos, espacios, guiones
-    const phoneRegex = /^\+\d[\d\s\-]{4,}\d$/;
-    if (val.length === 0 || !phoneRegex.test(val)) {
+    const phoneRegex = /^(?:\+1[\d\s\-]{4,}\d|\+57[\d\s\-]{4,}\d)$/;
+    const digitsAfterCode = val.replace(/^\+1|\+57/, '').replace(/\D/g, '');
+    if (val.length === 0 || !phoneRegex.test(val) || digitsAfterCode.length < 6) {
       fields.phone.errorEl.textContent = 'El teléfono debe incluir código de país (ejemplo: +57 300 123 4567 o +1 305 123 4567)';
       setError(fields.phone, true);
       return false;
@@ -649,9 +652,26 @@
     closeBtn.textContent = 'Cerrar';
     closeBtn.addEventListener('click', function () {
       overlay.style.display = 'none';
+      // Transformar botón de envío a "Volver a página principal"
+      var submitBtn = document.getElementById('btn-submit');
+      if (submitBtn) {
+        submitBtn.textContent = 'Volver a página principal';
+        submitBtn.type = 'button';
+        submitBtn.onclick = function () {
+          window.location.href = 'index.html';
+        };
+      }
     });
     closeBtn.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') overlay.style.display = 'none';
+    });
+
+    const homeBtn = document.createElement('button');
+    homeBtn.type = 'button';
+    homeBtn.className = 'mt-4 sm:mt-8 sm:ml-4 px-8 py-3 border border-brand-ochre text-brand-ochre font-semibold uppercase tracking-[0.15em] text-sm hover:bg-brand-ochre/10 transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2';
+    homeBtn.textContent = 'Volver al inicio';
+    homeBtn.addEventListener('click', function () {
+      window.location.href = 'index.html';
     });
 
     successBox.appendChild(icon);
@@ -659,6 +679,7 @@
     successBox.appendChild(desc);
     successBox.appendChild(subtitle);
     successBox.appendChild(closeBtn);
+    successBox.appendChild(homeBtn);
     overlay.appendChild(successBox);
     document.body.appendChild(overlay);
 
@@ -680,6 +701,10 @@
   form.addEventListener('submit', function (e) {
     e.preventDefault();
 
+    if (formSubmittedSuccessfully) {
+      return;
+    }
+
     // Correr todas las validaciones
     const isValid = validateAll();
 
@@ -690,6 +715,7 @@
     }
 
     if (isValid) {
+      formSubmittedSuccessfully = true;
       showSuccessMessage();
       // Opcionalmente resetear el formulario después de éxito
       // (no hacer reset automático para que el usuario vea los datos)
@@ -705,6 +731,38 @@
   // ---- Inicializar ----
   setupRealTimeValidation();
   setupDietaryCheckboxes();
+
+  // ---- Reset de botón de envío al interactuar con términos tras envío exitoso ----
+  if (fields.terms.el) {
+    fields.terms.el.addEventListener('change', function () {
+      if (formSubmittedSuccessfully) {
+        formSubmittedSuccessfully = false;
+        var submitBtn = document.getElementById('btn-submit');
+        if (submitBtn) {
+          submitBtn.textContent = 'Registrarme en Brasa Points';
+          submitBtn.type = 'submit';
+          submitBtn.onclick = null;
+        }
+      }
+    });
+  }
+
+  // ---- Límites del selector de fecha de nacimiento (max 18 años, min 100 años) ----
+  (function setupBirthdateLimits() {
+    var birthdateInput = document.getElementById('birthdate');
+    if (!birthdateInput) return;
+    var today = new Date();
+    var maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+    var minDate = new Date(today.getFullYear() - 100, today.getMonth(), today.getDate());
+    function toISODate(d) {
+      var yyyy = d.getFullYear();
+      var mm = String(d.getMonth() + 1).padStart(2, '0');
+      var dd = String(d.getDate()).padStart(2, '0');
+      return yyyy + '-' + mm + '-' + dd;
+    }
+    birthdateInput.setAttribute('max', toISODate(maxDate));
+    birthdateInput.setAttribute('min', toISODate(minDate));
+  })();
 
   // Iniciar en primer paso
   goToStep(1);
