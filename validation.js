@@ -566,6 +566,9 @@
 
   // ---- Reset del formulario ----
   form.addEventListener('reset', function () {
+    // Permitir un nuevo envío luego de limpiar el formulario.
+    formSubmittedSuccessfully = false;
+
     // Limpiar estados de error/éxito de todos los campos
     const allFieldKeys = Object.keys(fields);
     allFieldKeys.forEach(key => {
@@ -597,6 +600,15 @@
     // Quitar overlay
     const overlay = document.getElementById('success-overlay');
     if (overlay) overlay.style.display = 'none';
+
+    // Restaurar botón submit a su estado original
+    var submitBtn = document.getElementById('btn-submit');
+    if (submitBtn) {
+      submitBtn.textContent = 'Registrarme en Brasa Points';
+      submitBtn.type = 'submit';
+      submitBtn.disabled = false;
+      submitBtn.onclick = null;
+    }
 
     // Reset de banderas de blur
     document.querySelectorAll('input, select').forEach(el => {
@@ -747,12 +759,12 @@
     });
   }
 
-  // ---- Límites del selector de fecha de nacimiento (max 18 años, min 100 años) ----
+  // ---- Límites del selector de fecha de nacimiento (se valida que cumpla la regla de edad mínima de 18 años desde 12 años) ----
   (function setupBirthdateLimits() {
     var birthdateInput = document.getElementById('birthdate');
     if (!birthdateInput) return;
     var today = new Date();
-    var maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+    var maxDate = '2014-12-31';
     var minDate = new Date(today.getFullYear() - 100, today.getMonth(), today.getDate());
     function toISODate(d) {
       var yyyy = d.getFullYear();
@@ -760,7 +772,7 @@
       var dd = String(d.getDate()).padStart(2, '0');
       return yyyy + '-' + mm + '-' + dd;
     }
-    birthdateInput.setAttribute('max', toISODate(maxDate));
+    birthdateInput.setAttribute('max', maxDate);
     birthdateInput.setAttribute('min', toISODate(minDate));
   })();
 
