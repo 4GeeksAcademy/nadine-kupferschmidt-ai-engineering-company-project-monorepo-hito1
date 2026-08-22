@@ -155,8 +155,6 @@ El programa Brasa Points está diseñado para clientes mayores de 18 años que q
 
 Implementa el siguiente marcado Schema.org en tu landing page:
 
-_Si entregas un solo idioma, configura `availableLanguage` únicamente con ese idioma base._
-
 ```json
 {
   "@context": "https://schema.org",
