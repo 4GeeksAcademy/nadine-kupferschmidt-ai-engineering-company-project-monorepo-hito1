@@ -89,10 +89,10 @@
         <!-- Language selector + back link -->
         <div class="flex items-center gap-4">
           <div class="flex border border-brand-ochre/30 rounded" role="radiogroup" aria-label="Seleccionar idioma">
-            <button data-lang="es" aria-pressed="true" aria-checked="true" class="px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-brand-ochre border-brand-ochre bg-brand-ochre/10 transition-all duration-300" onclick="toggleLanguage()">ES</button>
-            <button data-lang="en" aria-pressed="false" aria-checked="false" class="px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-brand-ivory/60 border-l border-brand-ochre/30 bg-transparent transition-all duration-300" onclick="toggleLanguage()">EN</button>
+            <button data-lang="es" aria-pressed="true" aria-checked="true" class="inline-flex items-center justify-center min-w-11 min-h-11 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-brand-ochre border-brand-ochre bg-brand-ochre/10 transition-all duration-300" onclick="toggleLanguage()">ES</button>
+            <button data-lang="en" aria-pressed="false" aria-checked="false" class="inline-flex items-center justify-center min-w-11 min-h-11 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-brand-ivory/70 border-l border-brand-ochre/30 bg-transparent transition-all duration-300" onclick="toggleLanguage()">EN</button>
           </div>
-          <a href="index.html" class="text-brand-ivory/50 hover:text-brand-ochre text-xs uppercase tracking-wider font-medium transition-colors duration-300 hidden sm:inline-block" data-i18n="back">← Volver al inicio</a>
+          <a href="index.html" class="text-brand-ivory/75 hover:text-brand-ochre text-xs uppercase tracking-wider font-medium transition-colors duration-300 hidden sm:inline-block" data-i18n="back">← Volver al inicio</a>
         </div>
       </div>
     </div>
@@ -103,7 +103,7 @@
     <!-- Hero section -->
     <section class="relative bg-brand-darkbrown overflow-hidden">
       <div class="absolute inset-0">
-        <img src="https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=1920&q=80" alt="" class="w-full h-full object-cover opacity-10" aria-hidden="true">
+        <img src="https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=1024&q=80" srcset="https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=640&q=80 640w, https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=1024&q=80 1024w, https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=1920&q=80 1920w" sizes="100vw" alt="" width="1920" height="1080" loading="eager" decoding="async" fetchpriority="high" class="w-full h-full object-cover opacity-10" aria-hidden="true">
         <div class="absolute inset-0 bg-gradient-to-b from-brand-darkbrown via-brand-darkbrown/90 to-brand-darkbrown"></div>
       </div>
       <div class="relative z-10 max-w-3xl mx-auto px-6 py-20 lg:py-28 text-center">
@@ -112,7 +112,7 @@
           <span data-i18n="page.title1">Brasa</span>
           <span class="text-brand-ochre italic font-normal" data-i18n="page.title2">Points</span>
         </h1>
-        <p class="text-brand-ivory/60 text-base lg:text-lg font-light max-w-xl mx-auto leading-relaxed" data-i18n="page.subtitle">
+        <p class="text-brand-ivory/75 text-base lg:text-lg font-light max-w-xl mx-auto leading-relaxed" data-i18n="page.subtitle">
           Regístrate y empieza a acumular puntos con cada visita. Canjea por descuentos y platos gratis en cualquiera de nuestras 14 ubicaciones.
         </p>
       </div>
@@ -121,7 +121,7 @@
     <!-- Order notice -->
     <div class="bg-brand-beige border-b border-brand-ochre/10">
       <div class="max-w-3xl mx-auto px-6 py-4 text-center">
-        <p class="text-brand-charcoal/60 text-xs sm:text-sm font-light" data-i18n="orderNotice">
+        <p class="text-brand-charcoal/75 text-xs sm:text-sm font-light" data-i18n="orderNotice">
           ¿Quieres hacer un pedido? Llama a tu ubicación favorita o visítanos directamente. ¡Pronto tendremos pedidos en línea!
         </p>
       </div>
@@ -221,7 +221,7 @@
               <div class="mb-6">
                 <label for="favoriteLocation" class="block text-sm font-medium text-brand-charcoal mb-1.5">
                   <span data-i18n="field.favorite">Ubicación favorita de Brasaland</span>
-                  <span class="text-brand-ivory/50 text-xs font-light" data-i18n="field.optional">(opcional)</span>
+                  <span class="text-brand-charcoal/65 text-xs font-light" data-i18n="field.optional">(opcional)</span>
                 </label>
                 <select id="favoriteLocation" name="favoriteLocation" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal text-sm focus:border-brand-ochre transition-colors duration-200" aria-describedby="favoriteLocation-error">
                   <option value="" data-i18n="select.favorite.placeholder">Selecciona tu ubicación favorita</option>
@@ -253,7 +253,7 @@
               <div class="mb-6">
                 <p class="text-sm font-medium text-brand-charcoal mb-3" id="dietary-label">
                   <span data-i18n="field.dietary">Preferencias alimentarias</span>
-                  <span class="text-brand-ivory/50 text-xs font-light" data-i18n="field.optional">(opcional)</span>
+                  <span class="text-brand-charcoal/65 text-xs font-light" data-i18n="field.optional">(opcional)</span>
                 </p>
                 <div class="space-y-3" role="group" aria-labelledby="dietary-label">
                   <label class="flex items-center gap-3 cursor-pointer group">
@@ -330,7 +330,7 @@
                     Acepto términos del programa
                   </span>
                 </label>
-                <button type="button" id="btn-show-terms" class="text-xs text-brand-ochre hover:text-brand-gold underline underline-offset-2 mt-1.5 ml-7 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory">
+                <button type="button" id="btn-show-terms" class="inline-flex items-center min-h-11 px-3 text-xs text-brand-ochre hover:text-brand-gold underline underline-offset-2 mt-1.5 ml-7 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory">
                   Ver términos y condiciones
                 </button>
                 <div id="terms-error" class="error-message" role="alert" aria-live="polite">Debes aceptar los términos del programa Brasa Points para continuar</div>
@@ -370,7 +370,7 @@
   <footer class="bg-brand-darkbrown py-10" role="contentinfo">
     <div class="max-w-5xl mx-auto px-6 lg:px-8 text-center">
       <a href="index.html" class="text-brand-ochre font-serif text-lg font-semibold tracking-wide">Brasaland</a>
-      <p class="text-brand-ivory/40 text-xs mt-3 font-light" data-i18n="footer.copyright">&copy; 2025 Brasaland. Todos los derechos reservados.</p>
+      <p class="text-brand-ivory/65 text-xs mt-3 font-light" data-i18n="footer.copyright">&copy; 2025 Brasaland. Todos los derechos reservados.</p>
     </div>
   </footer>
 
@@ -379,7 +379,7 @@
     <div class="bg-brand-ivory max-w-2xl mx-6 max-h-[80vh] overflow-y-auto shadow-xl">
       <div class="sticky top-0 bg-brand-ivory border-b border-brand-beige px-8 py-5 flex items-center justify-between">
         <h2 id="terms-modal-title" class="text-xl font-serif font-bold text-brand-charcoal">Términos y Condiciones — Brasa Points</h2>
-        <button type="button" id="btn-close-terms-modal" class="text-brand-warmgray hover:text-brand-charcoal transition-colors p-1 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2" aria-label="Cerrar términos y condiciones">
+        <button type="button" id="btn-close-terms-modal" class="inline-flex items-center justify-center min-w-11 min-h-11 text-brand-warmgray hover:text-brand-charcoal transition-colors p-2 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2" aria-label="Cerrar términos y condiciones">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
@@ -524,16 +524,17 @@
     let formLang = 'es';
 
     function applyFormLanguage(lang) {
+      const safeLang = lang === 'en' ? 'en' : 'es';
       const elements = document.querySelectorAll('[data-i18n]');
       elements.forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (window.formTranslations[lang] && window.formTranslations[lang][key]) {
+        if (window.formTranslations[safeLang] && window.formTranslations[safeLang][key]) {
           // Handle dynamic keys with {n} placeholder
           if (key === 'step.progress') {
             const currentStep = window.currentStep || 1;
-            el.innerHTML = window.formTranslations[lang][key].replace('{n}', currentStep);
+            el.innerHTML = window.formTranslations[safeLang][key].replace('{n}', currentStep);
           } else {
-            el.innerHTML = window.formTranslations[lang][key];
+            el.innerHTML = window.formTranslations[safeLang][key];
           }
         }
       });
@@ -545,31 +546,31 @@
       const referralSelect = document.getElementById('referral');
 
       // Only update placeholders if the current selection is the empty default
-      if (countrySelect.value === '') countrySelect.options[0].text = window.formTranslations[lang]['select.placeholder'];
-      if (citySelect.value === '') citySelect.options[0].text = window.formTranslations[lang]['select.city.placeholder'];
-      if (favoriteSelect.value === '') favoriteSelect.options[0].text = window.formTranslations[lang]['select.favorite.placeholder'];
-      if (referralSelect.value === '') referralSelect.options[0].text = window.formTranslations[lang]['select.referral.placeholder'];
+      if (countrySelect.value === '') countrySelect.options[0].text = window.formTranslations[safeLang]['select.placeholder'];
+      if (citySelect.value === '') citySelect.options[0].text = window.formTranslations[safeLang]['select.city.placeholder'];
+      if (favoriteSelect.value === '') favoriteSelect.options[0].text = window.formTranslations[safeLang]['select.favorite.placeholder'];
+      if (referralSelect.value === '') referralSelect.options[0].text = window.formTranslations[safeLang]['select.referral.placeholder'];
 
-      document.documentElement.lang = lang;
-      document.documentElement.dataset.lang = lang;
+      document.documentElement.lang = safeLang;
+      document.documentElement.dataset.lang = safeLang;
 
       document.querySelectorAll('[data-lang]').forEach(btn => {
         const btnLang = btn.dataset.lang;
-        if (btnLang === lang) {
-          btn.classList.remove('text-brand-ivory/60', 'border-brand-ivory/20');
+        if (btnLang === safeLang) {
+          btn.classList.remove('text-brand-ivory/70', 'border-brand-ivory/20');
           btn.classList.add('text-brand-ochre', 'border-brand-ochre', 'bg-brand-ochre/10');
           btn.setAttribute('aria-pressed', 'true');
           btn.setAttribute('aria-checked', 'true');
         } else {
           btn.classList.remove('text-brand-ochre', 'border-brand-ochre', 'bg-brand-ochre/10');
-          btn.classList.add('text-brand-ivory/60', 'border-brand-ivory/20');
+          btn.classList.add('text-brand-ivory/70', 'border-brand-ivory/20');
           btn.setAttribute('aria-pressed', 'false');
           btn.setAttribute('aria-checked', 'false');
         }
       });
 
-      formLang = lang;
-      window.formLang = lang;
+      formLang = safeLang;
+      window.formLang = safeLang;
     }
 
     function toggleLanguage() {
