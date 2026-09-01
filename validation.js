@@ -189,9 +189,15 @@
     if (show) {
       addClass(container, 'field-error');
       removeClass(container, 'field-success');
+      fieldObj.errorEl.classList.remove('hidden');
+      fieldObj.el.classList.add('border-[#B33A3A]');
+      fieldObj.el.classList.remove('border-[#2E7D32]');
     } else {
       removeClass(container, 'field-error');
       addClass(container, 'field-success');
+      fieldObj.errorEl.classList.add('hidden');
+      fieldObj.el.classList.add('border-[#2E7D32]');
+      fieldObj.el.classList.remove('border-[#B33A3A]');
     }
   }
 
@@ -460,6 +466,7 @@
 
     // Resetear estados
     removeClass(citySelect.closest('.mb-6') || citySelect.parentElement, 'field-success');
+    removeClass(citySelect, 'border-[#2E7D32]');
 
     if (!countryVal) return;
 
@@ -578,7 +585,10 @@
         removeClass(container, 'field-error');
         removeClass(container, 'field-success');
       }
+      removeClass(f.el, 'border-[#B33A3A]');
+      removeClass(f.el, 'border-[#2E7D32]');
       if (f.errorEl) {
+        addClass(f.errorEl, 'hidden');
         f.errorEl.textContent = f.errorEl.getAttribute('data-original-message') || f.errorEl.textContent;
       }
     });
@@ -593,13 +603,12 @@
       favSelect.remove(1);
     }
 
-    // Ocultar mensaje de éxito
-    const successEl = document.getElementById('success-message');
-    if (successEl) successEl.style.display = 'none';
-
     // Quitar overlay
     const overlay = document.getElementById('success-overlay');
-    if (overlay) overlay.style.display = 'none';
+    if (overlay) {
+      overlay.classList.add('hidden');
+      overlay.classList.remove('flex');
+    }
 
     // Restaurar botón submit a su estado original
     var submitBtn = document.getElementById('btn-submit');
@@ -624,13 +633,14 @@
     // Crear overlay
     const existingOverlay = document.getElementById('success-overlay');
     if (existingOverlay) {
-      existingOverlay.style.display = 'flex';
+      existingOverlay.classList.remove('hidden');
+      existingOverlay.classList.add('flex');
       return;
     }
 
     const overlay = document.createElement('div');
     overlay.id = 'success-overlay';
-    overlay.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm';
+    overlay.className = 'fixed inset-0 z-50 items-center justify-center bg-black/50 backdrop-blur-sm';
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-modal', 'true');
     overlay.setAttribute('aria-labelledby', 'success-title');
@@ -663,7 +673,8 @@
     closeBtn.className = 'mt-8 px-8 py-3 bg-brand-ochre text-brand-darkbrown font-semibold uppercase tracking-[0.15em] text-sm hover:bg-brand-ochre/90 transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2';
     closeBtn.textContent = 'Cerrar';
     closeBtn.addEventListener('click', function () {
-      overlay.style.display = 'none';
+      overlay.classList.add('hidden');
+      overlay.classList.remove('flex');
       // Transformar botón de envío a "Volver a página principal"
       var submitBtn = document.getElementById('btn-submit');
       if (submitBtn) {
@@ -675,7 +686,10 @@
       }
     });
     closeBtn.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') overlay.style.display = 'none';
+      if (e.key === 'Escape') {
+        overlay.classList.add('hidden');
+        overlay.classList.remove('flex');
+      }
     });
 
     const homeBtn = document.createElement('button');
@@ -694,13 +708,20 @@
     successBox.appendChild(homeBtn);
     overlay.appendChild(successBox);
     document.body.appendChild(overlay);
+    overlay.classList.add('flex');
 
     // Cerrar con Escape
     overlay.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') overlay.style.display = 'none';
+      if (e.key === 'Escape') {
+        overlay.classList.add('hidden');
+        overlay.classList.remove('flex');
+      }
     });
     overlay.addEventListener('click', function (e) {
-      if (e.target === overlay) overlay.style.display = 'none';
+      if (e.target === overlay) {
+        overlay.classList.add('hidden');
+        overlay.classList.remove('flex');
+      }
     });
 
     // Enfocar el botón de cerrar

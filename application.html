@@ -27,6 +27,15 @@
             sans: ['Inter', 'system-ui', 'sans-serif'],
             serif: ['Playfair Display', 'Georgia', 'serif'],
           },
+          keyframes: {
+            stepFadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(12px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+          },
+          animation: {
+            stepFadeIn: 'stepFadeIn 0.4s ease forwards',
+          },
         },
       },
     };
@@ -60,23 +69,8 @@
       ]
     }
   </script>
-  <style>
-    body { background-color: #F5F0EB; font-family: 'Inter', system-ui, sans-serif; }
-    .error-message { color: #B33A3A; font-size: 0.75rem; line-height: 1.25; margin-top: 0.25rem; display: none; }
-    .field-error input, .field-error select { border-color: #B33A3A; }
-    .field-error .error-message { display: block; }
-    .field-success input, .field-success select { border-color: #2E7D32; }
-    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-    input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid #C6974A; outline-offset: 2px; }
-    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
-    /* Step carousel */
-    .step { transition: opacity 0.35s ease, transform 0.35s ease; }
-    .step.hidden { display: none; }
-    .step:not(.hidden) { display: block; animation: stepFadeIn 0.4s ease forwards; }
-    @keyframes stepFadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-  </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col bg-brand-ivory font-sans">
   <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-brand-ochre focus:text-brand-darkbrown focus:rounded focus:font-medium">Saltar al contenido principal</a>
 
   <!-- ==================== HEADER ==================== -->
@@ -89,8 +83,8 @@
         <!-- Language selector + back link -->
         <div class="flex items-center gap-4">
           <div class="flex border border-brand-ochre/30 rounded" role="radiogroup" aria-label="Seleccionar idioma">
-            <button data-lang="es" aria-pressed="true" aria-checked="true" class="inline-flex items-center justify-center min-w-11 min-h-11 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-brand-ochre border-brand-ochre bg-brand-ochre/10 transition-all duration-300" onclick="toggleLanguage()">ES</button>
-            <button data-lang="en" aria-pressed="false" aria-checked="false" class="inline-flex items-center justify-center min-w-11 min-h-11 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-brand-ivory/70 border-l border-brand-ochre/30 bg-transparent transition-all duration-300" onclick="toggleLanguage()">EN</button>
+            <button data-lang="es" aria-pressed="true" aria-checked="true" class="inline-flex items-center justify-center min-w-11 min-h-11 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-brand-ochre border-brand-ochre bg-brand-ochre/10 transition-all duration-300 motion-reduce:transition-none" onclick="toggleLanguage()">ES</button>
+            <button data-lang="en" aria-pressed="false" aria-checked="false" class="inline-flex items-center justify-center min-w-11 min-h-11 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-brand-ivory/70 border-l border-brand-ochre/30 bg-transparent transition-all duration-300 motion-reduce:transition-none" onclick="toggleLanguage()">EN</button>
           </div>
           <a href="index.html" class="text-brand-ivory/75 hover:text-brand-ochre text-xs uppercase tracking-wider font-medium transition-colors duration-300 hidden sm:inline-block" data-i18n="back">← Volver al inicio</a>
         </div>
@@ -140,7 +134,7 @@
         <form id="brasaForm" novalidate aria-label="Formulario de registro">
 
           <!-- ======= PASO 1 — DATOS PERSONALES ======= -->
-          <div id="step-1" class="step" role="group" aria-label="Paso 1: Datos personales">
+          <div id="step-1" class="step transition-[opacity,transform] duration-[350ms] ease-in-out animate-stepFadeIn motion-reduce:transition-none" role="group" aria-label="Paso 1: Datos personales">
             <fieldset>
               <legend class="sr-only" data-i18n="section.personal">Datos personales</legend>
 
@@ -150,8 +144,8 @@
                   <span data-i18n="field.name">Nombre completo</span>
                   <span class="text-brand-ochre" aria-hidden="true">*</span>
                 </label>
-                <input type="text" id="fullName" name="fullName" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal placeholder:text-brand-warmgray/50 text-sm focus:border-brand-ochre transition-colors duration-200" placeholder="Ej: Juan Pérez" required aria-describedby="fullName-error" autocomplete="name">
-                <div id="fullName-error" class="error-message" role="alert" aria-live="polite">Ingresa tu nombre completo (nombre y apellido)</div>
+                <input type="text" id="fullName" name="fullName" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal placeholder:text-brand-warmgray/50 text-sm focus:border-brand-ochre transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-brand-ochre focus-visible:outline-offset-2" placeholder="Ej: Juan Pérez" required aria-describedby="fullName-error" autocomplete="name">
+                <div id="fullName-error" class="error-message hidden text-[#B33A3A] text-xs leading-tight mt-1" role="alert" aria-live="polite">Ingresa tu nombre completo (nombre y apellido)</div>
               </div>
 
               <!-- Email -->
@@ -160,8 +154,8 @@
                   <span data-i18n="field.email">Email</span>
                   <span class="text-brand-ochre" aria-hidden="true">*</span>
                 </label>
-                <input type="email" id="email" name="email" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal placeholder:text-brand-warmgray/50 text-sm focus:border-brand-ochre transition-colors duration-200" placeholder="Ej: nombre@correo.com" required aria-describedby="email-error" autocomplete="email">
-                <div id="email-error" class="error-message" role="alert" aria-live="polite">Ingresa un email válido (ejemplo: nombre@correo.com)</div>
+                <input type="email" id="email" name="email" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal placeholder:text-brand-warmgray/50 text-sm focus:border-brand-ochre transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-brand-ochre focus-visible:outline-offset-2" placeholder="Ej: nombre@correo.com" required aria-describedby="email-error" autocomplete="email">
+                <div id="email-error" class="error-message hidden text-[#B33A3A] text-xs leading-tight mt-1" role="alert" aria-live="polite">Ingresa un email válido (ejemplo: nombre@correo.com)</div>
               </div>
 
               <!-- Teléfono -->
@@ -170,24 +164,24 @@
                   <span data-i18n="field.phone">Teléfono</span>
                   <span class="text-brand-ochre" aria-hidden="true">*</span>
                 </label>
-                <input type="tel" id="phone" name="phone" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal placeholder:text-brand-warmgray/50 text-sm focus:border-brand-ochre transition-colors duration-200" placeholder="Ej: +57 300 123 4567" required aria-describedby="phone-error" autocomplete="tel">
-                <div id="phone-error" class="error-message" role="alert" aria-live="polite">El teléfono debe incluir código de país (ejemplo: +57 300 123 4567 o +1 305 123 4567)</div>
+                <input type="tel" id="phone" name="phone" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal placeholder:text-brand-warmgray/50 text-sm focus:border-brand-ochre transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-brand-ochre focus-visible:outline-offset-2" placeholder="Ej: +57 300 123 4567" required aria-describedby="phone-error" autocomplete="tel">
+                <div id="phone-error" class="error-message hidden text-[#B33A3A] text-xs leading-tight mt-1" role="alert" aria-live="polite">El teléfono debe incluir código de país (ejemplo: +57 300 123 4567 o +1 305 123 4567)</div>
               </div>
             </fieldset>
 
             <!-- Navigation -->
             <div class="flex flex-col sm:flex-row gap-4 pt-4">
-              <button type="button" id="btn-step1-next" class="flex-1 px-8 py-4 bg-brand-ochre text-brand-darkbrown font-semibold uppercase tracking-[0.15em] text-sm hover:bg-brand-ochre/90 transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="step.next">
+              <button type="button" id="btn-step1-next" class="flex-1 px-8 py-4 bg-brand-ochre text-brand-darkbrown font-semibold uppercase tracking-[0.15em] text-sm hover:bg-brand-ochre/90 transition-all duration-300 motion-reduce:transition-none focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="step.next">
                 Siguiente
               </button>
-              <button type="reset" id="btn-clear-step1" class="px-8 py-4 border border-brand-warmgray/40 text-brand-charcoal/70 font-medium uppercase tracking-[0.15em] text-sm hover:bg-brand-charcoal/5 hover:text-brand-charcoal transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="form.clear">
+              <button type="reset" id="btn-clear-step1" class="px-8 py-4 border border-brand-warmgray/40 text-brand-charcoal/70 font-medium uppercase tracking-[0.15em] text-sm hover:bg-brand-charcoal/5 hover:text-brand-charcoal transition-all duration-300 motion-reduce:transition-none focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="form.clear">
                 Limpiar formulario
               </button>
             </div>
           </div>
 
           <!-- ======= PASO 2 — UBICACIÓN ======= -->
-          <div id="step-2" class="step hidden" role="group" aria-label="Paso 2: Ubicación" aria-hidden="true" inert>
+          <div id="step-2" class="step hidden transition-[opacity,transform] duration-[350ms] ease-in-out animate-stepFadeIn motion-reduce:transition-none" role="group" aria-label="Paso 2: Ubicación" aria-hidden="true" inert>
             <fieldset>
               <legend class="sr-only" data-i18n="section.location">Ubicación</legend>
 
@@ -197,12 +191,12 @@
                   <span data-i18n="field.country">País</span>
                   <span class="text-brand-ochre" aria-hidden="true">*</span>
                 </label>
-                <select id="country" name="country" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal text-sm focus:border-brand-ochre transition-colors duration-200" required aria-describedby="country-error">
+                <select id="country" name="country" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal text-sm focus:border-brand-ochre transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-brand-ochre focus-visible:outline-offset-2" required aria-describedby="country-error">
                   <option value="" data-i18n="select.placeholder">Selecciona tu país</option>
                   <option value="CO" data-i18n="country.colombia">Colombia</option>
                   <option value="US" data-i18n="country.usa">Estados Unidos</option>
                 </select>
-                <div id="country-error" class="error-message" role="alert" aria-live="polite">Selecciona tu país</div>
+                <div id="country-error" class="error-message hidden text-[#B33A3A] text-xs leading-tight mt-1" role="alert" aria-live="polite">Selecciona tu país</div>
               </div>
 
               <!-- Ciudad -->
@@ -211,10 +205,10 @@
                   <span data-i18n="field.city">Ciudad</span>
                   <span class="text-brand-ochre" aria-hidden="true">*</span>
                 </label>
-                <select id="city" name="city" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal text-sm focus:border-brand-ochre transition-colors duration-200" required aria-describedby="city-error">
+                <select id="city" name="city" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal text-sm focus:border-brand-ochre transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-brand-ochre focus-visible:outline-offset-2" required aria-describedby="city-error">
                   <option value="" data-i18n="select.city.placeholder">Selecciona tu ciudad</option>
                 </select>
-                <div id="city-error" class="error-message" role="alert" aria-live="polite">Selecciona tu ciudad</div>
+                <div id="city-error" class="error-message hidden text-[#B33A3A] text-xs leading-tight mt-1" role="alert" aria-live="polite">Selecciona tu ciudad</div>
               </div>
 
               <!-- Ubicación favorita (no obligatorio) -->
@@ -223,29 +217,29 @@
                   <span data-i18n="field.favorite">Ubicación favorita de Brasaland</span>
                   <span class="text-brand-charcoal/65 text-xs font-light" data-i18n="field.optional">(opcional)</span>
                 </label>
-                <select id="favoriteLocation" name="favoriteLocation" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal text-sm focus:border-brand-ochre transition-colors duration-200" aria-describedby="favoriteLocation-error">
+                <select id="favoriteLocation" name="favoriteLocation" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal text-sm focus:border-brand-ochre transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-brand-ochre focus-visible:outline-offset-2" aria-describedby="favoriteLocation-error">
                   <option value="" data-i18n="select.favorite.placeholder">Selecciona tu ubicación favorita</option>
                 </select>
-                <div id="favoriteLocation-error" class="error-message" role="alert" aria-live="polite"></div>
+                <div id="favoriteLocation-error" class="error-message hidden text-[#B33A3A] text-xs leading-tight mt-1" role="alert" aria-live="polite"></div>
               </div>
             </fieldset>
 
             <!-- Navigation -->
             <div class="flex flex-col sm:flex-row gap-4 pt-4">
-              <button type="button" id="btn-step2-back" class="px-8 py-4 border border-brand-warmgray/40 text-brand-charcoal/70 font-medium uppercase tracking-[0.15em] text-sm hover:bg-brand-charcoal/5 hover:text-brand-charcoal transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="step.back">
+              <button type="button" id="btn-step2-back" class="px-8 py-4 border border-brand-warmgray/40 text-brand-charcoal/70 font-medium uppercase tracking-[0.15em] text-sm hover:bg-brand-charcoal/5 hover:text-brand-charcoal transition-all duration-300 motion-reduce:transition-none focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="step.back">
                 Atrás
               </button>
-              <button type="button" id="btn-step2-next" class="flex-1 px-8 py-4 bg-brand-ochre text-brand-darkbrown font-semibold uppercase tracking-[0.15em] text-sm hover:bg-brand-ochre/90 transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="step.next">
+              <button type="button" id="btn-step2-next" class="flex-1 px-8 py-4 bg-brand-ochre text-brand-darkbrown font-semibold uppercase tracking-[0.15em] text-sm hover:bg-brand-ochre/90 transition-all duration-300 motion-reduce:transition-none focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="step.next">
                 Siguiente
               </button>
-              <button type="reset" id="btn-clear-step2" class="px-8 py-4 border border-brand-warmgray/40 text-brand-charcoal/70 font-medium uppercase tracking-[0.15em] text-sm hover:bg-brand-charcoal/5 hover:text-brand-charcoal transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="form.clear">
+              <button type="reset" id="btn-clear-step2" class="px-8 py-4 border border-brand-warmgray/40 text-brand-charcoal/70 font-medium uppercase tracking-[0.15em] text-sm hover:bg-brand-charcoal/5 hover:text-brand-charcoal transition-all duration-300 motion-reduce:transition-none focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="form.clear">
                 Limpiar formulario
               </button>
             </div>
           </div>
 
           <!-- ======= PASO 3 — PREFERENCIAS Y ORIGEN ======= -->
-          <div id="step-3" class="step hidden" role="group" aria-label="Paso 3: Preferencias y origen" aria-hidden="true" inert>
+          <div id="step-3" class="step hidden transition-[opacity,transform] duration-[350ms] ease-in-out animate-stepFadeIn motion-reduce:transition-none" role="group" aria-label="Paso 3: Preferencias y origen" aria-hidden="true" inert>
             <fieldset>
               <legend class="sr-only" data-i18n="section.preferences">Preferencias y origen</legend>
 
@@ -281,7 +275,7 @@
                   <span data-i18n="field.referral">¿Cómo nos conociste?</span>
                   <span class="text-brand-ochre" aria-hidden="true">*</span>
                 </label>
-                <select id="referral" name="referral" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal text-sm focus:border-brand-ochre transition-colors duration-200" required aria-describedby="referral-error">
+                <select id="referral" name="referral" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal text-sm focus:border-brand-ochre transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-brand-ochre focus-visible:outline-offset-2" required aria-describedby="referral-error">
                   <option value="" data-i18n="select.referral.placeholder">Selecciona una opción</option>
                   <option value="social-media" data-i18n="referral.social">Redes sociales</option>
                   <option value="referral" data-i18n="referral.recommendation">Recomendación</option>
@@ -289,7 +283,7 @@
                   <option value="search" data-i18n="referral.search">Búsqueda en internet</option>
                   <option value="other" data-i18n="referral.other">Otro</option>
                 </select>
-                <div id="referral-error" class="error-message" role="alert" aria-live="polite">Cuéntanos cómo conociste Brasaland</div>
+                <div id="referral-error" class="error-message hidden text-[#B33A3A] text-xs leading-tight mt-1" role="alert" aria-live="polite">Cuéntanos cómo conociste Brasaland</div>
               </div>
 
               <!-- Fecha de nacimiento -->
@@ -298,27 +292,27 @@
                   <span data-i18n="field.birthdate">Fecha de nacimiento</span>
                   <span class="text-brand-ochre" aria-hidden="true">*</span>
                 </label>
-                <input type="date" id="birthdate" name="birthdate" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal text-sm focus:border-brand-ochre transition-colors duration-200" required aria-describedby="birthdate-error" autocomplete="bday">
-                <div id="birthdate-error" class="error-message" role="alert" aria-live="polite">Debes ser mayor de 18 años para registrarte en Brasa Points</div>
+                <input type="date" id="birthdate" name="birthdate" class="w-full px-4 py-3 bg-brand-ivory border border-brand-warmgray/30 text-brand-charcoal text-sm focus:border-brand-ochre transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-brand-ochre focus-visible:outline-offset-2" required aria-describedby="birthdate-error" autocomplete="bday">
+                <div id="birthdate-error" class="error-message hidden text-[#B33A3A] text-xs leading-tight mt-1" role="alert" aria-live="polite">Debes ser mayor de 18 años para registrarte en Brasa Points</div>
               </div>
             </fieldset>
 
             <!-- Navigation -->
             <div class="flex flex-col sm:flex-row gap-4 pt-4">
-              <button type="button" id="btn-step3-back" class="px-8 py-4 border border-brand-warmgray/40 text-brand-charcoal/70 font-medium uppercase tracking-[0.15em] text-sm hover:bg-brand-charcoal/5 hover:text-brand-charcoal transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="step.back">
+              <button type="button" id="btn-step3-back" class="px-8 py-4 border border-brand-warmgray/40 text-brand-charcoal/70 font-medium uppercase tracking-[0.15em] text-sm hover:bg-brand-charcoal/5 hover:text-brand-charcoal transition-all duration-300 motion-reduce:transition-none focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="step.back">
                 Atrás
               </button>
-              <button type="button" id="btn-step3-next" class="flex-1 px-8 py-4 bg-brand-ochre text-brand-darkbrown font-semibold uppercase tracking-[0.15em] text-sm hover:bg-brand-ochre/90 transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="step.next">
+              <button type="button" id="btn-step3-next" class="flex-1 px-8 py-4 bg-brand-ochre text-brand-darkbrown font-semibold uppercase tracking-[0.15em] text-sm hover:bg-brand-ochre/90 transition-all duration-300 motion-reduce:transition-none focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="step.next">
                 Siguiente
               </button>
-              <button type="reset" id="btn-clear-step3" class="px-8 py-4 border border-brand-warmgray/40 text-brand-charcoal/70 font-medium uppercase tracking-[0.15em] text-sm hover:bg-brand-charcoal/5 hover:text-brand-charcoal transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="form.clear">
+              <button type="reset" id="btn-clear-step3" class="px-8 py-4 border border-brand-warmgray/40 text-brand-charcoal/70 font-medium uppercase tracking-[0.15em] text-sm hover:bg-brand-charcoal/5 hover:text-brand-charcoal transition-all duration-300 motion-reduce:transition-none focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="form.clear">
                 Limpiar formulario
               </button>
             </div>
           </div>
 
           <!-- ======= PASO 4 — TÉRMINOS Y CONDICIONES ======= -->
-          <div id="step-4" class="step hidden" role="group" aria-label="Paso 4: Términos y condiciones" aria-hidden="true" inert>
+          <div id="step-4" class="step hidden transition-[opacity,transform] duration-[350ms] ease-in-out animate-stepFadeIn motion-reduce:transition-none" role="group" aria-label="Paso 4: Términos y condiciones" aria-hidden="true" inert>
             <fieldset>
               <legend class="sr-only" data-i18n="section.terms">Términos y condiciones</legend>
 
@@ -330,10 +324,10 @@
                     Acepto términos del programa
                   </span>
                 </label>
-                <button type="button" id="btn-show-terms" class="inline-flex items-center min-h-11 px-3 text-xs text-brand-ochre hover:text-brand-gold underline underline-offset-2 mt-1.5 ml-7 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory">
+                <button type="button" id="btn-show-terms" class="inline-flex items-center min-h-11 px-3 text-xs text-brand-ochre hover:text-brand-gold underline underline-offset-2 mt-1.5 ml-7 transition-colors duration-200 motion-reduce:transition-none focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory">
                   Ver términos y condiciones
                 </button>
-                <div id="terms-error" class="error-message" role="alert" aria-live="polite">Debes aceptar los términos del programa Brasa Points para continuar</div>
+                <div id="terms-error" class="error-message hidden text-[#B33A3A] text-xs leading-tight mt-1" role="alert" aria-live="polite">Debes aceptar los términos del programa Brasa Points para continuar</div>
               </div>
 
               <!-- Ofertas (opcional) -->
@@ -349,13 +343,13 @@
 
             <!-- Navigation + Submit -->
             <div class="flex flex-col sm:flex-row gap-4 pt-4">
-              <button type="button" id="btn-step4-back" class="px-8 py-4 border border-brand-warmgray/40 text-brand-charcoal/70 font-medium uppercase tracking-[0.15em] text-sm hover:bg-brand-charcoal/5 hover:text-brand-charcoal transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="step.back">
+              <button type="button" id="btn-step4-back" class="px-8 py-4 border border-brand-warmgray/40 text-brand-charcoal/70 font-medium uppercase tracking-[0.15em] text-sm hover:bg-brand-charcoal/5 hover:text-brand-charcoal transition-all duration-300 motion-reduce:transition-none focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="step.back">
                 Atrás
               </button>
-              <button type="submit" id="btn-submit" class="flex-1 px-8 py-4 bg-brand-ochre text-brand-darkbrown font-semibold uppercase tracking-[0.15em] text-sm hover:bg-brand-ochre/90 transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="form.submit">
+              <button type="submit" id="btn-submit" class="flex-1 px-8 py-4 bg-brand-ochre text-brand-darkbrown font-semibold uppercase tracking-[0.15em] text-sm hover:bg-brand-ochre/90 transition-all duration-300 motion-reduce:transition-none focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="form.submit">
                 Registrarme en Brasa Points
               </button>
-              <button type="reset" id="btn-clear-step4" class="px-8 py-4 border border-brand-warmgray/40 text-brand-charcoal/70 font-medium uppercase tracking-[0.15em] text-sm hover:bg-brand-charcoal/5 hover:text-brand-charcoal transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="form.clear">
+              <button type="reset" id="btn-clear-step4" class="px-8 py-4 border border-brand-warmgray/40 text-brand-charcoal/70 font-medium uppercase tracking-[0.15em] text-sm hover:bg-brand-charcoal/5 hover:text-brand-charcoal transition-all duration-300 motion-reduce:transition-none focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory" data-i18n="form.clear">
                 Limpiar formulario
               </button>
             </div>
@@ -379,7 +373,7 @@
     <div class="bg-brand-ivory max-w-2xl mx-6 max-h-[80vh] overflow-y-auto shadow-xl">
       <div class="sticky top-0 bg-brand-ivory border-b border-brand-beige px-8 py-5 flex items-center justify-between">
         <h2 id="terms-modal-title" class="text-xl font-serif font-bold text-brand-charcoal">Términos y Condiciones — Brasa Points</h2>
-        <button type="button" id="btn-close-terms-modal" class="inline-flex items-center justify-center min-w-11 min-h-11 text-brand-warmgray hover:text-brand-charcoal transition-colors p-2 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2" aria-label="Cerrar términos y condiciones">
+        <button type="button" id="btn-close-terms-modal" class="inline-flex items-center justify-center min-w-11 min-h-11 text-brand-warmgray hover:text-brand-charcoal transition-colors motion-reduce:transition-none p-2 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2" aria-label="Cerrar términos y condiciones">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
@@ -405,7 +399,7 @@
         <p><strong>10. Contacto.</strong> Para cualquier consulta relacionada con el programa Brasa Points, puedes escribirnos a <strong>hola@brasaland.com</strong> o comunicarte con nuestro equipo en cualquiera de nuestras ubicaciones.</p>
       </div>
       <div class="sticky bottom-0 bg-brand-ivory border-t border-brand-beige px-8 py-4 flex justify-end">
-        <button type="button" id="btn-close-terms-bottom" class="px-8 py-3 bg-brand-ochre text-brand-darkbrown font-semibold uppercase tracking-[0.15em] text-sm hover:bg-brand-ochre/90 transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory">
+        <button type="button" id="btn-close-terms-bottom" class="px-8 py-3 bg-brand-ochre text-brand-darkbrown font-semibold uppercase tracking-[0.15em] text-sm hover:bg-brand-ochre/90 transition-all duration-300 motion-reduce:transition-none focus-visible:ring-2 focus-visible:ring-brand-ochre focus-visible:ring-offset-2 focus-visible:ring-offset-brand-ivory">
           Cerrar
         </button>
       </div>
