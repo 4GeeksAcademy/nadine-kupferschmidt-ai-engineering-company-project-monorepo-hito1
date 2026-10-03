@@ -225,6 +225,47 @@ function calculateCountryComparison(
   };
 }
 
+function findExtremeSales(
+  sales: SaleTransaction[],
+  currency: "USD" | "COP"
+): { highest: SaleTransaction | null; lowest: SaleTransaction | null } {
+  if (sales.length === 0) return { highest: null, lowest: null };
+
+  let highest = sales[0];
+  let lowest = sales[0];
+
+  for (const sale of sales) {
+    if (sale.totalPrice[currency] > highest.totalPrice[currency]) highest = sale;
+    if (sale.totalPrice[currency] < lowest.totalPrice[currency]) lowest = sale;
+  }
+
+  return { highest, lowest };
+}
+
+function findExtremeLocationRevenue(
+  sales: SaleTransaction[],
+  locations: Location[],
+  currency: "USD" | "COP"
+): { highest: { location: Location; revenue: number } | null; lowest: { location: Location; revenue: number } | null } {
+  if (locations.length === 0) return { highest: null, lowest: null };
+
+  const revenueByLocation = locations.map((location) => {
+    const locationSales = filterSalesByLocationLocal(sales, location.id);
+    const revenue = round2(locationSales.reduce((sum, s) => sum + s.totalPrice[currency], 0));
+    return { location, revenue };
+  });
+
+  let highest = revenueByLocation[0];
+  let lowest = revenueByLocation[0];
+
+  for (const entry of revenueByLocation) {
+    if (entry.revenue > highest.revenue) highest = entry;
+    if (entry.revenue < lowest.revenue) lowest = entry;
+  }
+
+  return { highest, lowest };
+}
+
 export {
   calculateDailyRevenue,
   calculateLocationMargin,
@@ -237,5 +278,7 @@ export {
   findTopSellingItems,
   groupWasteByReason,
   calculateCountryComparison,
+  findExtremeSales,
+  findExtremeLocationRevenue,
   CountryMetrics,
 };
