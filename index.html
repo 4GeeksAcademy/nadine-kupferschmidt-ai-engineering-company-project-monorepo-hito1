@@ -98,9 +98,9 @@
 
       <!-- Language Selector + CTA -->
       <div class="flex items-center gap-4">
-        <div class="flex items-center text-xs font-medium uppercase tracking-wider" role="radiogroup" aria-label="Selector de idioma">
-          <button id="lang-es" class="inline-flex items-center justify-center min-w-11 min-h-11 px-2 py-1 text-brand-ochre border border-brand-ochre rounded-l focus-visible:outline-2 focus-visible:outline-brand-ochre focus-visible:outline-offset-2" aria-pressed="true" data-lang="es" role="radio" aria-checked="true">ES</button>
-          <button id="lang-en" class="inline-flex items-center justify-center min-w-11 min-h-11 px-2 py-1 text-brand-ivory/70 border border-brand-ivory/20 rounded-r hover:text-brand-ochre hover:border-brand-ochre transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-brand-ochre focus-visible:outline-offset-2" aria-pressed="false" data-lang="en" role="radio" aria-checked="false">EN</button>
+        <div class="flex items-center text-xs font-medium uppercase tracking-wider" aria-label="Selector de idioma">
+          <button id="lang-es" class="inline-flex items-center justify-center min-w-11 min-h-11 px-2 py-1 text-brand-ochre border border-brand-ochre rounded-l focus-visible:outline-2 focus-visible:outline-brand-ochre focus-visible:outline-offset-2" aria-pressed="true" data-lang="es">ES</button>
+          <button id="lang-en" class="inline-flex items-center justify-center min-w-11 min-h-11 px-2 py-1 text-brand-ivory/70 border border-brand-ivory/20 rounded-r hover:text-brand-ochre hover:border-brand-ochre transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-brand-ochre focus-visible:outline-offset-2" aria-pressed="false" data-lang="en">EN</button>
         </div>
 
         <!-- Mobile menu button -->
@@ -141,9 +141,9 @@
       <!-- Background image overlay -->
       <div class="absolute inset-0">
         <picture>
-          <source srcset="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1920&q=80" media="(min-width: 1024px)">
-          <source srcset="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1280&q=80" media="(min-width: 640px)">
-          <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=640&q=80" alt="Carnes a la brasa en parrilla con llamas y humo, ambiente cálido de restaurante" width="1920" height="1080" loading="eager" decoding="async" fetchpriority="high" class="w-full h-full object-cover opacity-50 transition-opacity duration-500 ease-in-out">
+          <source srcset="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1600&q=75" media="(min-width: 1024px)">
+          <source srcset="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1000&q=75" media="(min-width: 640px)">
+          <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&q=75" alt="Carnes a la brasa en parrilla con llamas y humo, ambiente cálido de restaurante" width="1920" height="1080" loading="eager" decoding="async" fetchpriority="high" class="w-full h-full object-cover opacity-50 transition-opacity duration-500 ease-in-out">
         </picture>
         <div class="absolute inset-0 bg-gradient-to-b from-brand-darkbrown/70 via-brand-darkbrown/50 to-brand-darkbrown/80"></div>
       </div>
@@ -184,12 +184,12 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <!-- Image -->
           <div class="relative aspect-[4/5] overflow-hidden order-1 lg:order-2">
-            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80" alt="Plato de carnes a la brasa con vegetales asados, presentación elegante" width="600" height="750" loading="lazy" decoding="async" class="w-full h-full object-cover transition-opacity duration-500 ease-in-out">
+            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=75" alt="Plato de carnes a la brasa con vegetales asados, presentación elegante" width="600" height="750" loading="lazy" decoding="async" class="w-full h-full object-cover transition-opacity duration-500 ease-in-out">
             <div class="absolute inset-0 bg-brand-darkbrown/10"></div>
           </div>
           <!-- Text -->
           <div class="order-2 lg:order-1">
-            <p class="text-brand-ochre text-sm font-medium uppercase tracking-[0.25em] mb-4" data-i18n="history.label">Nuestra Historia</p>
+            <p class="text-[#7F6230] text-sm font-medium uppercase tracking-[0.25em] mb-4" data-i18n="history.label">Nuestra Historia</p>
             <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-brand-charcoal mb-8">
               <span data-i18n="history.heading">El origen</span><br>
               <span class="text-brand-ochre italic font-normal" data-i18n="history.heading2">de Brasaland</span>
@@ -208,7 +208,7 @@
       <div class="max-w-7xl mx-auto px-6 lg:px-12">
         <!-- Section header -->
         <div class="text-center max-w-2xl mx-auto mb-16 lg:mb-20">
-          <p class="text-brand-ochre text-sm font-medium uppercase tracking-[0.25em] mb-4" data-i18n="unique.label">Nuestra Esencia</p>
+          <p class="text-[#7F6230] text-sm font-medium uppercase tracking-[0.25em] mb-4" data-i18n="unique.label">Nuestra Esencia</p>
           <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-brand-charcoal mb-6" data-i18n="unique.heading">
             Lo que nos hace únicos
           </h2>
@@ -282,7 +282,7 @@
 
     <!-- ==================== IMAGE BREAK ==================== -->
     <section class="relative h-[50vh] lg:h-[60vh] overflow-hidden" aria-hidden="true">
-      <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=1920&q=80" alt="Parrilla con brasas y carne asándose, detalle del fuego" width="1920" height="1152" loading="lazy" decoding="async" class="w-full h-full object-cover transition-opacity duration-500 ease-in-out">
+      <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=1600&q=75" alt="Parrilla con brasas y carne asándose, detalle del fuego" width="1920" height="1152" loading="lazy" decoding="async" class="w-full h-full object-cover transition-opacity duration-500 ease-in-out">
       <div class="absolute inset-0 bg-brand-darkbrown/40"></div>
     </section>
 
@@ -291,7 +291,7 @@
       <div class="max-w-7xl mx-auto px-6 lg:px-12">
         <!-- Section header -->
         <div class="text-center max-w-2xl mx-auto mb-16 lg:mb-20">
-          <p class="text-brand-ochre text-sm font-medium uppercase tracking-[0.25em] mb-4" data-i18n="locations.label">Presencia Internacional</p>
+          <p class="text-[#7F6230] text-sm font-medium uppercase tracking-[0.25em] mb-4" data-i18n="locations.label">Presencia Internacional</p>
           <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-brand-charcoal mb-6" data-i18n="locations.heading">
             Nuestras Ubicaciones
           </h2>
@@ -303,7 +303,7 @@
           <!-- Colombia -->
           <article class="relative overflow-hidden bg-brand-darkbrown group">
             <div class="aspect-[16/10] overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?w=800&q=80" alt="Restaurante de carnes a la brasa en Colombia" width="800" height="500" loading="lazy" decoding="async" class="w-full h-full object-cover opacity-60 group-hover:opacity-70 transition-opacity duration-500 ease-in-out">
+              <img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?w=800&q=75" alt="Restaurante de carnes a la brasa en Colombia" width="800" height="500" loading="lazy" decoding="async" class="w-full h-full object-cover opacity-60 group-hover:opacity-70 transition-opacity duration-500 ease-in-out">
             </div>
             <div class="absolute inset-0 bg-gradient-to-t from-brand-darkbrown/90 via-brand-darkbrown/40 to-transparent"></div>
             <div class="absolute bottom-0 left-0 right-0 p-8 lg:p-10">
@@ -318,7 +318,7 @@
           <!-- Estados Unidos -->
           <article class="relative overflow-hidden bg-brand-darkbrown group">
             <div class="aspect-[16/10] overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?w=800&q=80" alt="Restaurante de carnes a la brasa en Estados Unidos" width="800" height="500" loading="lazy" decoding="async" class="w-full h-full object-cover opacity-60 group-hover:opacity-70 transition-opacity duration-500 ease-in-out">
+              <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?w=800&q=75" alt="Restaurante de carnes a la brasa en Estados Unidos" width="800" height="500" loading="lazy" decoding="async" class="w-full h-full object-cover opacity-60 group-hover:opacity-70 transition-opacity duration-500 ease-in-out">
             </div>
             <div class="absolute inset-0 bg-gradient-to-t from-brand-darkbrown/90 via-brand-darkbrown/40 to-transparent"></div>
             <div class="absolute bottom-0 left-0 right-0 p-8 lg:p-10">
@@ -337,7 +337,7 @@
     <section id="brasa-points" class="relative py-20 lg:py-32 bg-brand-darkbrown overflow-hidden" aria-label="Brasa Points">
       <!-- Background image -->
       <div class="absolute inset-0">
-        <img src="https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=1600&q=80" alt="Fuego y brasas incandescentes, ambiente cálido" width="1920" height="1080" loading="lazy" decoding="async" class="w-full h-full object-cover opacity-20 transition-opacity duration-500 ease-in-out">
+        <img src="https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=1400&q=75" alt="Fuego y brasas incandescentes, ambiente cálido" width="1920" height="1080" loading="lazy" decoding="async" class="w-full h-full object-cover opacity-20 transition-opacity duration-500 ease-in-out">
         <div class="absolute inset-0 bg-gradient-to-r from-brand-darkbrown via-brand-darkbrown/90 to-brand-darkbrown"></div>
       </div>
 
@@ -396,7 +396,7 @@
 
     <!-- ==================== IMAGE BREAK 2 ==================== -->
     <section class="relative h-[40vh] lg:h-[50vh] overflow-hidden" aria-hidden="true">
-      <img src="https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=1600&q=80" alt="Detalle de carne a la brasa siendo preparada con especias" width="1920" height="960" loading="lazy" decoding="async" class="w-full h-full object-cover transition-opacity duration-500 ease-in-out">
+      <img src="https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=1400&q=75" alt="Detalle de carne a la brasa siendo preparada con especias" width="1920" height="960" loading="lazy" decoding="async" class="w-full h-full object-cover transition-opacity duration-500 ease-in-out">
       <div class="absolute inset-0 bg-brand-darkbrown/30"></div>
     </section>
 
@@ -404,7 +404,7 @@
     <section id="contacto" class="py-20 lg:py-32 bg-brand-beige" aria-label="Contacto">
       <div class="max-w-4xl mx-auto px-6 lg:px-12">
         <div class="text-center">
-          <p class="text-brand-ochre text-sm font-medium uppercase tracking-[0.25em] mb-4" data-i18n="contact.label">Contacto</p>
+          <p class="text-[#7F6230] text-sm font-medium uppercase tracking-[0.25em] mb-4" data-i18n="contact.label">Contacto</p>
           <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-brand-charcoal mb-10">
             <span data-i18n="contact.heading">Hablemos</span>
           </h2>
@@ -413,17 +413,17 @@
           <div class="flex flex-col md:flex-row justify-center gap-10 md:gap-16 lg:gap-20">
             <!-- Email -->
             <div>
-              <p class="text-brand-ochre text-xs font-semibold uppercase tracking-[0.2em] mb-2" data-i18n="contact.emailLabel">Email</p>
+              <p class="text-[#7F6230] text-xs font-semibold uppercase tracking-[0.2em] mb-2" data-i18n="contact.emailLabel">Email</p>
               <a href="mailto:hola@brasaland.com" class="text-brand-charcoal text-lg lg:text-xl font-light hover:text-brand-ochre transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-brand-ochre focus-visible:outline-offset-2">hola@brasaland.com</a>
             </div>
             <!-- Colombia -->
             <div>
-              <p class="text-brand-ochre text-xs font-semibold uppercase tracking-[0.2em] mb-2" data-i18n="contact.colombiaLabel">Colombia</p>
+              <p class="text-[#7F6230] text-xs font-semibold uppercase tracking-[0.2em] mb-2" data-i18n="contact.colombiaLabel">Colombia</p>
               <a href="tel:+5741234567" class="text-brand-charcoal text-lg lg:text-xl font-light hover:text-brand-ochre transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-brand-ochre focus-visible:outline-offset-2">+57 4 123 4567</a>
             </div>
             <!-- Florida -->
             <div>
-              <p class="text-brand-ochre text-xs font-semibold uppercase tracking-[0.2em] mb-2" data-i18n="contact.floridaLabel">Florida</p>
+              <p class="text-[#7F6230] text-xs font-semibold uppercase tracking-[0.2em] mb-2" data-i18n="contact.floridaLabel">Florida</p>
               <a href="tel:+13051234567" class="text-brand-charcoal text-lg lg:text-xl font-light hover:text-brand-ochre transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-brand-ochre focus-visible:outline-offset-2">+1 305 123 4567</a>
             </div>
           </div>
@@ -630,12 +630,10 @@
           btn.classList.remove('text-brand-ivory/70', 'border-brand-ivory/20');
           btn.classList.add('text-brand-ochre', 'border-brand-ochre');
           btn.setAttribute('aria-pressed', 'true');
-          btn.setAttribute('aria-checked', 'true');
         } else {
           btn.classList.remove('text-brand-ochre', 'border-brand-ochre');
           btn.classList.add('text-brand-ivory/70', 'border-brand-ivory/20');
           btn.setAttribute('aria-pressed', 'false');
-          btn.setAttribute('aria-checked', 'false');
         }
       });
 

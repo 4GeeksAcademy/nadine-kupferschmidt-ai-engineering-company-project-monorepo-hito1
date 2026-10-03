@@ -82,9 +82,9 @@
 
         <!-- Language selector + back link -->
         <div class="flex items-center gap-4">
-          <div class="flex border border-brand-ochre/30 rounded" role="radiogroup" aria-label="Seleccionar idioma">
-            <button data-lang="es" aria-pressed="true" aria-checked="true" class="inline-flex items-center justify-center min-w-11 min-h-11 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-brand-ochre border-brand-ochre bg-brand-ochre/10 transition-all duration-300 motion-reduce:transition-none" onclick="toggleLanguage()">ES</button>
-            <button data-lang="en" aria-pressed="false" aria-checked="false" class="inline-flex items-center justify-center min-w-11 min-h-11 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-brand-ivory/70 border-l border-brand-ochre/30 bg-transparent transition-all duration-300 motion-reduce:transition-none" onclick="toggleLanguage()">EN</button>
+          <div class="flex border border-brand-ochre/30 rounded" aria-label="Seleccionar idioma">
+            <button data-lang="es" aria-pressed="true" class="inline-flex items-center justify-center min-w-11 min-h-11 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-brand-ochre border-brand-ochre bg-brand-ochre/10 transition-all duration-300 motion-reduce:transition-none" onclick="toggleLanguage()">ES</button>
+            <button data-lang="en" aria-pressed="false" class="inline-flex items-center justify-center min-w-11 min-h-11 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-brand-ivory/70 border-l border-brand-ochre/30 bg-transparent transition-all duration-300 motion-reduce:transition-none" onclick="toggleLanguage()">EN</button>
           </div>
           <a href="index.html" class="text-brand-ivory/75 hover:text-brand-ochre text-xs uppercase tracking-wider font-medium transition-colors duration-300 hidden sm:inline-block" data-i18n="back">← Volver al inicio</a>
         </div>
@@ -97,7 +97,7 @@
     <!-- Hero section -->
     <section class="relative bg-brand-darkbrown overflow-hidden">
       <div class="absolute inset-0">
-        <img src="https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=1024&q=80" srcset="https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=640&q=80 640w, https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=1024&q=80 1024w, https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=1920&q=80 1920w" sizes="100vw" alt="" width="1920" height="1080" loading="eager" decoding="async" fetchpriority="high" class="w-full h-full object-cover opacity-10" aria-hidden="true">
+        <img src="https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=1024&q=75" srcset="https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=640&q=75 640w, https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=1024&q=75 1024w, https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=1920&q=75 1920w" sizes="100vw" alt="" width="1920" height="1080" loading="eager" decoding="async" fetchpriority="high" class="w-full h-full object-cover opacity-10" aria-hidden="true">
         <div class="absolute inset-0 bg-gradient-to-b from-brand-darkbrown via-brand-darkbrown/90 to-brand-darkbrown"></div>
       </div>
       <div class="relative z-10 max-w-3xl mx-auto px-6 py-20 lg:py-28 text-center">
@@ -126,7 +126,7 @@
       <div class="max-w-2xl mx-auto px-6 lg:px-8">
         <!-- Progress indicator -->
         <div id="step-progress" class="text-center mb-10" aria-live="polite" role="status">
-          <p class="text-brand-ochre text-xs font-medium uppercase tracking-[0.2em] mb-1" id="step-counter" data-i18n="step.progress">Paso 1 de 4</p>
+          <p class="text-[#7F6230] text-xs font-medium uppercase tracking-[0.2em] mb-1" id="step-counter" data-i18n="step.progress">Paso 1 de 4</p>
           <p class="text-brand-charcoal font-serif text-lg font-semibold" id="step-title" data-i18n="step1.title">Datos personales</p>
           <div class="w-8 h-0.5 bg-brand-ochre mx-auto mt-3"></div>
         </div>
@@ -554,12 +554,10 @@
           btn.classList.remove('text-brand-ivory/70', 'border-brand-ivory/20');
           btn.classList.add('text-brand-ochre', 'border-brand-ochre', 'bg-brand-ochre/10');
           btn.setAttribute('aria-pressed', 'true');
-          btn.setAttribute('aria-checked', 'true');
         } else {
           btn.classList.remove('text-brand-ochre', 'border-brand-ochre', 'bg-brand-ochre/10');
           btn.classList.add('text-brand-ivory/70', 'border-brand-ivory/20');
           btn.setAttribute('aria-pressed', 'false');
-          btn.setAttribute('aria-checked', 'false');
         }
       });
 
