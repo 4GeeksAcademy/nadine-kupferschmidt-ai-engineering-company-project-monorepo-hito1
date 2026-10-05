@@ -1,21 +1,30 @@
-import { MenuItem, Location, SaleTransaction } from "./types/models";
-import { findLocationById, binarySearchLocationByCapacity } from "./utils/search";
+import { MenuItem, Location, SaleTransaction, WasteRecord } from "./types/models";
+import { findLocationById, findMenuItemByName, binarySearchLocationByCapacity } from "./utils/search";
 import {
   sortLocationsByCapacity,
   filterActiveLocations,
   filterMenuItemsByCategory,
   sortMenuItemsByPrice,
+  filterSalesByDateRange,
 } from "./utils/collections";
 import {
+  calculateDailyRevenue,
   calculateLocationMargin,
+  calculateWasteCost,
+  convertCurrency,
+  scoreLocationPerformance,
   rankLocationsByPerformance,
   countSalesByPaymentMethod,
+  calculateAverageTicket,
+  findTopSellingItems,
+  groupWasteByReason,
+  calculateCountryComparison,
   findExtremeSales,
   findExtremeLocationRevenue,
-  findTopSellingItems,
 } from "./utils/transformations";
 import { validateMenuItem, validateSaleTransaction, validateLocation } from "./utils/validations";
 
+// ---- Ítems de menú (cubren las 5 categorías de MenuCategory) ----
 export const sampleMenuItems: MenuItem[] = [
   {
     id: "ITEM-PICANHA-250",
@@ -41,8 +50,45 @@ export const sampleMenuItems: MenuItem[] = [
     allergens: [],
     status: "Active",
   },
+  {
+    id: "ITEM-COKE",
+    name: "Coca-Cola",
+    category: "Beverage",
+    basePrice: { USD: 2.5, COP: 10000 },
+    ingredientCost: { USD: 0.8, COP: 3200 },
+    prepTimeMinutes: 2,
+    isAvailableInColombia: true,
+    isAvailableInUSA: true,
+    allergens: [],
+    status: "Active",
+  },
+  {
+    id: "ITEM-TRESLECHES",
+    name: "Tres Leches",
+    category: "Dessert",
+    basePrice: { USD: 6.0, COP: 24000 },
+    ingredientCost: { USD: 2.1, COP: 8400 },
+    prepTimeMinutes: 5,
+    isAvailableInColombia: true,
+    isAvailableInUSA: false,
+    allergens: ["Lácteos", "Huevo"],
+    status: "Active",
+  },
+  {
+    id: "ITEM-COMBO-FAMILIAR",
+    name: "Combo Familiar",
+    category: "Combo",
+    basePrice: { USD: 42.0, COP: 168000 },
+    ingredientCost: { USD: 16.5, COP: 66000 },
+    prepTimeMinutes: 25,
+    isAvailableInColombia: true,
+    isAvailableInUSA: true,
+    allergens: [],
+    status: "Seasonal",
+  },
 ];
 
+// ---- Ubicaciones (2 por país) ----
 export const sampleLocations: Location[] = [
   {
     id: "LOC-MEDELLIN-01",
@@ -58,6 +104,19 @@ export const sampleLocations: Location[] = [
     status: "Active",
   },
   {
+    id: "LOC-BOGOTA-01",
+    name: "Brasaland Bogotá",
+    city: "Bogotá",
+    country: "Colombia",
+    openingYear: 2014,
+    seatingCapacity: 60,
+    staffCount: 10,
+    monthlyRentCost: { USD: 1800, COP: 7200000 },
+    averageMonthlyUtilities: { USD: 450, COP: 1800000 },
+    manager: "Laura Peña",
+    status: "Active",
+  },
+  {
     id: "LOC-MIAMI-01",
     name: "Brasaland Miami Beach",
     city: "Miami",
@@ -70,8 +129,22 @@ export const sampleLocations: Location[] = [
     manager: "Jake Morrison",
     status: "Active",
   },
+  {
+    id: "LOC-ORLANDO-01",
+    name: "Brasaland Orlando",
+    city: "Orlando",
+    country: "USA",
+    openingYear: 2021,
+    seatingCapacity: 70,
+    staffCount: 11,
+    monthlyRentCost: { USD: 4200, COP: 16800000 },
+    averageMonthlyUtilities: { USD: 650, COP: 2600000 },
+    manager: "Sofía Ramírez",
+    status: "Under renovation",
+  },
 ];
 
+// ---- Ventas (cubren los 4 métodos de pago) ----
 export const sampleSales: SaleTransaction[] = [
   {
     id: "TXN-2024-15482",
@@ -93,24 +166,107 @@ export const sampleSales: SaleTransaction[] = [
     timestamp: new Date("2024-03-15T20:15:00"),
     waiterName: "John Smith",
   },
+  {
+    id: "TXN-2024-15484",
+    locationId: "LOC-BOGOTA-01",
+    itemId: "ITEM-COMBO-FAMILIAR",
+    quantity: 1,
+    totalPrice: { USD: 42.0, COP: 168000 },
+    paymentMethod: "Debit card",
+    timestamp: new Date("2024-03-16T13:10:00"),
+    waiterName: "Andrés Lozano",
+  },
+  {
+    id: "TXN-2024-15485",
+    locationId: "LOC-MEDELLIN-01",
+    itemId: "ITEM-COKE",
+    quantity: 4,
+    totalPrice: { USD: 10.0, COP: 40000 },
+    paymentMethod: "Digital wallet",
+    timestamp: new Date("2024-03-16T14:00:00"),
+    waiterName: "María González",
+  },
+  {
+    id: "TXN-2024-15486",
+    locationId: "LOC-MIAMI-01",
+    itemId: "ITEM-TRESLECHES",
+    quantity: 2,
+    totalPrice: { USD: 12.0, COP: 48000 },
+    paymentMethod: "Credit card",
+    timestamp: new Date("2024-03-17T21:05:00"),
+    waiterName: "Jake Morrison",
+  },
 ];
 
+// ---- Registros de desperdicio ----
+export const sampleWasteRecords: WasteRecord[] = [
+  {
+    id: "WASTE-0001",
+    locationId: "LOC-MEDELLIN-01",
+    itemId: "ITEM-PICANHA-250",
+    quantity: 2,
+    reason: "Expired",
+    cost: { USD: 14.4, COP: 57600 },
+    timestamp: new Date("2024-03-14T08:00:00"),
+    reportedBy: "Carlos Jiménez",
+  },
+  {
+    id: "WASTE-0002",
+    locationId: "LOC-MIAMI-01",
+    itemId: "ITEM-FRIES",
+    quantity: 5,
+    reason: "Cooking error",
+    cost: { USD: 6.0, COP: 24000 },
+    timestamp: new Date("2024-03-15T12:30:00"),
+    reportedBy: "Jake Morrison",
+  },
+  {
+    id: "WASTE-0003",
+    locationId: "LOC-BOGOTA-01",
+    itemId: "ITEM-TRESLECHES",
+    quantity: 3,
+    reason: "Customer return",
+    cost: { USD: 6.3, COP: 25200 },
+    timestamp: new Date("2024-03-16T19:45:00"),
+    reportedBy: "Laura Peña",
+  },
+];
+
+// ---- Exponer todo para el panel HTML ----
 (window as any).Brasaland = {
   sampleMenuItems,
   sampleLocations,
   sampleSales,
+  sampleWasteRecords,
+
+  // search
   findLocationById,
+  findMenuItemByName,
   binarySearchLocationByCapacity,
+
+  // collections
   sortLocationsByCapacity,
   filterActiveLocations,
   filterMenuItemsByCategory,
   sortMenuItemsByPrice,
+  filterSalesByDateRange,
+
+  // transformations
+  calculateDailyRevenue,
   calculateLocationMargin,
+  calculateWasteCost,
+  convertCurrency,
+  scoreLocationPerformance,
   rankLocationsByPerformance,
   countSalesByPaymentMethod,
+  calculateAverageTicket,
+  findTopSellingItems,
+  groupWasteByReason,
+  calculateCountryComparison,
   findExtremeSales,
   findExtremeLocationRevenue,
-  findTopSellingItems,
+
+  // validations
   validateMenuItem,
   validateSaleTransaction,
   validateLocation,

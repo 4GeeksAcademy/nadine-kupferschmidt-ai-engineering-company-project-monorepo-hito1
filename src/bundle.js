@@ -7,6 +7,13 @@
     }
     return null;
   }
+  function findMenuItemByName(items, name) {
+    const targetName = name.toLowerCase();
+    for (const item of items) {
+      if (item.name.toLowerCase() === targetName) return item;
+    }
+    return null;
+  }
   function binarySearchLocationByCapacity(sortedLocations, targetCapacity) {
     let low = 0;
     let high = sortedLocations.length - 1;
@@ -25,6 +32,14 @@
   }
 
   // src/utils/collections.ts
+  function filterSalesByDateRange(sales, startDate, endDate) {
+    const start = startDate.getTime();
+    const end = endDate.getTime();
+    return sales.filter((sale) => {
+      const time = sale.timestamp.getTime();
+      return time >= start && time <= end;
+    });
+  }
   function filterMenuItemsByCategory(items, category) {
     return items.filter((item) => item.category === category);
   }
@@ -43,11 +58,20 @@
   }
 
   // src/utils/transformations.ts
+  var USD_TO_COP_RATE = 4e3;
   function round2(value) {
     return Math.round(value * 100) / 100;
   }
+  function isSameCalendarDay(a, b) {
+    return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+  }
   function filterSalesByLocationLocal(sales, locationId) {
     return sales.filter((sale) => sale.locationId === locationId);
+  }
+  function calculateDailyRevenue(sales, date, currency) {
+    const dailySales = sales.filter((sale) => isSameCalendarDay(sale.timestamp, date));
+    const total = dailySales.reduce((sum, sale) => sum + sale.totalPrice[currency], 0);
+    return round2(total);
   }
   function calculateLocationMargin(sales, menuItems, locationId, currency) {
     const locationSales = filterSalesByLocationLocal(sales, locationId);
@@ -63,6 +87,15 @@
     if (totalRevenue === 0) return 0;
     const margin = (totalRevenue - totalIngredientCost) / totalRevenue * 100;
     return round2(margin);
+  }
+  function calculateWasteCost(wasteRecords, locationId, currency) {
+    const total = wasteRecords.filter((record) => record.locationId === locationId).reduce((sum, record) => sum + record.cost[currency], 0);
+    return round2(total);
+  }
+  function convertCurrency(amount, fromCurrency, toCurrency) {
+    if (fromCurrency === toCurrency) return amount;
+    const result = fromCurrency === "USD" ? amount * USD_TO_COP_RATE : amount / USD_TO_COP_RATE;
+    return round2(result);
   }
   function scoreLocationPerformance(location, sales, wasteRecords, menuItems) {
     const locationSales = filterSalesByLocationLocal(sales, location.id);
@@ -102,6 +135,11 @@
     }
     return counts;
   }
+  function calculateAverageTicket(sales, currency) {
+    if (sales.length === 0) return 0;
+    const total = sales.reduce((sum, sale) => sum + sale.totalPrice[currency], 0);
+    return round2(total / sales.length);
+  }
   function findTopSellingItems(sales, menuItems, topN) {
     const quantityByItemId = {};
     for (const sale of sales) {
@@ -115,6 +153,45 @@
       }
     }
     return result.sort((a, b) => b.totalSold - a.totalSold).slice(0, topN);
+  }
+  function groupWasteByReason(wasteRecords) {
+    const groups = {
+      Expired: [],
+      "Cooking error": [],
+      "Customer return": [],
+      Damage: [],
+      Other: []
+    };
+    for (const record of wasteRecords) {
+      groups[record.reason].push(record);
+    }
+    return groups;
+  }
+  function calculateCountryComparison(sales, locations, menuItems) {
+    function metricsFor(country) {
+      const countryLocations = locations.filter((loc) => loc.country === country);
+      const locationIds = countryLocations.map((loc) => loc.id);
+      const countrySales = sales.filter((sale) => locationIds.includes(sale.locationId));
+      const totalRevenue = {
+        USD: round2(countrySales.reduce((sum, s) => sum + s.totalPrice.USD, 0)),
+        COP: round2(countrySales.reduce((sum, s) => sum + s.totalPrice.COP, 0))
+      };
+      const totalLocations = countryLocations.length;
+      const averageRevenuePerLocation = {
+        USD: totalLocations > 0 ? round2(totalRevenue.USD / totalLocations) : 0,
+        COP: totalLocations > 0 ? round2(totalRevenue.COP / totalLocations) : 0
+      };
+      return {
+        totalLocations,
+        totalRevenue,
+        averageRevenuePerLocation,
+        totalSales: countrySales.length
+      };
+    }
+    return {
+      Colombia: metricsFor("Colombia"),
+      USA: metricsFor("USA")
+    };
   }
   function findExtremeSales(sales, currency) {
     if (sales.length === 0) return { highest: null, lowest: null };
@@ -218,6 +295,42 @@
       isAvailableInUSA: true,
       allergens: [],
       status: "Active"
+    },
+    {
+      id: "ITEM-COKE",
+      name: "Coca-Cola",
+      category: "Beverage",
+      basePrice: { USD: 2.5, COP: 1e4 },
+      ingredientCost: { USD: 0.8, COP: 3200 },
+      prepTimeMinutes: 2,
+      isAvailableInColombia: true,
+      isAvailableInUSA: true,
+      allergens: [],
+      status: "Active"
+    },
+    {
+      id: "ITEM-TRESLECHES",
+      name: "Tres Leches",
+      category: "Dessert",
+      basePrice: { USD: 6, COP: 24e3 },
+      ingredientCost: { USD: 2.1, COP: 8400 },
+      prepTimeMinutes: 5,
+      isAvailableInColombia: true,
+      isAvailableInUSA: false,
+      allergens: ["L\xE1cteos", "Huevo"],
+      status: "Active"
+    },
+    {
+      id: "ITEM-COMBO-FAMILIAR",
+      name: "Combo Familiar",
+      category: "Combo",
+      basePrice: { USD: 42, COP: 168e3 },
+      ingredientCost: { USD: 16.5, COP: 66e3 },
+      prepTimeMinutes: 25,
+      isAvailableInColombia: true,
+      isAvailableInUSA: true,
+      allergens: [],
+      status: "Seasonal"
     }
   ];
   var sampleLocations = [
@@ -235,6 +348,19 @@
       status: "Active"
     },
     {
+      id: "LOC-BOGOTA-01",
+      name: "Brasaland Bogot\xE1",
+      city: "Bogot\xE1",
+      country: "Colombia",
+      openingYear: 2014,
+      seatingCapacity: 60,
+      staffCount: 10,
+      monthlyRentCost: { USD: 1800, COP: 72e5 },
+      averageMonthlyUtilities: { USD: 450, COP: 18e5 },
+      manager: "Laura Pe\xF1a",
+      status: "Active"
+    },
+    {
       id: "LOC-MIAMI-01",
       name: "Brasaland Miami Beach",
       city: "Miami",
@@ -246,6 +372,19 @@
       averageMonthlyUtilities: { USD: 800, COP: 32e5 },
       manager: "Jake Morrison",
       status: "Active"
+    },
+    {
+      id: "LOC-ORLANDO-01",
+      name: "Brasaland Orlando",
+      city: "Orlando",
+      country: "USA",
+      openingYear: 2021,
+      seatingCapacity: 70,
+      staffCount: 11,
+      monthlyRentCost: { USD: 4200, COP: 168e5 },
+      averageMonthlyUtilities: { USD: 650, COP: 26e5 },
+      manager: "Sof\xEDa Ram\xEDrez",
+      status: "Under renovation"
     }
   ];
   var sampleSales = [
@@ -268,24 +407,100 @@
       paymentMethod: "Cash",
       timestamp: /* @__PURE__ */ new Date("2024-03-15T20:15:00"),
       waiterName: "John Smith"
+    },
+    {
+      id: "TXN-2024-15484",
+      locationId: "LOC-BOGOTA-01",
+      itemId: "ITEM-COMBO-FAMILIAR",
+      quantity: 1,
+      totalPrice: { USD: 42, COP: 168e3 },
+      paymentMethod: "Debit card",
+      timestamp: /* @__PURE__ */ new Date("2024-03-16T13:10:00"),
+      waiterName: "Andr\xE9s Lozano"
+    },
+    {
+      id: "TXN-2024-15485",
+      locationId: "LOC-MEDELLIN-01",
+      itemId: "ITEM-COKE",
+      quantity: 4,
+      totalPrice: { USD: 10, COP: 4e4 },
+      paymentMethod: "Digital wallet",
+      timestamp: /* @__PURE__ */ new Date("2024-03-16T14:00:00"),
+      waiterName: "Mar\xEDa Gonz\xE1lez"
+    },
+    {
+      id: "TXN-2024-15486",
+      locationId: "LOC-MIAMI-01",
+      itemId: "ITEM-TRESLECHES",
+      quantity: 2,
+      totalPrice: { USD: 12, COP: 48e3 },
+      paymentMethod: "Credit card",
+      timestamp: /* @__PURE__ */ new Date("2024-03-17T21:05:00"),
+      waiterName: "Jake Morrison"
+    }
+  ];
+  var sampleWasteRecords = [
+    {
+      id: "WASTE-0001",
+      locationId: "LOC-MEDELLIN-01",
+      itemId: "ITEM-PICANHA-250",
+      quantity: 2,
+      reason: "Expired",
+      cost: { USD: 14.4, COP: 57600 },
+      timestamp: /* @__PURE__ */ new Date("2024-03-14T08:00:00"),
+      reportedBy: "Carlos Jim\xE9nez"
+    },
+    {
+      id: "WASTE-0002",
+      locationId: "LOC-MIAMI-01",
+      itemId: "ITEM-FRIES",
+      quantity: 5,
+      reason: "Cooking error",
+      cost: { USD: 6, COP: 24e3 },
+      timestamp: /* @__PURE__ */ new Date("2024-03-15T12:30:00"),
+      reportedBy: "Jake Morrison"
+    },
+    {
+      id: "WASTE-0003",
+      locationId: "LOC-BOGOTA-01",
+      itemId: "ITEM-TRESLECHES",
+      quantity: 3,
+      reason: "Customer return",
+      cost: { USD: 6.3, COP: 25200 },
+      timestamp: /* @__PURE__ */ new Date("2024-03-16T19:45:00"),
+      reportedBy: "Laura Pe\xF1a"
     }
   ];
   window.Brasaland = {
     sampleMenuItems,
     sampleLocations,
     sampleSales,
+    sampleWasteRecords,
+    // search
     findLocationById,
+    findMenuItemByName,
     binarySearchLocationByCapacity,
+    // collections
     sortLocationsByCapacity,
     filterActiveLocations,
     filterMenuItemsByCategory,
     sortMenuItemsByPrice,
+    filterSalesByDateRange,
+    // transformations
+    calculateDailyRevenue,
     calculateLocationMargin,
+    calculateWasteCost,
+    convertCurrency,
+    scoreLocationPerformance,
     rankLocationsByPerformance,
     countSalesByPaymentMethod,
+    calculateAverageTicket,
+    findTopSellingItems,
+    groupWasteByReason,
+    calculateCountryComparison,
     findExtremeSales,
     findExtremeLocationRevenue,
-    findTopSellingItems,
+    // validations
     validateMenuItem,
     validateSaleTransaction,
     validateLocation
