@@ -35,6 +35,24 @@
       .nav-item:not(.active) {
         color: rgba(253, 248, 240, 0.65);
       }
+      .sidebar {
+        background: linear-gradient(180deg, #1a1410 0%, #15110d 100%);
+      }
+      .report-button {
+        border: 1px solid #2a2a2a;
+        transition: background-color 180ms ease, color 180ms ease,
+          border-color 180ms ease;
+      }
+      .report-button:hover:not(.selected) {
+        background-color: #2a2a2a;
+        color: #fdf8f0;
+      }
+      .report-button.selected {
+        background-color: #c9a96e;
+        border-color: #c9a96e;
+        color: #1a1410;
+        font-weight: 600;
+      }
       .panel {
         display: none;
       }
@@ -48,13 +66,27 @@
   >
     <!-- Sidebar: barra horizontal con scroll en mobile, columna fija desde md -->
     <aside
-      class="w-full md:w-48 bg-brand-darkbrown flex-shrink-0 flex md:flex-col items-center md:items-stretch overflow-x-auto md:overflow-visible md:py-6 md:min-h-screen md:sticky md:top-0"
+      class="sidebar w-full md:w-56 text-brand-ivory flex-shrink-0 flex md:flex-col items-center md:items-stretch overflow-x-auto md:overflow-visible py-2 md:py-8 md:min-h-screen md:sticky md:top-0 shadow-md"
     >
-      <p
-        class="text-brand-ochre text-[10px] font-semibold uppercase tracking-widest px-5 py-3 md:pt-0 md:pb-4 whitespace-nowrap flex-shrink-0"
-      >
-        ✦ Brasaland Ops
-      </p>
+      <div class="px-5 py-3 md:pt-0 md:pb-7 flex flex-col gap-2 whitespace-nowrap flex-shrink-0">
+        <div class="flex items-center gap-2.5">
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            class="w-5 h-5 text-brand-ochre flex-shrink-0"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 2.5c1.2 3.2 4.9 4.8 4.9 9.2a4.9 4.9 0 1 1-9.8 0c0-2.3 1.1-4.3 2.8-6.1.1 2 1.1 3.2 2.1 3.8.6-2.3.6-4.4 0-6.9Z" />
+            <path d="M12.1 13.1c1.1 1.1 1.7 2 1.7 3.1a1.8 1.8 0 1 1-3.6 0c0-.8.4-1.7 1.9-3.1Z" />
+          </svg>
+          <span class="font-serif text-brand-ochre text-xs tracking-[0.22em]">BRASALAND</span>
+        </div>
+        <p class="text-brand-ochre text-[10px] font-semibold uppercase tracking-widest">Brasaland Ops</p>
+      </div>
       <div
         class="nav-item active px-5 py-3 md:py-2.5 text-sm whitespace-nowrap flex-shrink-0"
         data-panel="dashboard"
@@ -93,10 +125,10 @@
     </aside>
 
     <!-- Main content -->
-    <main class="flex-1 min-w-0 p-5 md:p-8">
+    <main class="flex-1 min-w-0 p-6 md:p-10">
       <!-- ========== SECCIÓN: DASHBOARD ========== -->
-      <section id="panel-dashboard" class="panel active max-w-6xl md:px-4 md:py-2">
-        <div class="mb-8">
+      <section id="panel-dashboard" class="panel active max-w-6xl md:px-6 md:py-4">
+        <div class="mb-10">
           <p
             class="text-brand-ochre text-xs font-semibold uppercase tracking-widest mb-2"
           >
@@ -110,13 +142,13 @@
 
         <div
           id="dashboard-results"
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7"
         ></div>
       </section>
 
       <!-- ========== SECCIÓN: UBICACIONES ========== -->
-      <section id="panel-ubicaciones" class="panel max-w-6xl md:px-4 md:py-2">
-        <div class="mb-8">
+      <section id="panel-ubicaciones" class="panel max-w-6xl md:px-6 md:py-4">
+        <div class="mb-10">
           <p
             class="text-brand-ochre text-xs font-semibold uppercase tracking-widest mb-2"
           >
@@ -126,7 +158,7 @@
           <p class="text-sm text-brand-warmgray">Filtrá por país y estado</p>
         </div>
 
-        <div class="flex flex-col md:flex-row gap-4 mb-8 md:items-end">
+        <div class="flex flex-col md:flex-row gap-5 mb-10 md:items-end">
           <div class="w-full md:w-auto">
             <label
               class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
@@ -134,7 +166,7 @@
             >
             <select
               id="loc-country"
-              class="w-full md:w-auto bg-brand-ivory border border-brand-ochre/40 rounded px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              class="w-full md:w-auto bg-brand-ivory border border-brand-ochre/40 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
             >
               <option value="">Todos</option>
               <option value="Colombia">Colombia</option>
@@ -148,7 +180,7 @@
             >
             <select
               id="loc-status"
-              class="w-full md:w-auto bg-brand-ivory border border-brand-ochre/40 rounded px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              class="w-full md:w-auto bg-brand-ivory border border-brand-ochre/40 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
             >
               <option value="">Todos</option>
               <option value="Active">Activa</option>
@@ -158,14 +190,14 @@
           </div>
           <button
             onclick="searchLocations()"
-            class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
+            class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
           >
             Buscar
           </button>
         </div>
 
         <div
-          class="overflow-x-auto bg-brand-beige border border-brand-ochre/20 rounded-lg p-4 md:p-6"
+          class="overflow-x-auto bg-brand-beige border border-brand-ochre/20 rounded-xl p-5 md:p-7 shadow-sm transition-shadow duration-200 hover:shadow-md"
         >
           <table class="w-full min-w-[560px] text-sm">
             <thead>
@@ -185,8 +217,8 @@
       </section>
 
       <!-- ========== SECCIÓN: MENÚ ========== -->
-      <section id="panel-menu" class="panel max-w-6xl md:px-4 md:py-2">
-        <div class="mb-8">
+      <section id="panel-menu" class="panel max-w-6xl md:px-6 md:py-4">
+        <div class="mb-10">
           <p
             class="text-brand-ochre text-xs font-semibold uppercase tracking-widest mb-2"
           >
@@ -198,7 +230,7 @@
           </p>
         </div>
 
-        <div class="flex flex-col md:flex-row gap-4 mb-8 md:items-end">
+        <div class="flex flex-col md:flex-row gap-5 mb-10 md:items-end">
           <div class="w-full md:w-auto">
             <label
               class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
@@ -206,7 +238,7 @@
             >
             <select
               id="menu-category"
-              class="w-full md:w-auto bg-brand-ivory border border-brand-ochre/40 rounded px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              class="w-full md:w-auto bg-brand-ivory border border-brand-ochre/40 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
             >
               <option value="">Todas</option>
               <option value="Meat">Carnes</option>
@@ -223,7 +255,7 @@
             >
             <select
               id="menu-order"
-              class="w-full md:w-auto bg-brand-ivory border border-brand-ochre/40 rounded px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              class="w-full md:w-auto bg-brand-ivory border border-brand-ochre/40 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
             >
               <option value="asc">Menor a mayor</option>
               <option value="desc">Mayor a menor</option>
@@ -231,14 +263,14 @@
           </div>
           <button
             onclick="searchMenu()"
-            class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
+            class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
           >
             Buscar
           </button>
         </div>
 
         <div
-          class="overflow-x-auto bg-brand-beige border border-brand-ochre/20 rounded-lg p-4 md:p-6"
+          class="overflow-x-auto bg-brand-beige border border-brand-ochre/20 rounded-xl p-5 md:p-7 shadow-sm transition-shadow duration-200 hover:shadow-md"
         >
           <table class="w-full min-w-[560px] text-sm">
             <thead>
@@ -258,8 +290,8 @@
       </section>
 
       <!-- ========== SECCIÓN: REPORTES ========== -->
-      <section id="panel-reportes" class="panel max-w-6xl md:px-4 md:py-2">
-        <div class="mb-8">
+      <section id="panel-reportes" class="panel max-w-6xl md:px-6 md:py-4">
+        <div class="mb-10">
           <p
             class="text-brand-ochre text-xs font-semibold uppercase tracking-widest mb-2"
           >
@@ -271,34 +303,39 @@
           </p>
         </div>
 
-        <div class="flex flex-col md:flex-row md:flex-wrap gap-3 mb-8">
+        <div class="flex flex-col md:flex-row md:flex-wrap gap-4 mb-10">
           <button
             onclick="renderReport('margin')"
-            class="w-full md:w-auto border border-brand-charcoal px-5 py-2.5 text-sm font-medium rounded hover:bg-brand-charcoal hover:text-brand-ivory transition-colors"
+            data-report="margin"
+            class="report-button w-full md:w-auto px-5 py-2.5 text-sm font-medium rounded-lg"
           >
             Margen por ubicación
           </button>
           <button
             onclick="renderReport('ranking')"
-            class="w-full md:w-auto border border-brand-charcoal px-5 py-2.5 text-sm font-medium rounded hover:bg-brand-charcoal hover:text-brand-ivory transition-colors"
+            data-report="ranking"
+            class="report-button selected w-full md:w-auto px-5 py-2.5 text-sm font-medium rounded-lg"
           >
             Ranking performance
           </button>
           <button
             onclick="renderReport('topItems')"
-            class="w-full md:w-auto border border-brand-charcoal px-5 py-2.5 text-sm font-medium rounded hover:bg-brand-charcoal hover:text-brand-ivory transition-colors"
+            data-report="topItems"
+            class="report-button w-full md:w-auto px-5 py-2.5 text-sm font-medium rounded-lg"
           >
             Ítems más vendidos
           </button>
           <button
             onclick="renderReport('extremeSales')"
-            class="w-full md:w-auto border border-brand-charcoal px-5 py-2.5 text-sm font-medium rounded hover:bg-brand-charcoal hover:text-brand-ivory transition-colors"
+            data-report="extremeSales"
+            class="report-button w-full md:w-auto px-5 py-2.5 text-sm font-medium rounded-lg"
           >
             Venta más cara/barata
           </button>
           <button
             onclick="renderReport('waste')"
-            class="w-full md:w-auto border border-brand-charcoal px-5 py-2.5 text-sm font-medium rounded hover:bg-brand-charcoal hover:text-brand-ivory transition-colors"
+            data-report="waste"
+            class="report-button w-full md:w-auto px-5 py-2.5 text-sm font-medium rounded-lg"
           >
             Desperdicio por razón
           </button>
@@ -306,13 +343,13 @@
 
         <div
           id="report-results"
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7"
         ></div>
       </section>
 
       <!-- ========== SECCIÓN: VALIDACIONES ========== -->
-      <section id="panel-validaciones" class="panel max-w-6xl md:px-4 md:py-2">
-        <div class="mb-8">
+      <section id="panel-validaciones" class="panel max-w-6xl md:px-6 md:py-4">
+        <div class="mb-10">
           <p
             class="text-brand-ochre text-xs font-semibold uppercase tracking-widest mb-2"
           >
@@ -325,9 +362,9 @@
         </div>
 
         <div
-          class="bg-brand-beige border border-brand-ochre/20 rounded-lg p-6 md:p-8 mb-6 max-w-2xl"
+          class="bg-brand-beige border border-brand-ochre/20 rounded-xl p-7 md:p-9 mb-7 max-w-2xl shadow-sm transition-shadow duration-200 hover:shadow-md"
         >
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-7">
             <div>
               <label
                 class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
@@ -337,7 +374,7 @@
                 id="val-name"
                 type="text"
                 value="Picanha 250g"
-                class="w-full bg-brand-ivory border border-brand-ochre/40 rounded px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full bg-brand-ivory border border-brand-ochre/40 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
             <div>
@@ -349,7 +386,7 @@
                 id="val-usd"
                 type="number"
                 value="18.5"
-                class="w-full bg-brand-ivory border border-brand-ochre/40 rounded px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full bg-brand-ivory border border-brand-ochre/40 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
             <div>
@@ -361,7 +398,7 @@
                 id="val-cop"
                 type="number"
                 value="74000"
-                class="w-full bg-brand-ivory border border-brand-ochre/40 rounded px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full bg-brand-ivory border border-brand-ochre/40 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
             <div>
@@ -373,14 +410,14 @@
                 id="val-prep"
                 type="number"
                 value="15"
-                class="w-full bg-brand-ivory border border-brand-ochre/40 rounded px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full bg-brand-ivory border border-brand-ochre/40 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
           </div>
 
           <button
             onclick="runValidation()"
-            class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
+            class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
           >
             Validar
           </button>
@@ -502,6 +539,9 @@
 
       function renderReport(type) {
         const el = document.getElementById("report-results");
+        document.querySelectorAll(".report-button").forEach((button) => {
+          button.classList.toggle("selected", button.dataset.report === type);
+        });
 
         if (type === "margin") {
           const margin = B.calculateLocationMargin(
@@ -711,6 +751,7 @@
       searchLocations();
       searchMenu();
       renderDashboard();
+      renderReport("ranking");
     </script>
   </body>
 </html>

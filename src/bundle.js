@@ -331,61 +331,148 @@
       isAvailableInUSA: true,
       allergens: [],
       status: "Seasonal"
+    },
+    {
+      id: "ITEM-COSTILLA",
+      name: "Costilla BBQ",
+      category: "Meat",
+      basePrice: { USD: 22.5, COP: 9e4 },
+      ingredientCost: { USD: 9, COP: 36e3 },
+      prepTimeMinutes: 30,
+      isAvailableInColombia: true,
+      isAvailableInUSA: true,
+      allergens: [],
+      status: "Active"
+    },
+    {
+      id: "ITEM-CHORIZO",
+      name: "Chorizo parrillero",
+      category: "Meat",
+      basePrice: { USD: 7.5, COP: 3e4 },
+      ingredientCost: { USD: 2.8, COP: 11200 },
+      prepTimeMinutes: 12,
+      isAvailableInColombia: true,
+      isAvailableInUSA: true,
+      allergens: [],
+      status: "Active"
+    },
+    {
+      id: "ITEM-POLLO-BRASA",
+      name: "Pollo a la brasa",
+      category: "Meat",
+      basePrice: { USD: 16, COP: 64e3 },
+      ingredientCost: { USD: 6.2, COP: 24800 },
+      prepTimeMinutes: 25,
+      isAvailableInColombia: true,
+      isAvailableInUSA: true,
+      allergens: [],
+      status: "Active"
+    },
+    {
+      id: "ITEM-LOMO",
+      name: "Lomo a la parrilla",
+      category: "Meat",
+      basePrice: { USD: 19.5, COP: 78e3 },
+      ingredientCost: { USD: 7.8, COP: 31200 },
+      prepTimeMinutes: 20,
+      isAvailableInColombia: true,
+      isAvailableInUSA: true,
+      allergens: [],
+      status: "Active"
+    },
+    {
+      id: "ITEM-MORCILLA",
+      name: "Morcilla artesanal",
+      category: "Meat",
+      basePrice: { USD: 6.5, COP: 26e3 },
+      ingredientCost: { USD: 2.4, COP: 9600 },
+      prepTimeMinutes: 12,
+      isAvailableInColombia: true,
+      isAvailableInUSA: true,
+      allergens: [],
+      status: "Active"
+    },
+    {
+      id: "ITEM-JUGO-NATURAL",
+      name: "Jugo natural de maracuy\xE1",
+      category: "Beverage",
+      basePrice: { USD: 4, COP: 16e3 },
+      ingredientCost: { USD: 1.3, COP: 5200 },
+      prepTimeMinutes: 5,
+      isAvailableInColombia: true,
+      isAvailableInUSA: true,
+      allergens: [],
+      status: "Active"
+    },
+    {
+      id: "ITEM-CERVEZA-ARTESANAL",
+      name: "Cerveza artesanal",
+      category: "Beverage",
+      basePrice: { USD: 7, COP: 28e3 },
+      ingredientCost: { USD: 2.5, COP: 1e4 },
+      prepTimeMinutes: 2,
+      isAvailableInColombia: true,
+      isAvailableInUSA: true,
+      allergens: ["Gluten"],
+      status: "Active"
+    },
+    {
+      id: "ITEM-LIMONADA",
+      name: "Limonada de la casa",
+      category: "Beverage",
+      basePrice: { USD: 3.5, COP: 14e3 },
+      ingredientCost: { USD: 1, COP: 4e3 },
+      prepTimeMinutes: 4,
+      isAvailableInColombia: true,
+      isAvailableInUSA: true,
+      allergens: [],
+      status: "Active"
+    },
+    {
+      id: "ITEM-YUCA-FRITA",
+      name: "Yuca frita",
+      category: "Side",
+      basePrice: { USD: 4, COP: 16e3 },
+      ingredientCost: { USD: 1.1, COP: 4400 },
+      prepTimeMinutes: 10,
+      isAvailableInColombia: true,
+      isAvailableInUSA: true,
+      allergens: [],
+      status: "Active"
+    },
+    {
+      id: "ITEM-FLAN-CARAMELO",
+      name: "Flan de caramelo",
+      category: "Dessert",
+      basePrice: { USD: 5, COP: 2e4 },
+      ingredientCost: { USD: 1.7, COP: 6800 },
+      prepTimeMinutes: 5,
+      isAvailableInColombia: true,
+      isAvailableInUSA: true,
+      allergens: ["L\xE1cteos", "Huevo"],
+      status: "Active"
     }
   ];
   var sampleLocations = [
-    {
-      id: "LOC-MEDELLIN-01",
-      name: "Brasaland Medell\xEDn Centro",
-      city: "Medell\xEDn",
-      country: "Colombia",
-      openingYear: 2008,
-      seatingCapacity: 80,
-      staffCount: 12,
-      monthlyRentCost: { USD: 1500, COP: 6e6 },
-      averageMonthlyUtilities: { USD: 400, COP: 16e5 },
-      manager: "Carlos Jim\xE9nez",
-      status: "Active"
-    },
-    {
-      id: "LOC-BOGOTA-01",
-      name: "Brasaland Bogot\xE1",
-      city: "Bogot\xE1",
-      country: "Colombia",
-      openingYear: 2014,
-      seatingCapacity: 60,
-      staffCount: 10,
-      monthlyRentCost: { USD: 1800, COP: 72e5 },
-      averageMonthlyUtilities: { USD: 450, COP: 18e5 },
-      manager: "Laura Pe\xF1a",
-      status: "Active"
-    },
-    {
-      id: "LOC-MIAMI-01",
-      name: "Brasaland Miami Beach",
-      city: "Miami",
-      country: "USA",
-      openingYear: 2018,
-      seatingCapacity: 100,
-      staffCount: 15,
-      monthlyRentCost: { USD: 5500, COP: 22e6 },
-      averageMonthlyUtilities: { USD: 800, COP: 32e5 },
-      manager: "Jake Morrison",
-      status: "Active"
-    },
-    {
-      id: "LOC-ORLANDO-01",
-      name: "Brasaland Orlando",
-      city: "Orlando",
-      country: "USA",
-      openingYear: 2021,
-      seatingCapacity: 70,
-      staffCount: 11,
-      monthlyRentCost: { USD: 4200, COP: 168e5 },
-      averageMonthlyUtilities: { USD: 650, COP: 26e5 },
-      manager: "Sof\xEDa Ram\xEDrez",
-      status: "Under renovation"
-    }
+    // Medellín
+    { id: "LOC-MEDELLIN-01", name: "Brasaland El Poblado", city: "Medell\xEDn", country: "Colombia", openingYear: 2008, seatingCapacity: 80, staffCount: 12, monthlyRentCost: { USD: 1500, COP: 6e6 }, averageMonthlyUtilities: { USD: 400, COP: 16e5 }, manager: "Carlos Jim\xE9nez", status: "Active" },
+    { id: "LOC-MEDELLIN-02", name: "Brasaland Laureles", city: "Medell\xEDn", country: "Colombia", openingYear: 2011, seatingCapacity: 65, staffCount: 10, monthlyRentCost: { USD: 1300, COP: 52e5 }, averageMonthlyUtilities: { USD: 350, COP: 14e5 }, manager: "Daniela Ruiz", status: "Active" },
+    { id: "LOC-MEDELLIN-03", name: "Brasaland Envigado", city: "Medell\xEDn", country: "Colombia", openingYear: 2013, seatingCapacity: 70, staffCount: 11, monthlyRentCost: { USD: 1400, COP: 56e5 }, averageMonthlyUtilities: { USD: 380, COP: 152e4 }, manager: "Felipe V\xE9lez", status: "Active" },
+    { id: "LOC-MEDELLIN-04", name: "Brasaland Sabaneta", city: "Medell\xEDn", country: "Colombia", openingYear: 2016, seatingCapacity: 55, staffCount: 9, monthlyRentCost: { USD: 1100, COP: 44e5 }, averageMonthlyUtilities: { USD: 300, COP: 12e5 }, manager: "Valentina Ospina", status: "Active" },
+    // Bogotá
+    { id: "LOC-BOGOTA-01", name: "Brasaland Usaqu\xE9n", city: "Bogot\xE1", country: "Colombia", openingYear: 2014, seatingCapacity: 60, staffCount: 10, monthlyRentCost: { USD: 1800, COP: 72e5 }, averageMonthlyUtilities: { USD: 450, COP: 18e5 }, manager: "Laura Pe\xF1a", status: "Active" },
+    { id: "LOC-BOGOTA-02", name: "Brasaland Chapinero", city: "Bogot\xE1", country: "Colombia", openingYear: 2017, seatingCapacity: 50, staffCount: 9, monthlyRentCost: { USD: 1700, COP: 68e5 }, averageMonthlyUtilities: { USD: 420, COP: 168e4 }, manager: "Andr\xE9s Lozano", status: "Active" },
+    { id: "LOC-BOGOTA-03", name: "Brasaland Zona Rosa", city: "Bogot\xE1", country: "Colombia", openingYear: 2019, seatingCapacity: 75, staffCount: 13, monthlyRentCost: { USD: 2200, COP: 88e5 }, averageMonthlyUtilities: { USD: 500, COP: 2e6 }, manager: "Camila Torres", status: "Active" },
+    // Cali
+    { id: "LOC-CALI-01", name: "Brasaland Granada", city: "Cali", country: "Colombia", openingYear: 2015, seatingCapacity: 55, staffCount: 9, monthlyRentCost: { USD: 1200, COP: 48e5 }, averageMonthlyUtilities: { USD: 320, COP: 128e4 }, manager: "Juan Pablo Rengifo", status: "Active" },
+    { id: "LOC-CALI-02", name: "Brasaland Ciudad Jard\xEDn", city: "Cali", country: "Colombia", openingYear: 2018, seatingCapacity: 60, staffCount: 10, monthlyRentCost: { USD: 1250, COP: 5e6 }, averageMonthlyUtilities: { USD: 330, COP: 132e4 }, manager: "Isabel Victoria", status: "Active" },
+    { id: "LOC-CALI-03", name: "Brasaland Unicentro", city: "Cali", country: "Colombia", openingYear: 2020, seatingCapacity: 65, staffCount: 11, monthlyRentCost: { USD: 1350, COP: 54e5 }, averageMonthlyUtilities: { USD: 360, COP: 144e4 }, manager: "Esteban G\xF3mez", status: "Temporarily closed" },
+    // Miami
+    { id: "LOC-MIAMI-01", name: "Brasaland Brickell", city: "Miami", country: "USA", openingYear: 2018, seatingCapacity: 100, staffCount: 15, monthlyRentCost: { USD: 5500, COP: 22e6 }, averageMonthlyUtilities: { USD: 800, COP: 32e5 }, manager: "Jake Morrison", status: "Active" },
+    { id: "LOC-MIAMI-02", name: "Brasaland Coral Gables", city: "Miami", country: "USA", openingYear: 2021, seatingCapacity: 90, staffCount: 14, monthlyRentCost: { USD: 5200, COP: 208e5 }, averageMonthlyUtilities: { USD: 750, COP: 3e6 }, manager: "Amanda Reyes", status: "Active" },
+    // Orlando
+    { id: "LOC-ORLANDO-01", name: "Brasaland Downtown", city: "Orlando", country: "USA", openingYear: 2021, seatingCapacity: 70, staffCount: 11, monthlyRentCost: { USD: 4200, COP: 168e5 }, averageMonthlyUtilities: { USD: 650, COP: 26e5 }, manager: "Sof\xEDa Ram\xEDrez", status: "Under renovation" },
+    { id: "LOC-ORLANDO-02", name: "Brasaland International Drive", city: "Orlando", country: "USA", openingYear: 2022, seatingCapacity: 85, staffCount: 13, monthlyRentCost: { USD: 4600, COP: 184e5 }, averageMonthlyUtilities: { USD: 700, COP: 28e5 }, manager: "Michael Torres", status: "Active" }
   ];
   var sampleSales = [
     {
