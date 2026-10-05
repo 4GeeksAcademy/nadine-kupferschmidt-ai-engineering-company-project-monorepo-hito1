@@ -53,6 +53,13 @@
       </p>
       <div
         class="nav-item active px-5 py-2.5 text-sm"
+        data-panel="dashboard"
+        onclick="showPanel('dashboard')"
+      >
+        Dashboard
+      </div>
+      <div
+        class="nav-item px-5 py-2.5 text-sm"
         data-panel="ubicaciones"
         onclick="showPanel('ubicaciones')"
       >
@@ -83,8 +90,28 @@
 
     <!-- Main content -->
     <main class="flex-1 p-8">
+      <!-- ========== SECCIÓN: DASHBOARD ========== -->
+      <section id="panel-dashboard" class="panel active max-w-6xl md:px-4 md:py-2">
+        <div class="mb-8">
+          <p
+            class="text-brand-ochre text-xs font-semibold uppercase tracking-widest mb-2"
+          >
+            ✦ Brasaland Ops
+          </p>
+          <h2 class="text-2xl font-semibold mb-1">Dashboard</h2>
+          <p class="text-sm text-brand-warmgray">
+            Resumen rápido de la operación
+          </p>
+        </div>
+
+        <div
+          id="dashboard-results"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        ></div>
+      </section>
+
       <!-- ========== SECCIÓN: UBICACIONES ========== -->
-      <section id="panel-ubicaciones" class="panel active">
+      <section id="panel-ubicaciones" class="panel">
         <h2 class="text-lg font-semibold mb-1">Buscar ubicaciones</h2>
         <p class="text-sm text-brand-warmgray mb-5">Filtrá por país y estado</p>
 
@@ -503,9 +530,124 @@
         }
       }
 
+      // ---- Dashboard ----
+      function cardDashboard(icon, title, value, detail, extraClasses = "") {
+        return `<div class="bg-brand-beige border border-brand-ochre/20 rounded-lg p-6 flex flex-col justify-between ${extraClasses}">
+        <p class="text-xs text-brand-warmgray uppercase tracking-wide mb-4"><span class="text-brand-ochre mr-1.5">${icon}</span>${title}</p>
+        <div>
+          <p class="text-3xl font-bold text-brand-darkbrown leading-tight">${value}</p>
+          ${detail ? `<p class="text-sm text-brand-warmgray mt-2">${detail}</p>` : ""}
+        </div>
+      </div>`;
+      }
+
+      function cardHighlight(icon, title, value, detail, extraClasses = "") {
+        return `<div class="bg-brand-darkbrown text-brand-ivory border-2 border-brand-ochre rounded-lg p-8 flex flex-col justify-between ${extraClasses}">
+        <p class="text-xs text-brand-ochre uppercase tracking-widest font-semibold mb-6"><span class="mr-1.5">${icon}</span>${title}</p>
+        <div>
+          <p class="text-6xl font-bold text-brand-ochre leading-none">${value}</p>
+          ${detail ? `<p class="text-lg font-semibold text-brand-ivory mt-4">${detail}</p>` : ""}
+        </div>
+      </div>`;
+      }
+
+      function cardCountryComparison(colombia, usa, extraClasses = "") {
+        const total = colombia.totalRevenue.USD + usa.totalRevenue.USD;
+        const coPct = total > 0 ? (colombia.totalRevenue.USD / total) * 100 : 50;
+        const usPct = 100 - coPct;
+        const column = (label, swatch, m, pct, align) => `
+          <div class="${align}">
+            <p class="text-xs text-brand-warmgray uppercase tracking-wide mb-2"><span class="inline-block w-2 h-2 rounded-full ${swatch} mr-1.5"></span>${label}</p>
+            <p class="text-3xl font-bold text-brand-darkbrown leading-tight">$${m.totalRevenue.USD.toFixed(2)}</p>
+            <p class="text-sm text-brand-warmgray mt-1">${m.totalLocations} ubicación(es) · ${m.totalSales} venta(s) · ${pct.toFixed(0)}%</p>
+          </div>`;
+        return `<div class="bg-brand-beige border border-brand-ochre/20 rounded-lg p-6 ${extraClasses}">
+        <p class="text-xs text-brand-warmgray uppercase tracking-wide mb-4"><span class="text-brand-ochre mr-1.5">✦</span>Colombia vs USA · Ingresos USD</p>
+        <div class="flex justify-between gap-6 mb-5">
+          ${column("Colombia", "bg-brand-ochre", colombia, coPct, "text-left")}
+          ${column("USA", "bg-brand-charcoal", usa, usPct, "text-right")}
+        </div>
+        <div class="flex h-2.5 w-full rounded-full overflow-hidden bg-brand-ivory">
+          <div class="bg-brand-ochre" style="width: ${coPct}%"></div>
+          <div class="bg-brand-charcoal" style="width: ${usPct}%"></div>
+        </div>
+      </div>`;
+      }
+
+      function renderDashboard() {
+        const el = document.getElementById("dashboard-results");
+
+        const activeLocations = B.filterActiveLocations(B.sampleLocations);
+
+        const ranking = B.rankLocationsByPerformance(
+          B.sampleLocations,
+          B.sampleSales,
+          B.sampleWasteRecords,
+          B.sampleMenuItems,
+        );
+        const best = ranking[0];
+
+        const topItem = B.findTopSellingItems(
+          B.sampleSales,
+          B.sampleMenuItems,
+          1,
+        )[0];
+
+        const comparison = B.calculateCountryComparison(
+          B.sampleSales,
+          B.sampleLocations,
+          B.sampleMenuItems,
+        );
+
+        const paymentLabels = {
+          Cash: "Efectivo",
+          "Credit card": "Tarjeta de crédito",
+          "Debit card": "Tarjeta de débito",
+          "Digital wallet": "Billetera digital",
+        };
+        const paymentCounts = B.countSalesByPaymentMethod(B.sampleSales);
+        const [topMethod, topMethodCount] = Object.entries(paymentCounts).sort(
+          (a, b) => b[1] - a[1],
+        )[0];
+
+        el.innerHTML =
+          cardHighlight(
+            "★",
+            "Mejor performance",
+            best ? `${best.score.toFixed(2)}<span class="text-2xl text-brand-ivory/60 font-semibold"> / 100</span>` : "—",
+            best ? best.location.name : "Sin datos",
+            "sm:col-span-2 lg:row-span-2",
+          ) +
+          cardDashboard(
+            "✦",
+            "Ubicaciones activas",
+            `${activeLocations.length}`,
+            `de ${B.sampleLocations.length} ubicaciones totales`,
+          ) +
+          cardDashboard(
+            "✦",
+            "Ítem más vendido",
+            topItem ? topItem.item.name : "Sin datos",
+            topItem ? `${topItem.totalSold} unidades vendidas` : "",
+          ) +
+          cardDashboard(
+            "✦",
+            "Método de pago más usado",
+            paymentLabels[topMethod] || topMethod,
+            `${topMethodCount} transacción(es)`,
+            "sm:col-span-2 lg:col-span-1",
+          ) +
+          cardCountryComparison(
+            comparison.Colombia,
+            comparison.USA,
+            "sm:col-span-2",
+          );
+      }
+
       // ---- Cargar resultados iniciales al abrir la página ----
       searchLocations();
       searchMenu();
+      renderDashboard();
     </script>
   </body>
 </html>
