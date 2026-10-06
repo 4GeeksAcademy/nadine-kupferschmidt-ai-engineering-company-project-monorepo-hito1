@@ -18,6 +18,7 @@ export function useCandidates({
 	search?: string;
 }) {
 	const [candidates, setCandidates] = useState<Candidate[]>([]);
+	const [total, setTotal] = useState<number>(0);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 
@@ -29,6 +30,7 @@ export function useCandidates({
 			try {
 				const response = await getCandidates({ status, stage, search });
 				setCandidates(response.data);
+				setTotal(response.total);
 			} catch (caughtError) {
 				setError(
 					caughtError instanceof Error
@@ -43,5 +45,5 @@ export function useCandidates({
 		void loadCandidates();
 	}, [status, stage, search]);
 
-	return { candidates, loading, error };
+	return { candidates, loading, error, total };
 }

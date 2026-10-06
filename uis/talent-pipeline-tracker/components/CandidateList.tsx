@@ -25,7 +25,7 @@ export default function CandidateList() {
 
 	const search = searchParam || undefined;
 
-	const { candidates, loading, error } = useCandidates({ status, stage, search });
+	const { candidates, loading, error, total } = useCandidates({ status, stage, search });
 
 	if (loading) {
 		return <p>Cargando candidaturas…</p>;
@@ -35,5 +35,12 @@ export default function CandidateList() {
 		return <p className="text-red-600">Error: {error}</p>;
 	}
 
-	return <CandidateTable candidates={candidates} />;
+	return (
+		<div>
+			<p className="mb-3 text-sm text-brand-warmgray">
+				{total} {total === 1 ? "candidatura" : "candidaturas"}
+			</p>
+			<CandidateTable candidates={candidates} />
+		</div>
+	);
 }
