@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import CandidateList from "@/components/CandidateList";
+import CandidateFilters from "@/components/CandidateFilters";
 
 export default function Home() {
 	return (
@@ -12,6 +13,9 @@ export default function Home() {
       </p>
 
 			<Suspense fallback={<p>Cargando candidaturas…</p>}>
+				<div className="mb-6">
+					<CandidateFilters />
+				</div>
 				<CandidateList />
 			</Suspense>
 		</main>
