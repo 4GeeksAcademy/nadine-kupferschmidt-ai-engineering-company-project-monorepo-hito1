@@ -31,7 +31,7 @@ export type Candidate = {
   experience_years: number;
   applied_at: string;
   updated_at: string;
-  notes: Note[];
+  notes?: Note[];
   notes_count: number;
 };
 
@@ -52,3 +52,10 @@ export type CandidateFormData = Pick<
   | "cv_url"
   | "experience_years"
 >;
+
+export type NotesResponse = {
+  data: Note[];
+  meta: {
+    total: number;
+  };
+};
