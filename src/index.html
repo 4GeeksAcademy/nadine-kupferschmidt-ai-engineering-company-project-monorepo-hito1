@@ -15,7 +15,7 @@
                 beige: "#F5EDE0",
                 charcoal: "#2A2A2A",
                 darkbrown: "#1A1410",
-                ochre: "#C9A96E",
+                ochre: "#F2A65A",
                 warmgray: "#6B6258",
               },
             },
@@ -26,30 +26,30 @@
     <style>
       .nav-item {
         cursor: pointer;
+        border-left: 3px solid transparent;
+        transition: background-color 180ms ease, color 180ms ease;
       }
       .nav-item.active {
-        background-color: #c9a96e;
+        background-color: rgba(242, 166, 90, 0.1);
         color: #1a1410;
+        border-left-color: #f2a65a;
         font-weight: 600;
       }
       .nav-item:not(.active) {
-        color: rgba(253, 248, 240, 0.65);
-      }
-      .sidebar {
-        background: linear-gradient(180deg, #1a1410 0%, #15110d 100%);
+        color: #2a2a2a;
       }
       .report-button {
-        border: 1px solid #2a2a2a;
+        border: 1px solid #f5ede0;
         transition: background-color 180ms ease, color 180ms ease,
           border-color 180ms ease;
       }
       .report-button:hover:not(.selected) {
-        background-color: #2a2a2a;
-        color: #fdf8f0;
+        background-color: #f5ede0;
+        color: #1a1410;
       }
       .report-button.selected {
-        background-color: #c9a96e;
-        border-color: #c9a96e;
+        background-color: #f2a65a;
+        border-color: #f2a65a;
         color: #1a1410;
         font-weight: 600;
       }
@@ -62,70 +62,48 @@
     </style>
   </head>
   <body
-    class="bg-brand-ivory text-brand-charcoal min-h-screen flex flex-col md:flex-row"
+    class="bg-gray-50 text-brand-charcoal min-h-screen flex flex-col md:flex-row"
   >
-    <!-- Sidebar: barra horizontal con scroll en mobile, columna fija desde md -->
+    <!-- Sidebar -->
     <aside
-      class="sidebar w-full md:w-56 text-brand-ivory flex-shrink-0 flex md:flex-col items-center md:items-stretch overflow-x-auto md:overflow-visible py-2 md:py-8 md:min-h-screen md:sticky md:top-0 shadow-md"
+      id="sidebar"
+      class="sidebar group w-full md:w-48 md:[&.collapsed]:w-16 bg-white border-r border-brand-beige text-brand-charcoal flex-shrink-0 flex md:flex-col items-center md:items-stretch overflow-x-auto md:overflow-visible py-2 md:py-5 md:min-h-screen md:sticky md:top-0 transition-all duration-300"
     >
-      <div class="px-5 py-3 md:pt-0 md:pb-7 flex flex-col gap-2 whitespace-nowrap flex-shrink-0">
-        <div class="flex items-center gap-2.5">
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 24 24"
-            class="w-5 h-5 text-brand-ochre flex-shrink-0"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.6"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M12 2.5c1.2 3.2 4.9 4.8 4.9 9.2a4.9 4.9 0 1 1-9.8 0c0-2.3 1.1-4.3 2.8-6.1.1 2 1.1 3.2 2.1 3.8.6-2.3.6-4.4 0-6.9Z" />
-            <path d="M12.1 13.1c1.1 1.1 1.7 2 1.7 3.1a1.8 1.8 0 1 1-3.6 0c0-.8.4-1.7 1.9-3.1Z" />
-          </svg>
-          <span class="font-serif text-brand-ochre text-xs tracking-[0.22em]">BRASALAND</span>
+      <div class="px-3 py-2 md:pb-6 flex items-center md:flex-col gap-3 flex-shrink-0">
+        <div class="flex items-center justify-center" title="Brasaland" aria-label="Brasaland">
+          <span class="font-serif text-xl font-semibold tracking-wide text-brand-ochre group-[.collapsed]:hidden">Brasaland</span>
+          <span aria-hidden="true" class="hidden font-serif text-xl font-semibold tracking-wide text-brand-ochre group-[.collapsed]:block">B</span>
         </div>
-        <p class="text-brand-ochre text-[10px] font-semibold uppercase tracking-widest">Brasaland Ops</p>
+        <button type="button" onclick="toggleSidebar()" aria-controls="sidebar" aria-expanded="true" aria-label="Alternar sidebar" title="Expandir o colapsar sidebar" class="w-8 h-8 flex items-center justify-center rounded-lg text-brand-warmgray hover:bg-brand-beige focus-visible:outline-brand-ochre transition-colors">
+          <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <path d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
       </div>
-      <div
-        class="nav-item active px-5 py-3 md:py-2.5 text-sm whitespace-nowrap flex-shrink-0"
-        data-panel="dashboard"
-        onclick="showPanel('dashboard')"
-      >
-        Dashboard
-      </div>
-      <div
-        class="nav-item px-5 py-3 md:py-2.5 text-sm whitespace-nowrap flex-shrink-0"
-        data-panel="ubicaciones"
-        onclick="showPanel('ubicaciones')"
-      >
-        Ubicaciones
-      </div>
-      <div
-        class="nav-item px-5 py-3 md:py-2.5 text-sm whitespace-nowrap flex-shrink-0"
-        data-panel="menu"
-        onclick="showPanel('menu')"
-      >
-        Menú
-      </div>
-      <div
-        class="nav-item px-5 py-3 md:py-2.5 text-sm whitespace-nowrap flex-shrink-0"
-        data-panel="reportes"
-        onclick="showPanel('reportes')"
-      >
-        Reportes
-      </div>
-      <div
-        class="nav-item px-5 py-3 md:py-2.5 text-sm whitespace-nowrap flex-shrink-0"
-        data-panel="validaciones"
-        onclick="showPanel('validaciones')"
-      >
-        Validaciones
-      </div>
+      <button type="button" class="nav-item active flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0" data-panel="dashboard" onclick="showPanel('dashboard')" title="Dashboard" aria-label="Dashboard">
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-7h6v7" /></svg>
+        <span class="group-[.collapsed]:hidden">Dashboard</span>
+      </button>
+      <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0" data-panel="ubicaciones" onclick="showPanel('ubicaciones')" title="Ubicaciones" aria-label="Ubicaciones">
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></svg>
+        <span class="group-[.collapsed]:hidden">Ubicaciones</span>
+      </button>
+      <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0" data-panel="menu" onclick="showPanel('menu')" title="Menú" aria-label="Menú">
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v5a3 3 0 0 0 6 0V3M7 3v18M20 3c-4 3-4 9 0 9V3Zm0 9v9" /></svg>
+        <span class="group-[.collapsed]:hidden">Menú</span>
+      </button>
+      <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0" data-panel="reportes" onclick="showPanel('reportes')" title="Reportes" aria-label="Reportes">
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H5v18h14V8l-5-5Zm0 0v5h5M8 12h8M8 16h6" /></svg>
+        <span class="group-[.collapsed]:hidden">Reportes</span>
+      </button>
+      <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0" data-panel="validaciones" onclick="showPanel('validaciones')" title="Validaciones" aria-label="Validaciones">
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="m8 12 3 3 5-6" /></svg>
+        <span class="group-[.collapsed]:hidden">Validaciones</span>
+      </button>
     </aside>
 
     <!-- Main content -->
-    <main class="flex-1 min-w-0 p-6 md:p-10">
+    <main class="flex-1 min-w-0 bg-gray-50 p-4 sm:p-6 md:p-10">
       <!-- ========== SECCIÓN: DASHBOARD ========== -->
       <section id="panel-dashboard" class="panel active max-w-6xl md:px-6 md:py-4">
         <div class="mb-10">
@@ -144,6 +122,46 @@
           id="dashboard-results"
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7"
         ></div>
+        <div class="mt-7 bg-white rounded-2xl shadow-sm overflow-hidden">
+          <h3 class="px-5 py-5 text-sm font-semibold text-brand-darkbrown">Ranking de ubicaciones</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[560px] text-sm text-left">
+              <thead class="bg-brand-beige text-brand-warmgray text-xs uppercase">
+                <tr>
+                  <th scope="col" class="px-5 py-3 font-medium">Ubicación</th>
+                  <th scope="col" class="px-5 py-3 font-medium">Ciudad</th>
+                  <th scope="col" class="px-5 py-3 font-medium text-right">Puntaje</th>
+                  <th scope="col" class="px-5 py-3 font-medium">Estado</th>
+                </tr>
+              </thead>
+              <tbody id="dashboard-ranking"></tbody>
+            </table>
+          </div>
+          <p id="dashboard-ranking-summary" class="px-5 py-4 text-xs text-brand-warmgray"></p>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-7 mt-7">
+          <div class="min-w-0 bg-white rounded-2xl shadow-sm p-6">
+            <h3 class="text-sm font-semibold text-brand-darkbrown mb-5">Ventas por método de pago</h3>
+            <div id="dashboard-payment-bars" class="space-y-4"></div>
+          </div>
+          <div class="min-w-0 bg-white rounded-2xl shadow-sm p-6">
+            <h3 class="text-sm font-semibold text-brand-darkbrown mb-5">Ubicaciones activas</h3>
+            <div class="relative w-32 h-32 mx-auto">
+              <svg id="dashboard-active-chart" role="img" viewBox="0 0 100 100" class="w-full h-full -rotate-90">
+                <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="10" class="text-brand-beige" />
+                <circle id="dashboard-active-arc" cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="10" stroke-dasharray="0 251.327" class="text-brand-ochre" />
+              </svg>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <span id="dashboard-active-percent" class="text-2xl font-bold text-brand-darkbrown"></span>
+              </div>
+            </div>
+            <p id="dashboard-active-summary" class="mt-4 text-center text-sm text-brand-warmgray"></p>
+          </div>
+          <div class="min-w-0 bg-white rounded-2xl shadow-sm p-6">
+            <h3 class="text-sm font-semibold text-brand-darkbrown mb-5">Ingresos por país · USD</h3>
+            <div id="dashboard-country-bars" class="space-y-6"></div>
+          </div>
+        </div>
       </section>
 
       <!-- ========== SECCIÓN: UBICACIONES ========== -->
@@ -158,7 +176,7 @@
           <p class="text-sm text-brand-warmgray">Filtrá por país y estado</p>
         </div>
 
-        <div class="flex flex-col md:flex-row gap-5 mb-10 md:items-end">
+        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end bg-white rounded-2xl shadow-sm p-5">
           <div class="w-full md:w-auto">
             <label
               class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
@@ -166,7 +184,7 @@
             >
             <select
               id="loc-country"
-              class="w-full md:w-auto bg-brand-ivory border border-brand-ochre/40 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
             >
               <option value="">Todos</option>
               <option value="Colombia">Colombia</option>
@@ -180,7 +198,7 @@
             >
             <select
               id="loc-status"
-              class="w-full md:w-auto bg-brand-ivory border border-brand-ochre/40 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
             >
               <option value="">Todos</option>
               <option value="Active">Activa</option>
@@ -197,12 +215,12 @@
         </div>
 
         <div
-          class="overflow-x-auto bg-brand-beige border border-brand-ochre/20 rounded-xl p-5 md:p-7 shadow-sm transition-shadow duration-200 hover:shadow-md"
+          class="overflow-x-auto bg-white rounded-2xl p-5 md:p-7 shadow-sm"
         >
           <table class="w-full min-w-[560px] text-sm">
             <thead>
               <tr
-                class="border-b border-brand-ochre/30 text-brand-warmgray text-left text-xs uppercase tracking-wide"
+                class="bg-brand-beige text-brand-warmgray text-left text-xs uppercase tracking-wide [&>th]:px-3"
               >
                 <th class="py-3 pr-4 font-medium">Ubicación</th>
                 <th class="py-3 pr-4 font-medium">Ciudad</th>
@@ -230,7 +248,7 @@
           </p>
         </div>
 
-        <div class="flex flex-col md:flex-row gap-5 mb-10 md:items-end">
+        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end bg-white rounded-2xl shadow-sm p-5">
           <div class="w-full md:w-auto">
             <label
               class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
@@ -238,7 +256,7 @@
             >
             <select
               id="menu-category"
-              class="w-full md:w-auto bg-brand-ivory border border-brand-ochre/40 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
             >
               <option value="">Todas</option>
               <option value="Meat">Carnes</option>
@@ -255,7 +273,7 @@
             >
             <select
               id="menu-order"
-              class="w-full md:w-auto bg-brand-ivory border border-brand-ochre/40 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
             >
               <option value="asc">Menor a mayor</option>
               <option value="desc">Mayor a menor</option>
@@ -270,12 +288,12 @@
         </div>
 
         <div
-          class="overflow-x-auto bg-brand-beige border border-brand-ochre/20 rounded-xl p-5 md:p-7 shadow-sm transition-shadow duration-200 hover:shadow-md"
+          class="overflow-x-auto bg-white rounded-2xl p-5 md:p-7 shadow-sm"
         >
           <table class="w-full min-w-[560px] text-sm">
             <thead>
               <tr
-                class="border-b border-brand-ochre/30 text-brand-warmgray text-left text-xs uppercase tracking-wide"
+                class="bg-brand-beige text-brand-warmgray text-left text-xs uppercase tracking-wide [&>th]:px-3"
               >
                 <th class="py-3 pr-4 font-medium">Ítem</th>
                 <th class="py-3 pr-4 font-medium">Categoría</th>
@@ -303,7 +321,7 @@
           </p>
         </div>
 
-        <div class="flex flex-col md:flex-row md:flex-wrap gap-4 mb-10">
+        <div class="flex flex-col md:flex-row md:flex-wrap gap-4 mb-7 bg-white rounded-2xl shadow-sm p-5">
           <button
             onclick="renderReport('margin')"
             data-report="margin"
@@ -362,7 +380,7 @@
         </div>
 
         <div
-          class="bg-brand-beige border border-brand-ochre/20 rounded-xl p-7 md:p-9 mb-7 max-w-2xl shadow-sm transition-shadow duration-200 hover:shadow-md"
+          class="bg-white rounded-2xl p-7 md:p-9 mb-7 max-w-2xl shadow-sm"
         >
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-7">
             <div>
@@ -374,7 +392,7 @@
                 id="val-name"
                 type="text"
                 value="Picanha 250g"
-                class="w-full bg-brand-ivory border border-brand-ochre/40 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
             <div>
@@ -386,7 +404,7 @@
                 id="val-usd"
                 type="number"
                 value="18.5"
-                class="w-full bg-brand-ivory border border-brand-ochre/40 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
             <div>
@@ -398,7 +416,7 @@
                 id="val-cop"
                 type="number"
                 value="74000"
-                class="w-full bg-brand-ivory border border-brand-ochre/40 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
             <div>
@@ -410,7 +428,7 @@
                 id="val-prep"
                 type="number"
                 value="15"
-                class="w-full bg-brand-ivory border border-brand-ochre/40 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
           </div>
@@ -448,16 +466,16 @@
       // ---- Ubicaciones ----
       function statusLabel(status) {
         const colors = {
-          Active: "bg-green-100 text-green-800",
-          "Temporarily closed": "bg-yellow-100 text-yellow-800",
-          "Under renovation": "bg-orange-100 text-orange-800",
+          Active: "bg-brand-beige text-brand-darkbrown",
+          "Temporarily closed": "bg-brand-ivory text-brand-warmgray",
+          "Under renovation": "bg-brand-ochre/20 text-brand-darkbrown",
         };
         const labels = {
           Active: "Activa",
           "Temporarily closed": "Cerrada temp.",
           "Under renovation": "En renovación",
         };
-        return `<span class="${colors[status]} text-xs px-2 py-1 rounded">${labels[status]}</span>`;
+        return `<span class="${colors[status]} inline-flex text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap">${labels[status]}</span>`;
       }
 
       function searchLocations() {
@@ -476,7 +494,7 @@
         tbody.innerHTML = results
           .map(
             (loc) => `
-        <tr class="border-b border-brand-ochre/10">
+        <tr class="border-b border-brand-beige [&>td]:px-3">
           <td class="py-2">${loc.name}</td>
           <td class="py-2">${loc.city}</td>
           <td class="py-2">${loc.seatingCapacity}</td>
@@ -517,7 +535,7 @@
         tbody.innerHTML = results
           .map(
             (item) => `
-        <tr class="border-b border-brand-ochre/10">
+        <tr class="border-b border-brand-beige [&>td]:px-3">
           <td class="py-2">${item.name}</td>
           <td class="py-2">${categoryLabel(item.category)}</td>
           <td class="py-2">$${item.basePrice.USD.toFixed(2)}</td>
@@ -531,7 +549,7 @@
 
       // ---- Reportes ----
       function card(title, value) {
-        return `<div class="bg-brand-beige border border-brand-ochre/20 rounded-lg p-6 flex flex-col justify-between">
+        return `<div class="bg-white rounded-2xl shadow-sm p-6 flex flex-col justify-between">
         <p class="text-xs text-brand-warmgray uppercase tracking-wide mb-4"><span class="text-brand-ochre mr-1.5">✦</span>${title}</p>
         <p class="text-2xl font-semibold text-brand-darkbrown leading-tight">${value}</p>
       </div>`;
@@ -622,9 +640,9 @@
         const el = document.getElementById("validation-result");
 
         if (result.valid) {
-          el.innerHTML = `<div class="bg-green-50 border border-green-300 text-green-800 rounded p-4 text-sm">✓ Los datos cumplen todas las reglas de negocio.</div>`;
+          el.innerHTML = `<div class="bg-white text-brand-darkbrown rounded-2xl shadow-sm p-4 text-sm">✓ Los datos cumplen todas las reglas de negocio.</div>`;
         } else {
-          el.innerHTML = `<div class="bg-red-50 border border-red-300 text-red-800 rounded p-4 text-sm">
+          el.innerHTML = `<div class="bg-white text-brand-darkbrown rounded-2xl shadow-sm p-4 text-sm">
           <p class="font-semibold mb-2">✗ Se encontraron ${result.errors.length} error(es):</p>
           <ul class="list-disc list-inside space-y-1">
             ${result.errors.map((e) => `<li>${e}</li>`).join("")}
@@ -635,7 +653,7 @@
 
       // ---- Dashboard ----
       function cardDashboard(icon, title, value, detail, extraClasses = "") {
-        return `<div class="bg-brand-beige border border-brand-ochre/20 rounded-lg p-6 flex flex-col justify-between ${extraClasses}">
+        return `<div class="bg-white rounded-2xl shadow-sm p-6 flex flex-col justify-between ${extraClasses}">
         <p class="text-xs text-brand-warmgray uppercase tracking-wide mb-4"><span class="text-brand-ochre mr-1.5">${icon}</span>${title}</p>
         <div>
           <p class="text-3xl font-bold text-brand-darkbrown leading-tight">${value}</p>
@@ -645,10 +663,11 @@
       }
 
       function cardHighlight(icon, title, value, detail, extraClasses = "") {
-        return `<div class="bg-brand-darkbrown text-brand-ivory border-2 border-brand-ochre rounded-lg p-8 flex flex-col justify-between ${extraClasses}">
-        <p class="text-xs text-brand-ochre uppercase tracking-widest font-semibold mb-6"><span class="mr-1.5">${icon}</span>${title}</p>
+        return `<div class="bg-brand-ochre text-brand-ivory rounded-2xl shadow-sm p-6 sm:p-8 flex flex-col justify-between ${extraClasses}">
+        <p class="text-xs text-brand-ivory uppercase tracking-widest font-semibold mb-6"><span class="mr-1.5">${icon}</span>${title}</p>
         <div>
-          <p class="text-6xl font-bold text-brand-ochre leading-none">${value}</p>
+          <span class="inline-flex bg-brand-darkbrown text-brand-ivory text-xs font-semibold px-3 py-1 rounded-full mb-4">Top performance</span>
+          <p class="text-5xl font-bold text-brand-ivory leading-none">${value}</p>
           ${detail ? `<p class="text-lg font-semibold text-brand-ivory mt-4">${detail}</p>` : ""}
         </div>
       </div>`;
@@ -664,9 +683,9 @@
             <p class="text-3xl font-bold text-brand-darkbrown leading-tight">$${m.totalRevenue.USD.toFixed(2)}</p>
             <p class="text-sm text-brand-warmgray mt-1">${m.totalLocations} ubicación(es) · ${m.totalSales} venta(s) · ${pct.toFixed(0)}%</p>
           </div>`;
-        return `<div class="bg-brand-beige border border-brand-ochre/20 rounded-lg p-6 ${extraClasses}">
+        return `<div class="bg-white rounded-2xl shadow-sm p-6 ${extraClasses}">
         <p class="text-xs text-brand-warmgray uppercase tracking-wide mb-4"><span class="text-brand-ochre mr-1.5">✦</span>Colombia vs USA · Ingresos USD</p>
-        <div class="flex justify-between gap-6 mb-5">
+        <div class="flex flex-wrap justify-between gap-6 mb-5">
           ${column("Colombia", "bg-brand-ochre", colombia, coPct, "text-left")}
           ${column("USA", "bg-brand-charcoal", usa, usPct, "text-right")}
         </div>
@@ -752,6 +771,89 @@
       searchMenu();
       renderDashboard();
       renderReport("ranking");
+    </script>
+    <script>
+      function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        const collapsed = sidebar.classList.toggle("collapsed");
+        sidebar.querySelector("[aria-controls='sidebar']").setAttribute("aria-expanded", String(!collapsed));
+      }
+
+      function renderDashboardRanking() {
+        const ranking = B.rankLocationsByPerformance(
+          B.sampleLocations,
+          B.sampleSales,
+          B.sampleWasteRecords,
+          B.sampleMenuItems,
+        );
+        const topLocations = ranking.slice(0, 5);
+        document.getElementById("dashboard-ranking").innerHTML = topLocations
+          .map((entry) => `<tr class="border-b border-brand-beige last:border-0">
+            <td class="px-5 py-3 font-medium text-brand-darkbrown">${entry.location.name}</td>
+            <td class="px-5 py-3 text-brand-charcoal">${entry.location.city}</td>
+            <td class="px-5 py-3 text-right font-semibold text-brand-darkbrown whitespace-nowrap">${entry.score.toFixed(2)} / 100</td>
+            <td class="px-5 py-3">${statusLabel(entry.location.status)}</td>
+          </tr>`)
+          .join("");
+        document.getElementById("dashboard-ranking-summary").textContent =
+          `Mostrando las ${topLocations.length} mejores ubicaciones de ${ranking.length}`;
+      }
+
+      function renderDashboardInsights() {
+        const paymentLabels = {
+          Cash: "Efectivo",
+          "Credit card": "Tarjeta de crédito",
+          "Debit card": "Tarjeta de débito",
+          "Digital wallet": "Billetera digital",
+        };
+        const paymentColors = ["bg-brand-ochre", "bg-brand-ochre/80", "bg-brand-ochre/60", "bg-brand-charcoal"];
+        const paymentCounts = B.countSalesByPaymentMethod(B.sampleSales);
+        const totalPayments = Object.values(paymentCounts).reduce((sum, count) => sum + count, 0);
+        document.getElementById("dashboard-payment-bars").innerHTML = Object.entries(paymentCounts)
+          .map(([method, count], index) => {
+            const percent = totalPayments > 0 ? (count / totalPayments) * 100 : 0;
+            return `<div>
+              <div class="flex flex-wrap justify-between gap-x-3 gap-y-1 text-xs mb-2">
+                <span class="text-brand-charcoal">${paymentLabels[method] || method}</span>
+                <span class="font-semibold text-brand-darkbrown">${count} trans. · ${percent.toFixed(0)}%</span>
+              </div>
+              <div class="h-2.5 bg-brand-beige rounded-full overflow-hidden">
+                <div class="h-full rounded-full ${paymentColors[index % paymentColors.length]}" style="width: ${percent}%"></div>
+              </div>
+            </div>`;
+          })
+          .join("");
+
+        const activeCount = B.filterActiveLocations(B.sampleLocations).length;
+        const totalLocations = B.sampleLocations.length;
+        const activePercent = totalLocations > 0 ? (activeCount / totalLocations) * 100 : 0;
+        const circumference = 2 * Math.PI * 40;
+        document.getElementById("dashboard-active-arc").setAttribute("stroke-dasharray", `${(activePercent / 100) * circumference} ${circumference}`);
+        document.getElementById("dashboard-active-chart").setAttribute("aria-label", `${activeCount} de ${totalLocations} ubicaciones activas, ${activePercent.toFixed(0)}%`);
+        document.getElementById("dashboard-active-percent").textContent = `${activePercent.toFixed(0)}%`;
+        document.getElementById("dashboard-active-summary").textContent = `${activeCount}/${totalLocations} activas`;
+
+        const comparison = B.calculateCountryComparison(B.sampleSales, B.sampleLocations, B.sampleMenuItems);
+        const countries = [["Colombia", comparison.Colombia], ["USA", comparison.USA]];
+        const maxRevenue = Math.max(1, ...countries.map(([, metrics]) => metrics.totalRevenue.USD));
+        document.getElementById("dashboard-country-bars").innerHTML = countries
+          .map(([country, metrics], index) => {
+            const revenue = metrics.totalRevenue.USD;
+            return `<div>
+              <div class="flex flex-wrap justify-between gap-x-3 gap-y-1 text-sm mb-2">
+                <span class="text-brand-charcoal">${country}</span>
+                <span class="font-semibold text-brand-darkbrown">$${revenue.toFixed(2)}</span>
+              </div>
+              <div class="h-3 bg-brand-beige rounded-full overflow-hidden">
+                <div class="h-full rounded-full ${index === 0 ? "bg-brand-ochre" : "bg-brand-charcoal"}" style="width: ${(revenue / maxRevenue) * 100}%"></div>
+              </div>
+            </div>`;
+          })
+          .join("");
+      }
+
+      renderDashboardRanking();
+      renderDashboardInsights();
     </script>
   </body>
 </html>
