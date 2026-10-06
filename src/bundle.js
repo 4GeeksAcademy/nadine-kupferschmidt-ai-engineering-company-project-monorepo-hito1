@@ -524,6 +524,276 @@
       paymentMethod: "Credit card",
       timestamp: /* @__PURE__ */ new Date("2024-03-17T21:05:00"),
       waiterName: "Jake Morrison"
+    },
+    {
+      id: "TXN-2024-15487",
+      locationId: "LOC-MEDELLIN-01",
+      itemId: "ITEM-COMBO-FAMILIAR",
+      quantity: 2,
+      totalPrice: { USD: 84, COP: 336e3 },
+      paymentMethod: "Cash",
+      timestamp: /* @__PURE__ */ new Date("2024-04-02T13:15:00"),
+      waiterName: "Mar\xEDa Gonz\xE1lez"
+    },
+    {
+      id: "TXN-2024-15488",
+      locationId: "LOC-MEDELLIN-02",
+      itemId: "ITEM-PICANHA-250",
+      quantity: 2,
+      totalPrice: { USD: 37, COP: 148e3 },
+      paymentMethod: "Credit card",
+      timestamp: /* @__PURE__ */ new Date("2024-03-18T19:10:00"),
+      waiterName: "Daniela Ruiz"
+    },
+    {
+      id: "TXN-2024-15489",
+      locationId: "LOC-MEDELLIN-02",
+      itemId: "ITEM-COSTILLA",
+      quantity: 3,
+      totalPrice: { USD: 67.5, COP: 27e4 },
+      paymentMethod: "Debit card",
+      timestamp: /* @__PURE__ */ new Date("2024-03-23T20:30:00"),
+      waiterName: "Daniela Ruiz"
+    },
+    {
+      id: "TXN-2024-15490",
+      locationId: "LOC-MEDELLIN-02",
+      itemId: "ITEM-POLLO-BRASA",
+      quantity: 5,
+      totalPrice: { USD: 80, COP: 32e4 },
+      paymentMethod: "Digital wallet",
+      timestamp: /* @__PURE__ */ new Date("2024-04-05T13:00:00"),
+      waiterName: "Daniela Ruiz"
+    },
+    {
+      id: "TXN-2024-15491",
+      locationId: "LOC-MEDELLIN-03",
+      itemId: "ITEM-CERVEZA-ARTESANAL",
+      quantity: 2,
+      totalPrice: { USD: 14, COP: 56e3 },
+      paymentMethod: "Cash",
+      timestamp: /* @__PURE__ */ new Date("2024-03-19T18:45:00"),
+      waiterName: "Felipe V\xE9lez"
+    },
+    {
+      id: "TXN-2024-15492",
+      locationId: "LOC-MEDELLIN-03",
+      itemId: "ITEM-CHORIZO",
+      quantity: 2,
+      totalPrice: { USD: 15, COP: 6e4 },
+      paymentMethod: "Credit card",
+      timestamp: /* @__PURE__ */ new Date("2024-04-06T19:20:00"),
+      waiterName: "Felipe V\xE9lez"
+    },
+    {
+      id: "TXN-2024-15493",
+      locationId: "LOC-MEDELLIN-04",
+      itemId: "ITEM-FRIES",
+      quantity: 6,
+      totalPrice: { USD: 27, COP: 108e3 },
+      paymentMethod: "Digital wallet",
+      timestamp: /* @__PURE__ */ new Date("2024-03-20T12:40:00"),
+      waiterName: "Valentina Ospina"
+    },
+    {
+      id: "TXN-2024-15494",
+      locationId: "LOC-MEDELLIN-04",
+      itemId: "ITEM-LIMONADA",
+      quantity: 4,
+      totalPrice: { USD: 14, COP: 56e3 },
+      paymentMethod: "Cash",
+      timestamp: /* @__PURE__ */ new Date("2024-04-07T14:10:00"),
+      waiterName: "Valentina Ospina"
+    },
+    {
+      id: "TXN-2024-15495",
+      locationId: "LOC-MEDELLIN-04",
+      itemId: "ITEM-CHORIZO",
+      quantity: 3,
+      totalPrice: { USD: 22.5, COP: 9e4 },
+      paymentMethod: "Debit card",
+      timestamp: /* @__PURE__ */ new Date("2024-04-12T19:00:00"),
+      waiterName: "Valentina Ospina"
+    },
+    {
+      id: "TXN-2024-15496",
+      locationId: "LOC-BOGOTA-01",
+      itemId: "ITEM-PICANHA-250",
+      quantity: 2,
+      totalPrice: { USD: 37, COP: 148e3 },
+      paymentMethod: "Credit card",
+      timestamp: /* @__PURE__ */ new Date("2024-03-21T20:00:00"),
+      waiterName: "Andr\xE9s Lozano"
+    },
+    {
+      id: "TXN-2024-15497",
+      locationId: "LOC-BOGOTA-01",
+      itemId: "ITEM-FRIES",
+      quantity: 4,
+      totalPrice: { USD: 18, COP: 72e3 },
+      paymentMethod: "Cash",
+      timestamp: /* @__PURE__ */ new Date("2024-04-08T13:30:00"),
+      waiterName: "Andr\xE9s Lozano"
+    },
+    {
+      id: "TXN-2024-15498",
+      locationId: "LOC-BOGOTA-02",
+      itemId: "ITEM-FRIES",
+      quantity: 4,
+      totalPrice: { USD: 18, COP: 72e3 },
+      paymentMethod: "Debit card",
+      timestamp: /* @__PURE__ */ new Date("2024-03-22T12:15:00"),
+      waiterName: "Andr\xE9s Lozano"
+    },
+    {
+      id: "TXN-2024-15499",
+      locationId: "LOC-BOGOTA-02",
+      itemId: "ITEM-LIMONADA",
+      quantity: 3,
+      totalPrice: { USD: 10.5, COP: 42e3 },
+      paymentMethod: "Digital wallet",
+      timestamp: /* @__PURE__ */ new Date("2024-04-09T14:25:00"),
+      waiterName: "Andr\xE9s Lozano"
+    },
+    {
+      id: "TXN-2024-15500",
+      locationId: "LOC-BOGOTA-03",
+      itemId: "ITEM-COMBO-FAMILIAR",
+      quantity: 2,
+      totalPrice: { USD: 84, COP: 336e3 },
+      paymentMethod: "Credit card",
+      timestamp: /* @__PURE__ */ new Date("2024-03-23T19:45:00"),
+      waiterName: "Camila Torres"
+    },
+    {
+      id: "TXN-2024-15501",
+      locationId: "LOC-BOGOTA-03",
+      itemId: "ITEM-POLLO-BRASA",
+      quantity: 4,
+      totalPrice: { USD: 64, COP: 256e3 },
+      paymentMethod: "Cash",
+      timestamp: /* @__PURE__ */ new Date("2024-04-10T13:50:00"),
+      waiterName: "Camila Torres"
+    },
+    {
+      id: "TXN-2024-15502",
+      locationId: "LOC-BOGOTA-03",
+      itemId: "ITEM-CERVEZA-ARTESANAL",
+      quantity: 3,
+      totalPrice: { USD: 21, COP: 84e3 },
+      paymentMethod: "Digital wallet",
+      timestamp: /* @__PURE__ */ new Date("2024-04-15T20:10:00"),
+      waiterName: "Camila Torres"
+    },
+    {
+      id: "TXN-2024-15503",
+      locationId: "LOC-CALI-01",
+      itemId: "ITEM-COSTILLA",
+      quantity: 2,
+      totalPrice: { USD: 45, COP: 18e4 },
+      paymentMethod: "Cash",
+      timestamp: /* @__PURE__ */ new Date("2024-03-24T19:30:00"),
+      waiterName: "Juan Pablo Rengifo"
+    },
+    {
+      id: "TXN-2024-15504",
+      locationId: "LOC-CALI-01",
+      itemId: "ITEM-LOMO",
+      quantity: 2,
+      totalPrice: { USD: 39, COP: 156e3 },
+      paymentMethod: "Credit card",
+      timestamp: /* @__PURE__ */ new Date("2024-04-11T20:00:00"),
+      waiterName: "Juan Pablo Rengifo"
+    },
+    {
+      id: "TXN-2024-15505",
+      locationId: "LOC-CALI-02",
+      itemId: "ITEM-POLLO-BRASA",
+      quantity: 3,
+      totalPrice: { USD: 48, COP: 192e3 },
+      paymentMethod: "Debit card",
+      timestamp: /* @__PURE__ */ new Date("2024-03-25T13:15:00"),
+      waiterName: "Isabel Victoria"
+    },
+    {
+      id: "TXN-2024-15506",
+      locationId: "LOC-CALI-02",
+      itemId: "ITEM-YUCA-FRITA",
+      quantity: 5,
+      totalPrice: { USD: 20, COP: 8e4 },
+      paymentMethod: "Digital wallet",
+      timestamp: /* @__PURE__ */ new Date("2024-04-12T14:30:00"),
+      waiterName: "Isabel Victoria"
+    },
+    {
+      id: "TXN-2024-15507",
+      locationId: "LOC-CALI-02",
+      itemId: "ITEM-FLAN-CARAMELO",
+      quantity: 4,
+      totalPrice: { USD: 20, COP: 8e4 },
+      paymentMethod: "Cash",
+      timestamp: /* @__PURE__ */ new Date("2024-04-16T19:10:00"),
+      waiterName: "Isabel Victoria"
+    },
+    {
+      id: "TXN-2024-15508",
+      locationId: "LOC-MIAMI-01",
+      itemId: "ITEM-COSTILLA",
+      quantity: 4,
+      totalPrice: { USD: 90, COP: 36e4 },
+      paymentMethod: "Debit card",
+      timestamp: /* @__PURE__ */ new Date("2024-04-13T20:30:00"),
+      waiterName: "John Smith"
+    },
+    {
+      id: "TXN-2024-15509",
+      locationId: "LOC-MIAMI-02",
+      itemId: "ITEM-COSTILLA",
+      quantity: 3,
+      totalPrice: { USD: 67.5, COP: 27e4 },
+      paymentMethod: "Credit card",
+      timestamp: /* @__PURE__ */ new Date("2024-03-26T19:15:00"),
+      waiterName: "Amanda Reyes"
+    },
+    {
+      id: "TXN-2024-15510",
+      locationId: "LOC-MIAMI-02",
+      itemId: "ITEM-POLLO-BRASA",
+      quantity: 2,
+      totalPrice: { USD: 32, COP: 128e3 },
+      paymentMethod: "Cash",
+      timestamp: /* @__PURE__ */ new Date("2024-04-14T13:00:00"),
+      waiterName: "Amanda Reyes"
+    },
+    {
+      id: "TXN-2024-15511",
+      locationId: "LOC-ORLANDO-02",
+      itemId: "ITEM-FRIES",
+      quantity: 4,
+      totalPrice: { USD: 18, COP: 72e3 },
+      paymentMethod: "Digital wallet",
+      timestamp: /* @__PURE__ */ new Date("2024-03-27T12:30:00"),
+      waiterName: "Michael Torres"
+    },
+    {
+      id: "TXN-2024-15512",
+      locationId: "LOC-ORLANDO-02",
+      itemId: "ITEM-LIMONADA",
+      quantity: 6,
+      totalPrice: { USD: 21, COP: 84e3 },
+      paymentMethod: "Credit card",
+      timestamp: /* @__PURE__ */ new Date("2024-04-15T14:00:00"),
+      waiterName: "Michael Torres"
+    },
+    {
+      id: "TXN-2024-15513",
+      locationId: "LOC-ORLANDO-02",
+      itemId: "ITEM-COKE",
+      quantity: 8,
+      totalPrice: { USD: 20, COP: 8e4 },
+      paymentMethod: "Cash",
+      timestamp: /* @__PURE__ */ new Date("2024-04-20T19:30:00"),
+      waiterName: "Michael Torres"
     }
   ];
   var sampleWasteRecords = [

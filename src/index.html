@@ -442,6 +442,7 @@
         </div>
 
         <div id="validation-result" class="max-w-2xl"></div>
+        <p class="mt-4 max-w-2xl text-xs text-brand-warmgray">Esta herramienta verifica que los datos de un ítem de menú cumplan las reglas del negocio antes de ingresarlos al sistema: precios válidos, tiempo de preparación razonable (hasta 60 minutos), nombre completo, y disponibilidad en al menos un país.</p>
       </section>
     </main>
 
@@ -579,14 +580,31 @@
             B.sampleWasteRecords,
             B.sampleMenuItems,
           );
-          el.innerHTML = ranking
-            .map((r, i) =>
-              card(
-                `#${i + 1} — ${r.location.name}`,
-                `Puntaje: ${r.score.toFixed(2)} / 100`,
-              ),
-            )
-            .join("");
+          const activeRanking = ranking.filter(r => r.location.status === "Active");
+          const excludedCount = ranking.length - activeRanking.length;
+          el.innerHTML = `<div class="col-span-full min-w-0 bg-white rounded-2xl shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full min-w-[560px] text-sm text-left">
+                <caption class="sr-only">Ranking performance de ubicaciones activas</caption>
+                <thead class="bg-brand-beige text-brand-warmgray text-xs uppercase">
+                  <tr>
+                    <th scope="col" class="px-5 py-3 font-medium">Posición</th>
+                    <th scope="col" class="px-5 py-3 font-medium">Ubicación</th>
+                    <th scope="col" class="px-5 py-3 font-medium">Ciudad</th>
+                    <th scope="col" class="px-5 py-3 font-medium text-right">Puntaje</th>
+                  </tr>
+                </thead>
+                <tbody>${activeRanking.map((r, i) => `<tr class="border-b border-brand-beige last:border-0">
+                  <td class="px-5 py-3 text-brand-warmgray">${i + 1}</td>
+                  <td class="px-5 py-3 font-medium text-brand-darkbrown">${r.location.name}</td>
+                  <td class="px-5 py-3 text-brand-charcoal">${r.location.city}</td>
+                  <td class="px-5 py-3 text-right font-semibold text-brand-darkbrown whitespace-nowrap">${Math.round(r.score)} / 100</td>
+                </tr>`).join("") || '<tr><td colspan="4" class="px-5 py-4 text-center text-brand-warmgray">Sin ubicaciones activas</td></tr>'}</tbody>
+              </table>
+            </div>
+            <p class="px-5 py-4 text-xs text-brand-warmgray">Se excluyen ubicaciones cerradas temporalmente o en renovación (${excludedCount} de ${ranking.length}).</p>
+            <p class="px-5 pb-4 text-xs text-brand-warmgray">El puntaje de performance (sobre 100) combina cuatro factores: ingresos generados, eficiencia de uso del local según su capacidad, control de desperdicio, y margen de ganancia. Un puntaje más alto indica mejor desempeño general de la ubicación.</p>
+          </div>`;
         } else if (type === "topItems") {
           const top = B.findTopSellingItems(
             B.sampleSales,
