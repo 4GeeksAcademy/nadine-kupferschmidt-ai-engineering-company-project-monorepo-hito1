@@ -2,11 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { useCandidate } from "@/hooks/useCandidate";
+import CandidateStatusControls from "@/components/CandidateStatusControls";
 import { STAGE_LABELS, STATUS_LABELS } from "@/lib/labels";
 
 export default function CandidateDetail({ id }: { id: string }) {
 	const router = useRouter();
-	const { candidate, loading, error } = useCandidate(id);
+	const { candidate, loading, error, setCandidate } = useCandidate(id);
 
 	if (loading) {
 		return <p>Cargando candidatura…</p>;
@@ -132,6 +133,7 @@ export default function CandidateDetail({ id }: { id: string }) {
 					</div>
 				</dl>
 			</div>
+			<CandidateStatusControls candidate={candidate} onUpdated={setCandidate} />
 		</div>
 	);
 }
