@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { STAGE_LABELS, STATUS_LABELS } from "@/lib/labels";
+import { STAGE_LABELS, STATUS_LABELS, STATUS_STYLES } from "@/lib/labels";
 import type { Candidate } from "@/types/candidate";
 
 export default function CandidateTable({
@@ -13,9 +13,9 @@ export default function CandidateTable({
 
 	return (
 		<div className="overflow-x-auto rounded-md border border-brand-beige bg-white">
-			<table className="w-full border-collapse text-left">
+			<table className="w-full border-collapse text-left text-sm">
 				<thead>
-					<tr className="bg-brand-beige">
+					<tr className="bg-gray-200">
 						<th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-brand-warmgray">Nombre</th>
 						<th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-brand-warmgray">Puesto</th>
 						<th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-brand-warmgray">Estado</th>
@@ -32,7 +32,9 @@ export default function CandidateTable({
 							</td>
 							<td className="px-4 py-3">{candidate.position}</td>
 							<td className="px-4 py-3">
-								{STATUS_LABELS[candidate.status]}
+								<span className={`inline-block rounded-full border px-2 py-0 text-[11px] font-medium ${STATUS_STYLES[candidate.status]}`}>
+									{STATUS_LABELS[candidate.status]}
+								</span>
 							</td>
 							<td className="px-4 py-3">
 								{STAGE_LABELS[candidate.stage]}
