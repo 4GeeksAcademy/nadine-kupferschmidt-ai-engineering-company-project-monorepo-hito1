@@ -1,14 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCandidate } from "@/hooks/useCandidate";
+import CandidateForm from "@/components/CandidateForm";
 import CandidateStatusControls from "@/components/CandidateStatusControls";
 import CandidateNotes from "@/components/CandidateNotes";
+import { updateCandidate } from "@/lib/api";
 import { STAGE_LABELS, STATUS_LABELS } from "@/lib/labels";
+import type { CandidateFormData } from "@/types/candidate";
 
 export default function CandidateDetail({ id }: { id: string }) {
 	const router = useRouter();
 	const { candidate, loading, error, setCandidate } = useCandidate(id);
+	const [isEditing, setIsEditing] = useState(false);
+	const [editSuccess, setEditSuccess] = useState<string | null>(null);
 
 	if (loading) {
 		return <p>Cargando candidatura…</p>;
@@ -20,6 +26,15 @@ export default function CandidateDetail({ id }: { id: string }) {
 
 	if (!candidate) {
 		return <p>No se encontró la candidatura.</p>;
+	}
+
+	async function handleUpdate(data: CandidateFormData) {
+		if (!candidate) return;
+
+		const updated = await updateCandidate(candidate.id, data);
+		setCandidate(updated);
+		setIsEditing(false);
+		setEditSuccess("Datos actualizados correctamente.");
 	}
 
 	return (
@@ -36,8 +51,36 @@ export default function CandidateDetail({ id }: { id: string }) {
 				{candidate.full_name}
 			</h1>
 			<p className="text-brand-warmgray">{candidate.position}</p>
+			{!isEditing && (
+				<button
+					type="button"
+					onClick={() => {
+						setIsEditing(true);
+						setEditSuccess(null);
+					}}
+					className="mt-4 rounded bg-brand-ochre px-4 py-2 text-sm text-brand-darkbrown hover:opacity-90"
+				>
+					Editar datos
+				</button>
+			)}
+			{editSuccess && (
+				<p className="mt-3 text-sm text-green-700">{editSuccess}</p>
+			)}
 
-			<div className="mt-6 rounded-md border border-brand-beige bg-white p-6">
+			{isEditing ? (
+				<div className="mt-6 rounded-md border border-brand-beige bg-white p-6">
+					<h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-brand-warmgray">
+						Editar datos
+					</h2>
+					<CandidateForm
+						initialValues={candidate}
+						submitLabel="Guardar cambios"
+						onSubmit={handleUpdate}
+						onCancel={() => setIsEditing(false)}
+					/>
+				</div>
+			) : (
+				<div className="mt-6 rounded-md border border-brand-beige bg-white p-6">
 				<dl className="grid gap-4 sm:grid-cols-2">
 					<div>
 						<dt className="text-xs uppercase tracking-wide text-brand-warmgray">
@@ -133,7 +176,8 @@ export default function CandidateDetail({ id }: { id: string }) {
 						</dd>
 					</div>
 				</dl>
-			</div>
+				</div>
+			)}
 			<CandidateStatusControls candidate={candidate} onUpdated={setCandidate} />
 			<CandidateNotes candidateId={candidate.id} />
 		</div>
