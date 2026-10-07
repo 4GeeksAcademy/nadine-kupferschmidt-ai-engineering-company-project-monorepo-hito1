@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
+import ConfirmDialog from "@/components/ConfirmDialog";
 import { addNote, deleteNote, getNotes } from "@/lib/api";
 import type { Note } from "@/types/candidate";
 
@@ -17,6 +18,7 @@ export default function CandidateNotes({ candidateId }: CandidateNotesProps) {
 	const [adding, setAdding] = useState(false);
 	const [deletingId, setDeletingId] = useState<string | null>(null);
 	const [actionError, setActionError] = useState<string | null>(null);
+	const [noteToDelete, setNoteToDelete] = useState<string | null>(null);
 
 	useEffect(() => {
 		const loadNotes = async () => {
@@ -67,16 +69,16 @@ export default function CandidateNotes({ candidateId }: CandidateNotesProps) {
 		}
 	}
 
-	async function handleDelete(noteId: string) {
-		if (!window.confirm("¿Seguro que quieres eliminar esta nota?")) {
+	async function handleDelete() {
+		if (noteToDelete === null) {
 			return;
 		}
 
-		setDeletingId(noteId);
+		setDeletingId(noteToDelete);
 		setActionError(null);
 
 		try {
-			await deleteNote(candidateId, noteId);
+			await deleteNote(candidateId, noteToDelete);
 			const response = await getNotes(candidateId);
 			setNotes(response);
 		} catch (caughtError) {
@@ -87,6 +89,7 @@ export default function CandidateNotes({ candidateId }: CandidateNotesProps) {
 			);
 		} finally {
 			setDeletingId(null);
+			setNoteToDelete(null);
 		}
 	}
 
@@ -144,7 +147,7 @@ export default function CandidateNotes({ candidateId }: CandidateNotesProps) {
 								<button
 									type="button"
 									disabled={deletingId === note.id}
-									onClick={() => void handleDelete(note.id)}
+									onClick={() => setNoteToDelete(note.id)}
 									className="text-sm text-red-600 hover:underline"
 								>
 									{deletingId === note.id ? "Eliminando…" : "Eliminar"}
@@ -154,6 +157,15 @@ export default function CandidateNotes({ candidateId }: CandidateNotesProps) {
 					</ul>
 				)}
 			</div>
+			<ConfirmDialog
+				open={noteToDelete !== null}
+				title="Eliminar nota"
+				message="Esta acción no se puede deshacer. ¿Seguro que quieres eliminar esta nota?"
+				confirmLabel="Eliminar"
+				loading={deletingId !== null}
+				onConfirm={() => void handleDelete()}
+				onCancel={() => setNoteToDelete(null)}
+			/>
 		</section>
 	);
 }
