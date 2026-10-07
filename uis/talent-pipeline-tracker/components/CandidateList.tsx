@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import CandidateTable from "@/components/CandidateTable";
 import { useCandidates } from "@/hooks/useCandidates";
@@ -26,6 +27,7 @@ export default function CandidateList() {
 	const search = searchParam || undefined;
 
 	const { candidates, loading, error, total } = useCandidates({ status, stage, search });
+	const [showAll, setShowAll] = useState(false);
 
 	if (loading) {
 		return <p>Cargando candidaturas…</p>;
@@ -35,12 +37,28 @@ export default function CandidateList() {
 		return <p className="text-red-600">Error: {error}</p>;
 	}
 
+	const visibleCandidates = showAll ? candidates : candidates.slice(0, 15);
+
 	return (
 		<div>
 			<p className="mb-3 text-sm text-brand-warmgray">
-				{total} {total === 1 ? "candidatura" : "candidaturas"}
+				{visibleCandidates.length < total ? (
+					`Mostrando ${visibleCandidates.length} de ${total} candidaturas`
+				) : (
+					<>{total} {total === 1 ? "candidatura" : "candidaturas"}</>
+				)}
 			</p>
-			<CandidateTable candidates={candidates} />
+			<CandidateTable candidates={visibleCandidates} />
+			{candidates.length > 15 && (
+				<div className="mt-4 flex justify-center">
+					<button
+						onClick={() => setShowAll(!showAll)}
+						className="rounded border border-brand-beige bg-white px-4 py-2 text-sm text-brand-darkbrown hover:border-brand-ochre"
+					>
+						{showAll ? "Ver menos" : `Ver todas (${candidates.length})`}
+					</button>
+				</div>
+			)}
 		</div>
 	);
 }
