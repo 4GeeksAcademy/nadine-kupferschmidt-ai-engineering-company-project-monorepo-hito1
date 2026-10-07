@@ -22,7 +22,7 @@ export async function getCandidates(
 	if (filters.status) params.set("status", filters.status);
 	if (filters.stage) params.set("stage", filters.stage);
 	if (filters.search) params.set("search", filters.search);
-	params.set("limit", "100");
+	params.set("limit", "250");
 
 	const response = await fetch(`${API_URL}/records?${params.toString()}`);
 
