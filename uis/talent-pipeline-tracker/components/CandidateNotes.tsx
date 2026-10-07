@@ -111,7 +111,7 @@ export default function CandidateNotes({ candidateId }: CandidateNotesProps) {
 				<button
 					type="submit"
 					disabled={adding}
-					className="rounded bg-brand-ochre px-4 py-2 text-brand-darkbrown disabled:opacity-60"
+					className="rounded bg-brand-ochre px-4 py-2 text-sm text-brand-darkbrown disabled:opacity-60"
 				>
 					{adding ? "Guardando…" : "Agregar nota"}
 				</button>

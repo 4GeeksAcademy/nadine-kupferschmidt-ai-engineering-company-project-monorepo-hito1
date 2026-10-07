@@ -175,7 +175,7 @@ export default function CandidateForm({
 				<button
 					type="submit"
 					disabled={submitting}
-					className="rounded bg-brand-ochre px-4 py-2 text-brand-darkbrown disabled:opacity-60"
+					className="rounded bg-brand-ochre px-4 py-2 text-brand-darkbrown disabled:opacity-60 text-sm"
 				>
 					{submitting ? "Guardando…" : submitLabel}
 				</button>
@@ -183,7 +183,7 @@ export default function CandidateForm({
 					<button
 						type="button"
 						onClick={onCancel}
-						className="rounded border border-brand-beige bg-white px-4 py-2 text-brand-warmgray"
+						className="rounded border border-brand-beige bg-white px-4 py-2 text-brand-warmgray text-sm"
 					>
 						Cancelar
 					</button>

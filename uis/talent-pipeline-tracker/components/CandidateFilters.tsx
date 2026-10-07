@@ -45,7 +45,7 @@ export default function CandidateFilters() {
 					id="candidate-status"
 					value={searchParams.get("status") ?? ""}
 					onChange={(event) => updateParams({ status: event.target.value })}
-					className="rounded border border-brand-beige bg-white px-3 py-2 text-brand-warmgray"
+					className="rounded border border-brand-beige bg-white px-3 py-2 text-brand-warmgray text-sm"
 				>
 					<option value="">Todos los estados</option>
 					{Object.entries(STATUS_LABELS).map(([value, label]) => (
@@ -64,7 +64,7 @@ export default function CandidateFilters() {
 					id="candidate-stage"
 					value={searchParams.get("stage") ?? ""}
 					onChange={(event) => updateParams({ stage: event.target.value })}
-					className="rounded border border-brand-beige bg-white px-3 py-2 text-brand-warmgray"
+					className="rounded border border-brand-beige bg-white px-3 py-2 text-brand-warmgray text-sm"
 				>
 					<option value="">Todas las etapas</option>
 					{Object.entries(STAGE_LABELS).map(([value, label]) => (
@@ -86,11 +86,11 @@ export default function CandidateFilters() {
 						placeholder="Buscar por nombre o email"
 						value={search}
 						onChange={(event) => setSearch(event.target.value)}
-						className="min-w-56 rounded border border-brand-beige bg-white px-3 py-2 text-brand-warmgray"
+						className="min-w-56 rounded border border-brand-beige bg-white px-3 py-2 text-brand-warmgray text-sm"
 					/>
 					<button
 						type="submit"
-						className="rounded bg-brand-ochre px-4 py-2 text-brand-darkbrown"
+						className="rounded bg-brand-ochre px-4 py-2 text-brand-darkbrown text-sm"
 					>
 						Buscar
 					</button>
@@ -100,7 +100,7 @@ export default function CandidateFilters() {
 			<button
 				type="button"
 				onClick={clearFilters}
-				className="rounded border border-brand-beige bg-white px-4 py-2 text-brand-warmgray"
+				className="rounded border border-brand-beige bg-white px-4 py-2 text-brand-warmgray text-sm"
 			>
 				Limpiar filtros
 			</button>

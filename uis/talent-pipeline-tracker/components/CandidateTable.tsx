@@ -32,7 +32,7 @@ export default function CandidateTable({
 							</td>
 							<td className="px-4 py-3">{candidate.position}</td>
 							<td className="px-4 py-3">
-								<span className={`inline-block rounded-full border px-2 py-0 text-[11px] font-medium ${STATUS_STYLES[candidate.status]}`}>
+								<span className={`inline-block rounded-full border px-2 py-0 text-xs font-medium ${STATUS_STYLES[candidate.status]}`}>
 									{STATUS_LABELS[candidate.status]}
 								</span>
 							</td>

@@ -47,7 +47,7 @@ export default function ConfirmDialog({
 						type="button"
 						onClick={onCancel}
 						disabled={loading}
-						className="rounded border border-brand-beige bg-white px-4 py-2 text-brand-warmgray"
+						className="rounded border border-brand-beige bg-white px-4 py-2 text-brand-warmgray text-sm"
 					>
 						Cancelar
 					</button>
@@ -55,7 +55,7 @@ export default function ConfirmDialog({
 						type="button"
 						onClick={onConfirm}
 						disabled={loading}
-						className="rounded bg-red-600 px-4 py-2 text-white disabled:opacity-60"
+						className="rounded bg-red-600 px-4 py-2 text-white disabled:opacity-60 text-sm"
 					>
 						{loading ? "Eliminando…" : confirmLabel}
 					</button>

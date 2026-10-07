@@ -9,7 +9,7 @@ export const STATUS_LABELS: Record<CandidateStatus, string> = {
 
 export const STATUS_STYLES: Record<CandidateStatus, string> = {
 	received: "border-blue-600 text-blue-700",
-	in_progress: "border-brand-ochre text-brand-ochre",
+	in_progress: "border-brand-ochre text-orange-700",
 	selected: "border-green-600 text-green-700",
 	discarded: "border-red-600 text-red-700",
 };

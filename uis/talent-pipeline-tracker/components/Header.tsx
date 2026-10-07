@@ -13,7 +13,7 @@ export default function Header() {
           </Link>
           <span className="text-sm text-brand-warmgray">People &amp; Talent</span>
         </div>
-        <nav className="flex gap-5 text-sm">
+        <nav className="flex gap-5 text-sm items-center">
           <Link href="/" className="text-brand-warmgray hover:text-brand-ochre flex items-center gap-1.5">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -28,7 +28,7 @@ export default function Header() {
             </svg>
             Candidaturas
           </Link>
-          <Link href="/candidates/new" className="text-brand-warmgray hover:text-brand-ochre flex items-center gap-1.5">
+          <Link href="/candidates/new" className="flex items-center gap-1.5 rounded bg-brand-ochre px-3 py-1.5 text-brand-darkbrown hover:opacity-90">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
