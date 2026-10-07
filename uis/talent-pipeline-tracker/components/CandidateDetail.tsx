@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useCandidate } from "@/hooks/useCandidate";
 import CandidateStatusControls from "@/components/CandidateStatusControls";
+import CandidateNotes from "@/components/CandidateNotes";
 import { STAGE_LABELS, STATUS_LABELS } from "@/lib/labels";
 
 export default function CandidateDetail({ id }: { id: string }) {
@@ -134,6 +135,7 @@ export default function CandidateDetail({ id }: { id: string }) {
 				</dl>
 			</div>
 			<CandidateStatusControls candidate={candidate} onUpdated={setCandidate} />
+			<CandidateNotes candidateId={candidate.id} />
 		</div>
 	);
 }
