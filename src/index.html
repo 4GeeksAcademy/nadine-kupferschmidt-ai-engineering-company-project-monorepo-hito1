@@ -709,9 +709,9 @@
           >
             ✦ Brasaland Ops
           </p>
-          <h2 class="text-2xl font-semibold mb-1">Validar un ítem de menú</h2>
+          <h2 class="text-2xl font-semibold mb-1">Validar datos</h2>
           <p class="text-sm text-brand-warmgray">
-            Cargá datos de prueba y verificá si cumplen las reglas de negocio
+            Probá si un ítem, una venta o una locación cumplen las reglas de negocio
           </p>
         </div>
 
@@ -767,6 +767,14 @@
                 class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
+            <label class="flex items-center gap-2 text-sm text-brand-charcoal">
+              <input id="val-colombia" type="checkbox" checked class="w-4 h-4 accent-brand-ochre" />
+              Disponible en Colombia
+            </label>
+            <label class="flex items-center gap-2 text-sm text-brand-charcoal">
+              <input id="val-usa" type="checkbox" checked class="w-4 h-4 accent-brand-ochre" />
+              Disponible en USA
+            </label>
           </div>
 
           <button
@@ -779,6 +787,184 @@
 
         <div id="validation-result" class="max-w-2xl"></div>
         <p class="mt-4 max-w-2xl text-xs text-brand-warmgray">Esta herramienta verifica que los datos de un ítem de menú cumplan las reglas del negocio antes de ingresarlos al sistema: precios válidos, tiempo de preparación razonable (hasta 60 minutos), nombre completo, y disponibilidad en al menos un país.</p>
+
+        <div
+          class="bg-white rounded-2xl p-7 md:p-9 mt-10 mb-7 max-w-2xl shadow-sm"
+        >
+          <h3 class="text-sm font-semibold text-brand-darkbrown mb-5">Validar una venta</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-7">
+            <div>
+              <label
+                for="sale-quantity"
+                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                >Cantidad</label
+              >
+              <input
+                id="sale-quantity"
+                type="number"
+                value="1"
+                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div>
+              <label
+                for="sale-waiter"
+                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                >Nombre del mesero</label
+              >
+              <input
+                id="sale-waiter"
+                type="text"
+                value="María González"
+                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div>
+              <label
+                for="sale-usd"
+                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                >Precio total USD</label
+              >
+              <input
+                id="sale-usd"
+                type="number"
+                value="37"
+                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div>
+              <label
+                for="sale-cop"
+                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                >Precio total COP</label
+              >
+              <input
+                id="sale-cop"
+                type="number"
+                value="148000"
+                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+          </div>
+
+          <button
+            onclick="runSaleValidation()"
+            class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
+          >
+            Validar venta
+          </button>
+        </div>
+
+        <div id="sale-validation-result" class="max-w-2xl"></div>
+
+        <div
+          class="bg-white rounded-2xl p-7 md:p-9 mt-10 mb-7 max-w-2xl shadow-sm"
+        >
+          <h3 class="text-sm font-semibold text-brand-darkbrown mb-5">Validar una locación</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-7">
+            <div>
+              <label
+                for="loc-val-year"
+                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                >Año de apertura</label
+              >
+              <input
+                id="loc-val-year"
+                type="number"
+                value="2008"
+                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div>
+              <label
+                for="loc-val-capacity"
+                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                >Capacidad de asientos</label
+              >
+              <input
+                id="loc-val-capacity"
+                type="number"
+                value="80"
+                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div>
+              <label
+                for="loc-val-staff"
+                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                >Cantidad de empleados</label
+              >
+              <input
+                id="loc-val-staff"
+                type="number"
+                value="12"
+                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div class="hidden md:block"></div>
+            <div>
+              <label
+                for="loc-val-rent-usd"
+                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                >Renta mensual USD</label
+              >
+              <input
+                id="loc-val-rent-usd"
+                type="number"
+                value="1500"
+                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div>
+              <label
+                for="loc-val-rent-cop"
+                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                >Renta mensual COP</label
+              >
+              <input
+                id="loc-val-rent-cop"
+                type="number"
+                value="6000000"
+                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div>
+              <label
+                for="loc-val-utilities-usd"
+                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                >Servicios mensuales USD</label
+              >
+              <input
+                id="loc-val-utilities-usd"
+                type="number"
+                value="400"
+                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div>
+              <label
+                for="loc-val-utilities-cop"
+                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                >Servicios mensuales COP</label
+              >
+              <input
+                id="loc-val-utilities-cop"
+                type="number"
+                value="1600000"
+                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+          </div>
+
+          <button
+            onclick="runLocationValidation()"
+            class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
+          >
+            Validar locación
+          </button>
+        </div>
+
+        <div id="location-validation-result" class="max-w-2xl"></div>
       </section>
     </main>
 
@@ -1168,15 +1354,58 @@
           },
           ingredientCost: { USD: 1, COP: 1000 },
           prepTimeMinutes: parseInt(document.getElementById("val-prep").value),
-          isAvailableInColombia: true,
-          isAvailableInUSA: true,
+          isAvailableInColombia: document.getElementById("val-colombia").checked,
+          isAvailableInUSA: document.getElementById("val-usa").checked,
           allergens: [],
           status: "Active",
         };
 
-        const result = B.validateMenuItem(testItem);
-        const el = document.getElementById("validation-result");
+        renderValidationResult(
+          document.getElementById("validation-result"),
+          B.validateMenuItem(testItem),
+        );
+      }
 
+      function runSaleValidation() {
+        const sale = {
+          ...B.sampleSales[0],
+          quantity: parseInt(document.getElementById("sale-quantity").value, 10),
+          totalPrice: {
+            USD: parseFloat(document.getElementById("sale-usd").value),
+            COP: parseFloat(document.getElementById("sale-cop").value),
+          },
+          waiterName: document.getElementById("sale-waiter").value,
+        };
+
+        renderValidationResult(
+          document.getElementById("sale-validation-result"),
+          B.validateSaleTransaction(sale),
+        );
+      }
+
+      function runLocationValidation() {
+        const location = {
+          ...B.sampleLocations[0],
+          openingYear: parseInt(document.getElementById("loc-val-year").value, 10),
+          seatingCapacity: parseInt(document.getElementById("loc-val-capacity").value, 10),
+          staffCount: parseInt(document.getElementById("loc-val-staff").value, 10),
+          monthlyRentCost: {
+            USD: parseFloat(document.getElementById("loc-val-rent-usd").value),
+            COP: parseFloat(document.getElementById("loc-val-rent-cop").value),
+          },
+          averageMonthlyUtilities: {
+            USD: parseFloat(document.getElementById("loc-val-utilities-usd").value),
+            COP: parseFloat(document.getElementById("loc-val-utilities-cop").value),
+          },
+        };
+
+        renderValidationResult(
+          document.getElementById("location-validation-result"),
+          B.validateLocation(location, new Date().getFullYear()),
+        );
+      }
+
+      function renderValidationResult(el, result) {
         if (result.valid) {
           el.innerHTML = `<div class="bg-white text-brand-darkbrown rounded-2xl shadow-sm p-4 text-sm">✓ Los datos cumplen todas las reglas de negocio.</div>`;
         } else {
