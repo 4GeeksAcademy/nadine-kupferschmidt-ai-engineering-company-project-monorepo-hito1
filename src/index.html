@@ -206,12 +206,72 @@
               <option value="Under renovation">En renovación</option>
             </select>
           </div>
+          <div class="w-full md:w-auto">
+            <label
+              class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+              >Ordenar por capacidad</label
+            >
+            <select
+              id="loc-sort"
+              class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+            >
+              <option value="">Sin ordenar</option>
+              <option value="asc">Menor a mayor</option>
+              <option value="desc">Mayor a menor</option>
+            </select>
+          </div>
           <button
             onclick="searchLocations()"
             class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
           >
             Buscar
           </button>
+        </div>
+
+        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end bg-white rounded-2xl shadow-sm p-5">
+          <div class="w-full md:w-auto">
+            <label
+              for="loc-id"
+              class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+              >Buscar ubicación por ID</label
+            >
+            <input
+              id="loc-id"
+              type="text"
+              placeholder="LOC-MEDELLIN-01"
+              class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+            />
+          </div>
+          <button
+            onclick="searchLocationById()"
+            class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
+          >
+            Buscar
+          </button>
+          <div id="loc-id-result" class="w-full"></div>
+        </div>
+
+        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end bg-white rounded-2xl shadow-sm p-5">
+          <div class="w-full md:w-auto">
+            <label
+              for="loc-capacity"
+              class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+              >Buscar por capacidad exacta (búsqueda binaria)</label
+            >
+            <input
+              id="loc-capacity"
+              type="number"
+              min="0"
+              class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+            />
+          </div>
+          <button
+            onclick="searchLocationByCapacity()"
+            class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
+          >
+            Buscar
+          </button>
+          <div id="loc-capacity-result" class="w-full"></div>
         </div>
 
         <div
@@ -449,6 +509,7 @@
     <script src="bundle.js"></script>
     <script>
       const B = window.Brasaland;
+      const REFERENCE_DATE = new Date();
 
       // ---- Navegación del menú lateral ----
       function showPanel(name) {
@@ -482,10 +543,13 @@
       function searchLocations() {
         const country = document.getElementById("loc-country").value;
         const status = document.getElementById("loc-status").value;
+        const sortOrder = document.getElementById("loc-sort").value;
 
         let results = B.sampleLocations;
         if (country) results = results.filter((l) => l.country === country);
-        if (status) results = results.filter((l) => l.status === status);
+        if (status === "Active") results = B.filterActiveLocations(results);
+        else if (status) results = results.filter((l) => l.status === status);
+        if (sortOrder) results = B.sortLocationsByCapacity(results, sortOrder);
 
         const tbody = document.getElementById("loc-results");
         if (results.length === 0) {
@@ -505,6 +569,39 @@
       `,
           )
           .join("");
+      }
+
+      function locationCard(loc) {
+        return `<div class="bg-brand-ivory rounded-2xl p-6 flex flex-col gap-2">
+        <p class="text-xs text-brand-warmgray uppercase tracking-wide"><span class="text-brand-ochre mr-1.5">✦</span>${loc.id}</p>
+        <p class="text-2xl font-semibold text-brand-darkbrown leading-tight">${loc.name}</p>
+        <p class="text-sm text-brand-charcoal">${loc.city} · ${loc.seatingCapacity} lugares · ${loc.manager}</p>
+        <div>${statusLabel(loc.status)}</div>
+      </div>`;
+      }
+
+      function notFoundMessage(text) {
+        return `<p class="text-sm text-brand-warmgray">${text}</p>`;
+      }
+
+      function searchLocationById() {
+        const id = document.getElementById("loc-id").value.trim();
+        const location = B.findLocationById(B.sampleLocations, id);
+        document.getElementById("loc-id-result").innerHTML = location
+          ? locationCard(location)
+          : notFoundMessage("No se encontró ninguna ubicación con ese ID");
+      }
+
+      function searchLocationByCapacity() {
+        const capacity = parseInt(document.getElementById("loc-capacity").value, 10);
+        const sorted = B.sortLocationsByCapacity(B.sampleLocations, "asc");
+        const index = Number.isNaN(capacity)
+          ? -1
+          : B.binarySearchLocationByCapacity(sorted, capacity);
+        document.getElementById("loc-capacity-result").innerHTML =
+          index !== -1
+            ? locationCard(sorted[index])
+            : notFoundMessage("No hay ninguna ubicación con esa capacidad");
       }
 
       // ---- Menú ----
@@ -579,6 +676,7 @@
             B.sampleSales,
             B.sampleWasteRecords,
             B.sampleMenuItems,
+            REFERENCE_DATE,
           );
           const activeRanking = ranking.filter(r => r.location.status === "Active");
           const excludedCount = ranking.length - activeRanking.length;
@@ -616,9 +714,13 @@
             .join("");
         } else if (type === 'extremeSales') {
           const extreme = B.findExtremeSales(B.sampleSales, 'USD');
-          el.innerHTML =
-            card('Venta más alta', `${extreme.highest.id} — $${extreme.highest.totalPrice.USD}`) +
-            card('Venta más baja', `${extreme.lowest.id} — $${extreme.lowest.totalPrice.USD}`);
+          if (!extreme.highest || !extreme.lowest) {
+            el.innerHTML = card('Venta más cara/barata', 'Sin ventas registradas');
+          } else {
+            el.innerHTML =
+              card('Venta más alta', `${extreme.highest.id} — $${extreme.highest.totalPrice.USD}`) +
+              card('Venta más baja', `${extreme.lowest.id} — $${extreme.lowest.totalPrice.USD}`);
+          }
 
         } else if (type === 'waste') {
           const grouped = B.groupWasteByReason(B.sampleWasteRecords);
@@ -724,6 +826,7 @@
           B.sampleSales,
           B.sampleWasteRecords,
           B.sampleMenuItems,
+          REFERENCE_DATE,
         );
         const best = ranking[0];
 
@@ -803,6 +906,7 @@
           B.sampleSales,
           B.sampleWasteRecords,
           B.sampleMenuItems,
+          REFERENCE_DATE,
         );
         const topLocations = ranking.slice(0, 5);
         document.getElementById("dashboard-ranking").innerHTML = topLocations
