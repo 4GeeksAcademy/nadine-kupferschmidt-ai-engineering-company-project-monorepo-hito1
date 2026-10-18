@@ -92,6 +92,10 @@
         <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v5a3 3 0 0 0 6 0V3M7 3v18M20 3c-4 3-4 9 0 9V3Zm0 9v9" /></svg>
         <span class="group-[.collapsed]:hidden">Menú</span>
       </button>
+      <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0" data-panel="ventas" onclick="showPanel('ventas')" title="Ventas" aria-label="Ventas">
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M16.5 7H10a2.5 2.5 0 0 0 0 5h4a2.5 2.5 0 0 1 0 5H7" /></svg>
+        <span class="group-[.collapsed]:hidden">Ventas</span>
+      </button>
       <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0" data-panel="reportes" onclick="showPanel('reportes')" title="Reportes" aria-label="Reportes">
         <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H5v18h14V8l-5-5Zm0 0v5h5M8 12h8M8 16h6" /></svg>
         <span class="group-[.collapsed]:hidden">Reportes</span>
@@ -400,6 +404,207 @@
             </thead>
             <tbody id="menu-results"></tbody>
           </table>
+        </div>
+      </section>
+
+      <!-- ========== SECCIÓN: VENTAS ========== -->
+      <section id="panel-ventas" class="panel max-w-6xl md:px-6 md:py-4">
+        <div class="mb-10">
+          <p
+            class="text-brand-ochre text-xs font-semibold uppercase tracking-widest mb-2"
+          >
+            ✦ Brasaland Ops
+          </p>
+          <h2 class="text-2xl font-semibold mb-1">Ventas</h2>
+          <p class="text-sm text-brand-warmgray">
+            Ingresos diarios, ventas por rango y conversión de moneda
+          </p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm p-5 mb-7">
+          <h3 class="text-sm font-semibold text-brand-darkbrown mb-5">Ingreso del día por ubicación</h3>
+          <div class="flex flex-col md:flex-row md:flex-wrap gap-5 md:items-end mb-5">
+            <div class="w-full md:w-auto">
+              <label
+                for="daily-location"
+                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                >Ubicación</label
+              >
+              <select
+                id="daily-location"
+                class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              ></select>
+            </div>
+            <div class="w-full md:w-auto">
+              <label
+                for="daily-date"
+                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                >Fecha</label
+              >
+              <input
+                id="daily-date"
+                type="date"
+                value="2024-03-15"
+                class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div class="w-full md:w-auto">
+              <label
+                for="daily-currency"
+                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                >Moneda</label
+              >
+              <select
+                id="daily-currency"
+                class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              >
+                <option value="USD">USD</option>
+                <option value="COP">COP</option>
+              </select>
+            </div>
+            <button
+              onclick="renderDailyRevenue()"
+              class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
+            >
+              Calcular
+            </button>
+          </div>
+          <div id="daily-result"></div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm p-5 mb-7">
+          <h3 class="text-sm font-semibold text-brand-darkbrown mb-5">Ventas por rango de fechas</h3>
+          <div class="flex flex-col md:flex-row md:flex-wrap gap-5 md:items-end">
+            <div class="w-full md:w-auto">
+              <label
+                for="range-from"
+                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                >Desde</label
+              >
+              <input
+                id="range-from"
+                type="date"
+                value="2024-03-01"
+                class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div class="w-full md:w-auto">
+              <label
+                for="range-to"
+                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                >Hasta</label
+              >
+              <input
+                id="range-to"
+                type="date"
+                value="2024-04-30"
+                class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div class="w-full md:w-auto">
+              <label
+                for="range-currency"
+                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                >Moneda</label
+              >
+              <select
+                id="range-currency"
+                class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              >
+                <option value="USD">USD</option>
+                <option value="COP">COP</option>
+              </select>
+            </div>
+            <button
+              onclick="renderSalesByRange()"
+              class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
+            >
+              Filtrar
+            </button>
+          </div>
+        </div>
+
+        <div
+          id="range-summary"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 mb-7"
+        ></div>
+
+        <div
+          class="overflow-x-auto bg-white rounded-2xl p-5 md:p-7 shadow-sm mb-7"
+        >
+          <table class="w-full min-w-[720px] text-sm">
+            <thead>
+              <tr
+                class="bg-brand-beige text-brand-warmgray text-left text-xs uppercase tracking-wide [&>th]:px-3"
+              >
+                <th class="py-3 pr-4 font-medium">ID</th>
+                <th class="py-3 pr-4 font-medium">Ubicación</th>
+                <th class="py-3 pr-4 font-medium">Ítem</th>
+                <th class="py-3 pr-4 font-medium">Cantidad</th>
+                <th class="py-3 pr-4 font-medium">Total</th>
+                <th class="py-3 pr-4 font-medium">Método de pago</th>
+                <th class="py-3 pr-4 font-medium">Fecha</th>
+              </tr>
+            </thead>
+            <tbody id="range-results"></tbody>
+          </table>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm p-5">
+          <h3 class="text-sm font-semibold text-brand-darkbrown mb-5">Conversor de moneda</h3>
+          <div class="flex flex-col md:flex-row md:flex-wrap gap-5 md:items-end mb-5">
+            <div class="w-full md:w-auto">
+              <label
+                for="convert-amount"
+                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                >Monto</label
+              >
+              <input
+                id="convert-amount"
+                type="number"
+                min="0"
+                step="any"
+                value="1"
+                class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div class="w-full md:w-auto">
+              <label
+                for="convert-from"
+                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                >De</label
+              >
+              <select
+                id="convert-from"
+                class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              >
+                <option value="USD">USD</option>
+                <option value="COP">COP</option>
+              </select>
+            </div>
+            <div class="w-full md:w-auto">
+              <label
+                for="convert-to"
+                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                >A</label
+              >
+              <select
+                id="convert-to"
+                class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              >
+                <option value="COP">COP</option>
+                <option value="USD">USD</option>
+              </select>
+            </div>
+            <button
+              onclick="runCurrencyConversion()"
+              class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
+            >
+              Convertir
+            </button>
+          </div>
+          <div id="convert-result"></div>
+          <p class="mt-4 text-xs text-brand-warmgray">Tasa fija: 1 USD = 4000 COP</p>
         </div>
       </section>
 
@@ -852,6 +1057,105 @@
         }
       }
 
+      // ---- Ventas ----
+      const salesPaymentLabels = {
+        Cash: "Efectivo",
+        "Credit card": "Tarjeta de crédito",
+        "Debit card": "Tarjeta de débito",
+        "Digital wallet": "Billetera digital",
+      };
+
+      const dailyLocationSelect = document.getElementById("daily-location");
+      B.sampleLocations.forEach((loc) => {
+        dailyLocationSelect.add(new Option(`${loc.name} — ${loc.city}`, loc.id));
+      });
+
+      function renderDailyRevenue() {
+        const el = document.getElementById("daily-result");
+        const dateValue = document.getElementById("daily-date").value;
+        const currency = document.getElementById("daily-currency").value;
+        const location = B.findLocationById(B.sampleLocations, dailyLocationSelect.value);
+        if (!location || !dateValue) {
+          el.innerHTML = notFoundMessage("Elegí una ubicación y una fecha válidas");
+          return;
+        }
+        const locationSales = B.filterSalesByLocation(B.sampleSales, location.id);
+        const timeZone = B.getTimeZoneByCountry(location.country);
+        const revenue = B.calculateDailyRevenue(
+          locationSales,
+          new Date(dateValue + "T12:00:00"),
+          currency,
+          timeZone,
+        );
+        el.innerHTML = `<div class="bg-brand-ivory rounded-2xl p-6 flex flex-col gap-2">
+        <p class="text-xs text-brand-warmgray uppercase tracking-wide"><span class="text-brand-ochre mr-1.5">✦</span>${location.name} · ${dateValue}</p>
+        <p class="text-2xl font-semibold text-brand-darkbrown leading-tight">${formatMoney(revenue, currency)}</p>
+        <p class="text-sm text-brand-warmgray">Zona horaria: ${timeZone}</p>
+      </div>`;
+      }
+
+      function renderSalesByRange() {
+        const fromValue = document.getElementById("range-from").value;
+        const toValue = document.getElementById("range-to").value;
+        const currency = document.getElementById("range-currency").value;
+        const summary = document.getElementById("range-summary");
+        const tbody = document.getElementById("range-results");
+
+        const sales = fromValue && toValue
+          ? B.filterSalesByDateRange(
+              B.sampleSales,
+              new Date(fromValue + "T00:00:00"),
+              new Date(toValue + "T23:59:59"),
+            )
+          : [];
+
+        if (sales.length === 0) {
+          summary.innerHTML = "";
+          tbody.innerHTML = `<tr><td colspan="7" class="py-4 text-brand-warmgray text-center">No hay ventas en ese rango de fechas</td></tr>`;
+          return;
+        }
+
+        const averageTicket = B.calculateAverageTicket(sales, currency);
+        const highest = B.findExtremeSales(sales, currency).highest;
+        summary.innerHTML =
+          card("Cantidad de ventas", `${sales.length}`) +
+          card("Ticket promedio", formatMoney(averageTicket, currency)) +
+          card("Venta más alta", highest ? `${highest.id} — ${formatMoney(highest.totalPrice[currency], currency)}` : "Sin datos");
+
+        tbody.innerHTML = sales
+          .map((sale) => {
+            const location = B.findLocationById(B.sampleLocations, sale.locationId);
+            const item = B.sampleMenuItems.find((i) => i.id === sale.itemId);
+            return `
+        <tr class="border-b border-brand-beige [&>td]:px-3">
+          <td class="py-2">${sale.id}</td>
+          <td class="py-2">${location ? location.name : sale.locationId}</td>
+          <td class="py-2">${item ? item.name : sale.itemId}</td>
+          <td class="py-2">${sale.quantity}</td>
+          <td class="py-2 whitespace-nowrap">${formatMoney(sale.totalPrice[currency], currency)}</td>
+          <td class="py-2">${salesPaymentLabels[sale.paymentMethod] || sale.paymentMethod}</td>
+          <td class="py-2 whitespace-nowrap">${new Date(sale.timestamp).toLocaleString("es")}</td>
+        </tr>`;
+          })
+          .join("");
+      }
+
+      function runCurrencyConversion() {
+        const amount = parseFloat(document.getElementById("convert-amount").value);
+        const from = document.getElementById("convert-from").value;
+        const to = document.getElementById("convert-to").value;
+        const el = document.getElementById("convert-result");
+        if (Number.isNaN(amount)) {
+          el.innerHTML = notFoundMessage("Ingresá un monto válido");
+          return;
+        }
+        const result = B.convertCurrency(amount, from, to);
+        el.innerHTML = `<div class="bg-brand-ivory rounded-2xl p-6 flex flex-col gap-2">
+        <p class="text-xs text-brand-warmgray uppercase tracking-wide"><span class="text-brand-ochre mr-1.5">✦</span>${formatMoney(amount, from)}</p>
+        <p class="text-2xl font-semibold text-brand-darkbrown leading-tight">${formatMoney(result, to)}</p>
+      </div>`;
+      }
+
       // ---- Validaciones ----
       function runValidation() {
         const testItem = {
@@ -1006,6 +1310,8 @@
       searchMenu();
       renderDashboard();
       renderReport("ranking");
+      renderDailyRevenue();
+      renderSalesByRange();
     </script>
     <script>
       function toggleSidebar() {

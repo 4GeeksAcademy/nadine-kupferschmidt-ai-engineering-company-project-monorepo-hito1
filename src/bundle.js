@@ -2,12 +2,14 @@
 (() => {
   // src/utils/search.ts
   function findLocationById(locations, id) {
+    if (locations === null) return null;
     for (const location of locations) {
       if (location.id === id) return location;
     }
     return null;
   }
   function findMenuItemByName(items, name) {
+    if (items === null || name === null) return null;
     const targetName = name.toLowerCase();
     for (const item of items) {
       if (item.name.toLowerCase() === targetName) return item;
@@ -15,6 +17,7 @@
     return null;
   }
   function binarySearchLocationByCapacity(sortedLocations, targetCapacity) {
+    if (sortedLocations === null) return -1;
     let low = 0;
     let high = sortedLocations.length - 1;
     while (low <= high) {
@@ -32,7 +35,13 @@
   }
 
   // src/utils/collections.ts
+  function filterSalesByLocation(sales, locationId) {
+    if (sales === null) return [];
+    return sales.filter((sale) => sale.locationId === locationId);
+  }
   function filterSalesByDateRange(sales, startDate, endDate) {
+    if (sales === null) return [];
+    if (startDate === null || endDate === null) return [];
     const start = startDate.getTime();
     const end = endDate.getTime();
     return sales.filter((sale) => {
@@ -41,17 +50,21 @@
     });
   }
   function filterMenuItemsByCategory(items, category) {
+    if (items === null) return [];
     return items.filter((item) => item.category === category);
   }
   function filterActiveLocations(locations) {
+    if (locations === null) return [];
     return locations.filter((location) => location.status === "Active");
   }
   function sortLocationsByCapacity(locations, order) {
+    if (locations === null) return [];
     return [...locations].sort(
       (a, b) => order === "asc" ? a.seatingCapacity - b.seatingCapacity : b.seatingCapacity - a.seatingCapacity
     );
   }
   function sortMenuItemsByPrice(items, currency, order) {
+    if (items === null) return [];
     return [...items].sort(
       (a, b) => order === "asc" ? a.basePrice[currency] - b.basePrice[currency] : b.basePrice[currency] - a.basePrice[currency]
     );
@@ -62,19 +75,21 @@
   function round2(value) {
     return Math.round(value * 100) / 100;
   }
-  function isSameCalendarDay(a, b) {
-    return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+  function getTimeZoneByCountry(country) {
+    return country === "Colombia" ? "America/Bogota" : "America/New_York";
   }
-  function filterSalesByLocationLocal(sales, locationId) {
-    return sales.filter((sale) => sale.locationId === locationId);
+  function isSameCalendarDay(a, b, timeZone) {
+    return a.toLocaleDateString("en-CA", { timeZone }) === b.toLocaleDateString("en-CA", { timeZone });
   }
-  function calculateDailyRevenue(sales, date, currency) {
-    const dailySales = sales.filter((sale) => isSameCalendarDay(sale.timestamp, date));
+  function calculateDailyRevenue(sales, date, currency, timeZone) {
+    if (sales === null || date === null) return 0;
+    const dailySales = sales.filter((sale) => isSameCalendarDay(sale.timestamp, date, timeZone));
     const total = dailySales.reduce((sum, sale) => sum + sale.totalPrice[currency], 0);
     return round2(total);
   }
   function calculateLocationMargin(sales, menuItems, locationId, currency) {
-    const locationSales = filterSalesByLocationLocal(sales, locationId);
+    if (sales === null || menuItems === null) return 0;
+    const locationSales = filterSalesByLocation(sales, locationId);
     let totalRevenue = 0;
     let totalIngredientCost = 0;
     for (const sale of locationSales) {
@@ -89,6 +104,7 @@
     return round2(margin);
   }
   function calculateWasteCost(wasteRecords, locationId, currency) {
+    if (wasteRecords === null) return 0;
     const total = wasteRecords.filter((record) => record.locationId === locationId).reduce((sum, record) => sum + record.cost[currency], 0);
     return round2(total);
   }
@@ -97,30 +113,36 @@
     const result = fromCurrency === "USD" ? amount * USD_TO_COP_RATE : amount / USD_TO_COP_RATE;
     return round2(result);
   }
-  function scoreLocationPerformance(location, sales, wasteRecords, menuItems) {
-    const locationSales = filterSalesByLocationLocal(sales, location.id);
-    const locationWaste = wasteRecords.filter((w) => w.locationId === location.id);
-    const today = /* @__PURE__ */ new Date();
+  function scoreLocationPerformance(location, sales, wasteRecords, menuItems, referenceDate) {
+    if (location === null) return 0;
+    const safeSales = sales ?? [];
+    const safeWasteRecords = wasteRecords ?? [];
+    const safeMenuItems = menuItems ?? [];
+    const locationSales = filterSalesByLocation(safeSales, location.id);
     const openingDate = new Date(location.openingYear, 0, 1);
     const daysOperating = Math.max(
       1,
-      Math.floor((today.getTime() - openingDate.getTime()) / (1e3 * 60 * 60 * 24))
+      Math.floor((referenceDate.getTime() - openingDate.getTime()) / (1e3 * 60 * 60 * 24))
     );
     const totalRevenueUSD = locationSales.reduce((sum, s) => sum + s.totalPrice.USD, 0);
     const avgDailyRevenueUSD = totalRevenueUSD / daysOperating;
     const revenueScore = Math.min(avgDailyRevenueUSD / 1e3 * 40, 40);
     const efficiencyScore = Math.min(locationSales.length / location.seatingCapacity * 30, 30);
-    const totalWasteCostUSD = locationWaste.reduce((sum, w) => sum + w.cost.USD, 0);
+    const totalWasteCostUSD = calculateWasteCost(safeWasteRecords, location.id, "USD");
     const wastePercentage = totalRevenueUSD > 0 ? totalWasteCostUSD / totalRevenueUSD * 100 : 0;
     const wasteScore = Math.max(20 - wastePercentage * 2, 0);
-    const margin = calculateLocationMargin(sales, menuItems, location.id, "USD");
+    const margin = calculateLocationMargin(safeSales, safeMenuItems, location.id, "USD");
     const marginScore = Math.min(margin / 10, 10);
     return round2(revenueScore + efficiencyScore + wasteScore + marginScore);
   }
-  function rankLocationsByPerformance(locations, sales, wasteRecords, menuItems) {
+  function rankLocationsByPerformance(locations, sales, wasteRecords, menuItems, referenceDate) {
+    if (locations === null) return [];
+    const safeSales = sales ?? [];
+    const safeWasteRecords = wasteRecords ?? [];
+    const safeMenuItems = menuItems ?? [];
     return locations.map((location) => ({
       location,
-      score: scoreLocationPerformance(location, sales, wasteRecords, menuItems)
+      score: scoreLocationPerformance(location, safeSales, safeWasteRecords, safeMenuItems, referenceDate)
     })).sort((a, b) => b.score - a.score);
   }
   function countSalesByPaymentMethod(sales) {
@@ -130,17 +152,20 @@
       "Debit card": 0,
       "Digital wallet": 0
     };
+    if (sales === null) return counts;
     for (const sale of sales) {
       counts[sale.paymentMethod] += 1;
     }
     return counts;
   }
   function calculateAverageTicket(sales, currency) {
+    if (sales === null) return 0;
     if (sales.length === 0) return 0;
     const total = sales.reduce((sum, sale) => sum + sale.totalPrice[currency], 0);
     return round2(total / sales.length);
   }
   function findTopSellingItems(sales, menuItems, topN) {
+    if (sales === null || menuItems === null || topN <= 0) return [];
     const quantityByItemId = {};
     for (const sale of sales) {
       quantityByItemId[sale.itemId] = (quantityByItemId[sale.itemId] ?? 0) + sale.quantity;
@@ -162,16 +187,19 @@
       Damage: [],
       Other: []
     };
+    if (wasteRecords === null) return groups;
     for (const record of wasteRecords) {
       groups[record.reason].push(record);
     }
     return groups;
   }
   function calculateCountryComparison(sales, locations, menuItems) {
+    const safeSales = sales ?? [];
+    const safeLocations = locations ?? [];
     function metricsFor(country) {
-      const countryLocations = locations.filter((loc) => loc.country === country);
+      const countryLocations = safeLocations.filter((loc) => loc.country === country);
       const locationIds = countryLocations.map((loc) => loc.id);
-      const countrySales = sales.filter((sale) => locationIds.includes(sale.locationId));
+      const countrySales = safeSales.filter((sale) => locationIds.includes(sale.locationId));
       const totalRevenue = {
         USD: round2(countrySales.reduce((sum, s) => sum + s.totalPrice.USD, 0)),
         COP: round2(countrySales.reduce((sum, s) => sum + s.totalPrice.COP, 0))
@@ -194,6 +222,7 @@
     };
   }
   function findExtremeSales(sales, currency) {
+    if (sales === null) return { highest: null, lowest: null };
     if (sales.length === 0) return { highest: null, lowest: null };
     let highest = sales[0];
     let lowest = sales[0];
@@ -204,9 +233,11 @@
     return { highest, lowest };
   }
   function findExtremeLocationRevenue(sales, locations, currency) {
+    if (locations === null) return { highest: null, lowest: null };
+    const safeSales = sales ?? [];
     if (locations.length === 0) return { highest: null, lowest: null };
     const revenueByLocation = locations.map((location) => {
-      const locationSales = filterSalesByLocationLocal(sales, location.id);
+      const locationSales = filterSalesByLocation(safeSales, location.id);
       const revenue = round2(locationSales.reduce((sum, s) => sum + s.totalPrice[currency], 0));
       return { location, revenue };
     });
@@ -221,6 +252,7 @@
 
   // src/utils/validations.ts
   function validateMenuItem(item) {
+    if (item === null) return { valid: false, errors: ["El \xEDtem de men\xFA no puede estar vac\xEDo."] };
     const errors = [];
     if (item.basePrice.USD <= 0 || item.basePrice.COP <= 0) {
       errors.push("El precio base (USD y COP) debe ser mayor a 0.");
@@ -237,6 +269,7 @@
     return { valid: errors.length === 0, errors };
   }
   function validateSaleTransaction(sale) {
+    if (sale === null) return { valid: false, errors: ["La venta no puede estar vac\xEDa."] };
     const errors = [];
     if (sale.quantity <= 0) {
       errors.push("La cantidad debe ser mayor a 0.");
@@ -249,9 +282,9 @@
     }
     return { valid: errors.length === 0, errors };
   }
-  function validateLocation(location) {
+  function validateLocation(location, currentYear) {
+    if (location === null) return { valid: false, errors: ["La locaci\xF3n no puede estar vac\xEDa."] };
     const errors = [];
-    const currentYear = (/* @__PURE__ */ new Date()).getFullYear();
     if (location.openingYear < 2008 || location.openingYear > currentYear) {
       errors.push(`El a\xF1o de apertura debe estar entre 2008 y ${currentYear}.`);
     }
@@ -482,7 +515,7 @@
       quantity: 2,
       totalPrice: { USD: 37, COP: 148e3 },
       paymentMethod: "Credit card",
-      timestamp: /* @__PURE__ */ new Date("2024-03-15T19:30:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-03-15T19:30:00-05:00"),
       waiterName: "Mar\xEDa Gonz\xE1lez"
     },
     {
@@ -492,7 +525,7 @@
       quantity: 3,
       totalPrice: { USD: 13.5, COP: 54e3 },
       paymentMethod: "Cash",
-      timestamp: /* @__PURE__ */ new Date("2024-03-15T20:15:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-03-15T20:15:00-04:00"),
       waiterName: "John Smith"
     },
     {
@@ -502,7 +535,7 @@
       quantity: 1,
       totalPrice: { USD: 42, COP: 168e3 },
       paymentMethod: "Debit card",
-      timestamp: /* @__PURE__ */ new Date("2024-03-16T13:10:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-03-16T13:10:00-05:00"),
       waiterName: "Andr\xE9s Lozano"
     },
     {
@@ -512,7 +545,7 @@
       quantity: 4,
       totalPrice: { USD: 10, COP: 4e4 },
       paymentMethod: "Digital wallet",
-      timestamp: /* @__PURE__ */ new Date("2024-03-16T14:00:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-03-16T14:00:00-05:00"),
       waiterName: "Mar\xEDa Gonz\xE1lez"
     },
     {
@@ -522,7 +555,7 @@
       quantity: 2,
       totalPrice: { USD: 12, COP: 48e3 },
       paymentMethod: "Credit card",
-      timestamp: /* @__PURE__ */ new Date("2024-03-17T21:05:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-03-17T21:05:00-04:00"),
       waiterName: "Jake Morrison"
     },
     {
@@ -532,7 +565,7 @@
       quantity: 2,
       totalPrice: { USD: 84, COP: 336e3 },
       paymentMethod: "Cash",
-      timestamp: /* @__PURE__ */ new Date("2024-04-02T13:15:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-04-02T13:15:00-05:00"),
       waiterName: "Mar\xEDa Gonz\xE1lez"
     },
     {
@@ -542,7 +575,7 @@
       quantity: 2,
       totalPrice: { USD: 37, COP: 148e3 },
       paymentMethod: "Credit card",
-      timestamp: /* @__PURE__ */ new Date("2024-03-18T19:10:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-03-18T19:10:00-05:00"),
       waiterName: "Daniela Ruiz"
     },
     {
@@ -552,7 +585,7 @@
       quantity: 3,
       totalPrice: { USD: 67.5, COP: 27e4 },
       paymentMethod: "Debit card",
-      timestamp: /* @__PURE__ */ new Date("2024-03-23T20:30:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-03-23T20:30:00-05:00"),
       waiterName: "Daniela Ruiz"
     },
     {
@@ -562,7 +595,7 @@
       quantity: 5,
       totalPrice: { USD: 80, COP: 32e4 },
       paymentMethod: "Digital wallet",
-      timestamp: /* @__PURE__ */ new Date("2024-04-05T13:00:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-04-05T13:00:00-05:00"),
       waiterName: "Daniela Ruiz"
     },
     {
@@ -572,7 +605,7 @@
       quantity: 2,
       totalPrice: { USD: 14, COP: 56e3 },
       paymentMethod: "Cash",
-      timestamp: /* @__PURE__ */ new Date("2024-03-19T18:45:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-03-19T18:45:00-05:00"),
       waiterName: "Felipe V\xE9lez"
     },
     {
@@ -582,7 +615,7 @@
       quantity: 2,
       totalPrice: { USD: 15, COP: 6e4 },
       paymentMethod: "Credit card",
-      timestamp: /* @__PURE__ */ new Date("2024-04-06T19:20:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-04-06T19:20:00-05:00"),
       waiterName: "Felipe V\xE9lez"
     },
     {
@@ -592,7 +625,7 @@
       quantity: 6,
       totalPrice: { USD: 27, COP: 108e3 },
       paymentMethod: "Digital wallet",
-      timestamp: /* @__PURE__ */ new Date("2024-03-20T12:40:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-03-20T12:40:00-05:00"),
       waiterName: "Valentina Ospina"
     },
     {
@@ -602,7 +635,7 @@
       quantity: 4,
       totalPrice: { USD: 14, COP: 56e3 },
       paymentMethod: "Cash",
-      timestamp: /* @__PURE__ */ new Date("2024-04-07T14:10:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-04-07T14:10:00-05:00"),
       waiterName: "Valentina Ospina"
     },
     {
@@ -612,7 +645,7 @@
       quantity: 3,
       totalPrice: { USD: 22.5, COP: 9e4 },
       paymentMethod: "Debit card",
-      timestamp: /* @__PURE__ */ new Date("2024-04-12T19:00:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-04-12T19:00:00-05:00"),
       waiterName: "Valentina Ospina"
     },
     {
@@ -622,7 +655,7 @@
       quantity: 2,
       totalPrice: { USD: 37, COP: 148e3 },
       paymentMethod: "Credit card",
-      timestamp: /* @__PURE__ */ new Date("2024-03-21T20:00:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-03-21T20:00:00-05:00"),
       waiterName: "Andr\xE9s Lozano"
     },
     {
@@ -632,7 +665,7 @@
       quantity: 4,
       totalPrice: { USD: 18, COP: 72e3 },
       paymentMethod: "Cash",
-      timestamp: /* @__PURE__ */ new Date("2024-04-08T13:30:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-04-08T13:30:00-05:00"),
       waiterName: "Andr\xE9s Lozano"
     },
     {
@@ -642,7 +675,7 @@
       quantity: 4,
       totalPrice: { USD: 18, COP: 72e3 },
       paymentMethod: "Debit card",
-      timestamp: /* @__PURE__ */ new Date("2024-03-22T12:15:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-03-22T12:15:00-05:00"),
       waiterName: "Andr\xE9s Lozano"
     },
     {
@@ -652,7 +685,7 @@
       quantity: 3,
       totalPrice: { USD: 10.5, COP: 42e3 },
       paymentMethod: "Digital wallet",
-      timestamp: /* @__PURE__ */ new Date("2024-04-09T14:25:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-04-09T14:25:00-05:00"),
       waiterName: "Andr\xE9s Lozano"
     },
     {
@@ -662,7 +695,7 @@
       quantity: 2,
       totalPrice: { USD: 84, COP: 336e3 },
       paymentMethod: "Credit card",
-      timestamp: /* @__PURE__ */ new Date("2024-03-23T19:45:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-03-23T19:45:00-05:00"),
       waiterName: "Camila Torres"
     },
     {
@@ -672,7 +705,7 @@
       quantity: 4,
       totalPrice: { USD: 64, COP: 256e3 },
       paymentMethod: "Cash",
-      timestamp: /* @__PURE__ */ new Date("2024-04-10T13:50:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-04-10T13:50:00-05:00"),
       waiterName: "Camila Torres"
     },
     {
@@ -682,7 +715,7 @@
       quantity: 3,
       totalPrice: { USD: 21, COP: 84e3 },
       paymentMethod: "Digital wallet",
-      timestamp: /* @__PURE__ */ new Date("2024-04-15T20:10:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-04-15T20:10:00-05:00"),
       waiterName: "Camila Torres"
     },
     {
@@ -692,7 +725,7 @@
       quantity: 2,
       totalPrice: { USD: 45, COP: 18e4 },
       paymentMethod: "Cash",
-      timestamp: /* @__PURE__ */ new Date("2024-03-24T19:30:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-03-24T19:30:00-05:00"),
       waiterName: "Juan Pablo Rengifo"
     },
     {
@@ -702,7 +735,7 @@
       quantity: 2,
       totalPrice: { USD: 39, COP: 156e3 },
       paymentMethod: "Credit card",
-      timestamp: /* @__PURE__ */ new Date("2024-04-11T20:00:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-04-11T20:00:00-05:00"),
       waiterName: "Juan Pablo Rengifo"
     },
     {
@@ -712,7 +745,7 @@
       quantity: 3,
       totalPrice: { USD: 48, COP: 192e3 },
       paymentMethod: "Debit card",
-      timestamp: /* @__PURE__ */ new Date("2024-03-25T13:15:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-03-25T13:15:00-05:00"),
       waiterName: "Isabel Victoria"
     },
     {
@@ -722,7 +755,7 @@
       quantity: 5,
       totalPrice: { USD: 20, COP: 8e4 },
       paymentMethod: "Digital wallet",
-      timestamp: /* @__PURE__ */ new Date("2024-04-12T14:30:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-04-12T14:30:00-05:00"),
       waiterName: "Isabel Victoria"
     },
     {
@@ -732,7 +765,7 @@
       quantity: 4,
       totalPrice: { USD: 20, COP: 8e4 },
       paymentMethod: "Cash",
-      timestamp: /* @__PURE__ */ new Date("2024-04-16T19:10:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-04-16T19:10:00-05:00"),
       waiterName: "Isabel Victoria"
     },
     {
@@ -742,7 +775,7 @@
       quantity: 4,
       totalPrice: { USD: 90, COP: 36e4 },
       paymentMethod: "Debit card",
-      timestamp: /* @__PURE__ */ new Date("2024-04-13T20:30:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-04-13T20:30:00-04:00"),
       waiterName: "John Smith"
     },
     {
@@ -752,7 +785,7 @@
       quantity: 3,
       totalPrice: { USD: 67.5, COP: 27e4 },
       paymentMethod: "Credit card",
-      timestamp: /* @__PURE__ */ new Date("2024-03-26T19:15:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-03-26T19:15:00-04:00"),
       waiterName: "Amanda Reyes"
     },
     {
@@ -762,7 +795,7 @@
       quantity: 2,
       totalPrice: { USD: 32, COP: 128e3 },
       paymentMethod: "Cash",
-      timestamp: /* @__PURE__ */ new Date("2024-04-14T13:00:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-04-14T13:00:00-04:00"),
       waiterName: "Amanda Reyes"
     },
     {
@@ -772,7 +805,7 @@
       quantity: 4,
       totalPrice: { USD: 18, COP: 72e3 },
       paymentMethod: "Digital wallet",
-      timestamp: /* @__PURE__ */ new Date("2024-03-27T12:30:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-03-27T12:30:00-04:00"),
       waiterName: "Michael Torres"
     },
     {
@@ -782,7 +815,7 @@
       quantity: 6,
       totalPrice: { USD: 21, COP: 84e3 },
       paymentMethod: "Credit card",
-      timestamp: /* @__PURE__ */ new Date("2024-04-15T14:00:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-04-15T14:00:00-04:00"),
       waiterName: "Michael Torres"
     },
     {
@@ -792,7 +825,7 @@
       quantity: 8,
       totalPrice: { USD: 20, COP: 8e4 },
       paymentMethod: "Cash",
-      timestamp: /* @__PURE__ */ new Date("2024-04-20T19:30:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-04-20T19:30:00-04:00"),
       waiterName: "Michael Torres"
     }
   ];
@@ -804,7 +837,7 @@
       quantity: 2,
       reason: "Expired",
       cost: { USD: 14.4, COP: 57600 },
-      timestamp: /* @__PURE__ */ new Date("2024-03-14T08:00:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-03-14T08:00:00-05:00"),
       reportedBy: "Carlos Jim\xE9nez"
     },
     {
@@ -814,7 +847,7 @@
       quantity: 5,
       reason: "Cooking error",
       cost: { USD: 6, COP: 24e3 },
-      timestamp: /* @__PURE__ */ new Date("2024-03-15T12:30:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-03-15T12:30:00-04:00"),
       reportedBy: "Jake Morrison"
     },
     {
@@ -824,42 +857,46 @@
       quantity: 3,
       reason: "Customer return",
       cost: { USD: 6.3, COP: 25200 },
-      timestamp: /* @__PURE__ */ new Date("2024-03-16T19:45:00"),
+      timestamp: /* @__PURE__ */ new Date("2024-03-16T19:45:00-05:00"),
       reportedBy: "Laura Pe\xF1a"
     }
   ];
-  window.Brasaland = {
-    sampleMenuItems,
-    sampleLocations,
-    sampleSales,
-    sampleWasteRecords,
-    // search
-    findLocationById,
-    findMenuItemByName,
-    binarySearchLocationByCapacity,
-    // collections
-    sortLocationsByCapacity,
-    filterActiveLocations,
-    filterMenuItemsByCategory,
-    sortMenuItemsByPrice,
-    filterSalesByDateRange,
-    // transformations
-    calculateDailyRevenue,
-    calculateLocationMargin,
-    calculateWasteCost,
-    convertCurrency,
-    scoreLocationPerformance,
-    rankLocationsByPerformance,
-    countSalesByPaymentMethod,
-    calculateAverageTicket,
-    findTopSellingItems,
-    groupWasteByReason,
-    calculateCountryComparison,
-    findExtremeSales,
-    findExtremeLocationRevenue,
-    // validations
-    validateMenuItem,
-    validateSaleTransaction,
-    validateLocation
-  };
+  Object.assign(window, {
+    Brasaland: {
+      sampleMenuItems,
+      sampleLocations,
+      sampleSales,
+      sampleWasteRecords,
+      // search
+      findLocationById,
+      findMenuItemByName,
+      binarySearchLocationByCapacity,
+      // collections
+      filterSalesByLocation,
+      sortLocationsByCapacity,
+      filterActiveLocations,
+      filterMenuItemsByCategory,
+      sortMenuItemsByPrice,
+      filterSalesByDateRange,
+      // transformations
+      getTimeZoneByCountry,
+      calculateDailyRevenue,
+      calculateLocationMargin,
+      calculateWasteCost,
+      convertCurrency,
+      scoreLocationPerformance,
+      rankLocationsByPerformance,
+      countSalesByPaymentMethod,
+      calculateAverageTicket,
+      findTopSellingItems,
+      groupWasteByReason,
+      calculateCountryComparison,
+      findExtremeSales,
+      findExtremeLocationRevenue,
+      // validations
+      validateMenuItem,
+      validateSaleTransaction,
+      validateLocation
+    }
+  });
 })();
