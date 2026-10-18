@@ -244,7 +244,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 2,
     totalPrice: { USD: 37.0, COP: 148000 },
     paymentMethod: "Credit card",
-    timestamp: new Date("2024-03-15T19:30:00"),
+    timestamp: new Date("2024-03-15T19:30:00-05:00"),
     waiterName: "María González",
   },
   {
@@ -254,7 +254,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 3,
     totalPrice: { USD: 13.5, COP: 54000 },
     paymentMethod: "Cash",
-    timestamp: new Date("2024-03-15T20:15:00"),
+    timestamp: new Date("2024-03-15T20:15:00-04:00"),
     waiterName: "John Smith",
   },
   {
@@ -264,7 +264,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 1,
     totalPrice: { USD: 42.0, COP: 168000 },
     paymentMethod: "Debit card",
-    timestamp: new Date("2024-03-16T13:10:00"),
+    timestamp: new Date("2024-03-16T13:10:00-05:00"),
     waiterName: "Andrés Lozano",
   },
   {
@@ -274,7 +274,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 4,
     totalPrice: { USD: 10.0, COP: 40000 },
     paymentMethod: "Digital wallet",
-    timestamp: new Date("2024-03-16T14:00:00"),
+    timestamp: new Date("2024-03-16T14:00:00-05:00"),
     waiterName: "María González",
   },
   {
@@ -284,7 +284,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 2,
     totalPrice: { USD: 12.0, COP: 48000 },
     paymentMethod: "Credit card",
-    timestamp: new Date("2024-03-17T21:05:00"),
+    timestamp: new Date("2024-03-17T21:05:00-04:00"),
     waiterName: "Jake Morrison",
   },
   {
@@ -294,7 +294,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 2,
     totalPrice: { USD: 84.0, COP: 336000 },
     paymentMethod: "Cash",
-    timestamp: new Date("2024-04-02T13:15:00"),
+    timestamp: new Date("2024-04-02T13:15:00-05:00"),
     waiterName: "María González",
   },
   {
@@ -304,7 +304,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 2,
     totalPrice: { USD: 37.0, COP: 148000 },
     paymentMethod: "Credit card",
-    timestamp: new Date("2024-03-18T19:10:00"),
+    timestamp: new Date("2024-03-18T19:10:00-05:00"),
     waiterName: "Daniela Ruiz",
   },
   {
@@ -314,7 +314,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 3,
     totalPrice: { USD: 67.5, COP: 270000 },
     paymentMethod: "Debit card",
-    timestamp: new Date("2024-03-23T20:30:00"),
+    timestamp: new Date("2024-03-23T20:30:00-05:00"),
     waiterName: "Daniela Ruiz",
   },
   {
@@ -324,7 +324,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 5,
     totalPrice: { USD: 80.0, COP: 320000 },
     paymentMethod: "Digital wallet",
-    timestamp: new Date("2024-04-05T13:00:00"),
+    timestamp: new Date("2024-04-05T13:00:00-05:00"),
     waiterName: "Daniela Ruiz",
   },
   {
@@ -334,7 +334,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 2,
     totalPrice: { USD: 14.0, COP: 56000 },
     paymentMethod: "Cash",
-    timestamp: new Date("2024-03-19T18:45:00"),
+    timestamp: new Date("2024-03-19T18:45:00-05:00"),
     waiterName: "Felipe Vélez",
   },
   {
@@ -344,7 +344,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 2,
     totalPrice: { USD: 15.0, COP: 60000 },
     paymentMethod: "Credit card",
-    timestamp: new Date("2024-04-06T19:20:00"),
+    timestamp: new Date("2024-04-06T19:20:00-05:00"),
     waiterName: "Felipe Vélez",
   },
   {
@@ -354,7 +354,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 6,
     totalPrice: { USD: 27.0, COP: 108000 },
     paymentMethod: "Digital wallet",
-    timestamp: new Date("2024-03-20T12:40:00"),
+    timestamp: new Date("2024-03-20T12:40:00-05:00"),
     waiterName: "Valentina Ospina",
   },
   {
@@ -364,7 +364,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 4,
     totalPrice: { USD: 14.0, COP: 56000 },
     paymentMethod: "Cash",
-    timestamp: new Date("2024-04-07T14:10:00"),
+    timestamp: new Date("2024-04-07T14:10:00-05:00"),
     waiterName: "Valentina Ospina",
   },
   {
@@ -374,7 +374,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 3,
     totalPrice: { USD: 22.5, COP: 90000 },
     paymentMethod: "Debit card",
-    timestamp: new Date("2024-04-12T19:00:00"),
+    timestamp: new Date("2024-04-12T19:00:00-05:00"),
     waiterName: "Valentina Ospina",
   },
   {
@@ -384,7 +384,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 2,
     totalPrice: { USD: 37.0, COP: 148000 },
     paymentMethod: "Credit card",
-    timestamp: new Date("2024-03-21T20:00:00"),
+    timestamp: new Date("2024-03-21T20:00:00-05:00"),
     waiterName: "Andrés Lozano",
   },
   {
@@ -394,7 +394,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 4,
     totalPrice: { USD: 18.0, COP: 72000 },
     paymentMethod: "Cash",
-    timestamp: new Date("2024-04-08T13:30:00"),
+    timestamp: new Date("2024-04-08T13:30:00-05:00"),
     waiterName: "Andrés Lozano",
   },
   {
@@ -404,7 +404,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 4,
     totalPrice: { USD: 18.0, COP: 72000 },
     paymentMethod: "Debit card",
-    timestamp: new Date("2024-03-22T12:15:00"),
+    timestamp: new Date("2024-03-22T12:15:00-05:00"),
     waiterName: "Andrés Lozano",
   },
   {
@@ -414,7 +414,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 3,
     totalPrice: { USD: 10.5, COP: 42000 },
     paymentMethod: "Digital wallet",
-    timestamp: new Date("2024-04-09T14:25:00"),
+    timestamp: new Date("2024-04-09T14:25:00-05:00"),
     waiterName: "Andrés Lozano",
   },
   {
@@ -424,7 +424,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 2,
     totalPrice: { USD: 84.0, COP: 336000 },
     paymentMethod: "Credit card",
-    timestamp: new Date("2024-03-23T19:45:00"),
+    timestamp: new Date("2024-03-23T19:45:00-05:00"),
     waiterName: "Camila Torres",
   },
   {
@@ -434,7 +434,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 4,
     totalPrice: { USD: 64.0, COP: 256000 },
     paymentMethod: "Cash",
-    timestamp: new Date("2024-04-10T13:50:00"),
+    timestamp: new Date("2024-04-10T13:50:00-05:00"),
     waiterName: "Camila Torres",
   },
   {
@@ -444,7 +444,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 3,
     totalPrice: { USD: 21.0, COP: 84000 },
     paymentMethod: "Digital wallet",
-    timestamp: new Date("2024-04-15T20:10:00"),
+    timestamp: new Date("2024-04-15T20:10:00-05:00"),
     waiterName: "Camila Torres",
   },
   {
@@ -454,7 +454,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 2,
     totalPrice: { USD: 45.0, COP: 180000 },
     paymentMethod: "Cash",
-    timestamp: new Date("2024-03-24T19:30:00"),
+    timestamp: new Date("2024-03-24T19:30:00-05:00"),
     waiterName: "Juan Pablo Rengifo",
   },
   {
@@ -464,7 +464,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 2,
     totalPrice: { USD: 39.0, COP: 156000 },
     paymentMethod: "Credit card",
-    timestamp: new Date("2024-04-11T20:00:00"),
+    timestamp: new Date("2024-04-11T20:00:00-05:00"),
     waiterName: "Juan Pablo Rengifo",
   },
   {
@@ -474,7 +474,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 3,
     totalPrice: { USD: 48.0, COP: 192000 },
     paymentMethod: "Debit card",
-    timestamp: new Date("2024-03-25T13:15:00"),
+    timestamp: new Date("2024-03-25T13:15:00-05:00"),
     waiterName: "Isabel Victoria",
   },
   {
@@ -484,7 +484,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 5,
     totalPrice: { USD: 20.0, COP: 80000 },
     paymentMethod: "Digital wallet",
-    timestamp: new Date("2024-04-12T14:30:00"),
+    timestamp: new Date("2024-04-12T14:30:00-05:00"),
     waiterName: "Isabel Victoria",
   },
   {
@@ -494,7 +494,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 4,
     totalPrice: { USD: 20.0, COP: 80000 },
     paymentMethod: "Cash",
-    timestamp: new Date("2024-04-16T19:10:00"),
+    timestamp: new Date("2024-04-16T19:10:00-05:00"),
     waiterName: "Isabel Victoria",
   },
   {
@@ -504,7 +504,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 4,
     totalPrice: { USD: 90.0, COP: 360000 },
     paymentMethod: "Debit card",
-    timestamp: new Date("2024-04-13T20:30:00"),
+    timestamp: new Date("2024-04-13T20:30:00-04:00"),
     waiterName: "John Smith",
   },
   {
@@ -514,7 +514,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 3,
     totalPrice: { USD: 67.5, COP: 270000 },
     paymentMethod: "Credit card",
-    timestamp: new Date("2024-03-26T19:15:00"),
+    timestamp: new Date("2024-03-26T19:15:00-04:00"),
     waiterName: "Amanda Reyes",
   },
   {
@@ -524,7 +524,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 2,
     totalPrice: { USD: 32.0, COP: 128000 },
     paymentMethod: "Cash",
-    timestamp: new Date("2024-04-14T13:00:00"),
+    timestamp: new Date("2024-04-14T13:00:00-04:00"),
     waiterName: "Amanda Reyes",
   },
   {
@@ -534,7 +534,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 4,
     totalPrice: { USD: 18.0, COP: 72000 },
     paymentMethod: "Digital wallet",
-    timestamp: new Date("2024-03-27T12:30:00"),
+    timestamp: new Date("2024-03-27T12:30:00-04:00"),
     waiterName: "Michael Torres",
   },
   {
@@ -544,7 +544,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 6,
     totalPrice: { USD: 21.0, COP: 84000 },
     paymentMethod: "Credit card",
-    timestamp: new Date("2024-04-15T14:00:00"),
+    timestamp: new Date("2024-04-15T14:00:00-04:00"),
     waiterName: "Michael Torres",
   },
   {
@@ -554,7 +554,7 @@ export const sampleSales: SaleTransaction[] = [
     quantity: 8,
     totalPrice: { USD: 20.0, COP: 80000 },
     paymentMethod: "Cash",
-    timestamp: new Date("2024-04-20T19:30:00"),
+    timestamp: new Date("2024-04-20T19:30:00-04:00"),
     waiterName: "Michael Torres",
   },
 ];
@@ -568,7 +568,7 @@ export const sampleWasteRecords: WasteRecord[] = [
     quantity: 2,
     reason: "Expired",
     cost: { USD: 14.4, COP: 57600 },
-    timestamp: new Date("2024-03-14T08:00:00"),
+    timestamp: new Date("2024-03-14T08:00:00-05:00"),
     reportedBy: "Carlos Jiménez",
   },
   {
@@ -578,7 +578,7 @@ export const sampleWasteRecords: WasteRecord[] = [
     quantity: 5,
     reason: "Cooking error",
     cost: { USD: 6.0, COP: 24000 },
-    timestamp: new Date("2024-03-15T12:30:00"),
+    timestamp: new Date("2024-03-15T12:30:00-04:00"),
     reportedBy: "Jake Morrison",
   },
   {
@@ -588,7 +588,7 @@ export const sampleWasteRecords: WasteRecord[] = [
     quantity: 3,
     reason: "Customer return",
     cost: { USD: 6.3, COP: 25200 },
-    timestamp: new Date("2024-03-16T19:45:00"),
+    timestamp: new Date("2024-03-16T19:45:00-05:00"),
     reportedBy: "Laura Peña",
   },
 ];

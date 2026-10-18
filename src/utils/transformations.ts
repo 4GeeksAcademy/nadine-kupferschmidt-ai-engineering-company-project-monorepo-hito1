@@ -6,6 +6,7 @@ import {
   PaymentMethod,
   WasteReason,
   Price,
+  Country,
 } from "../types/models";
 
 const USD_TO_COP_RATE = 4000;
@@ -14,11 +15,14 @@ function round2(value: number): number {
   return Math.round(value * 100) / 100;
 }
 
-function isSameCalendarDay(a: Date, b: Date): boolean {
+function getTimeZoneByCountry(country: Country): string {
+  return country === "Colombia" ? "America/Bogota" : "America/New_York";
+}
+
+function isSameCalendarDay(a: Date, b: Date, timeZone: string): boolean {
   return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
+    a.toLocaleDateString("en-CA", { timeZone }) ===
+    b.toLocaleDateString("en-CA", { timeZone })
   );
 }
 
@@ -29,9 +33,10 @@ function filterSalesByLocationLocal(sales: SaleTransaction[], locationId: string
 function calculateDailyRevenue(
   sales: SaleTransaction[],
   date: Date,
-  currency: "USD" | "COP"
+  currency: "USD" | "COP",
+  timeZone: string
 ): number {
-  const dailySales = sales.filter((sale) => isSameCalendarDay(sale.timestamp, date));
+  const dailySales = sales.filter((sale) => isSameCalendarDay(sale.timestamp, date, timeZone));
   const total = dailySales.reduce((sum, sale) => sum + sale.totalPrice[currency], 0);
   return round2(total);
 }
@@ -87,16 +92,16 @@ function scoreLocationPerformance(
   location: Location,
   sales: SaleTransaction[],
   wasteRecords: WasteRecord[],
-  menuItems: MenuItem[]
+  menuItems: MenuItem[],
+  referenceDate: Date
 ): number {
   const locationSales = filterSalesByLocationLocal(sales, location.id);
   const locationWaste = wasteRecords.filter((w) => w.locationId === location.id);
 
-  const today = new Date();
   const openingDate = new Date(location.openingYear, 0, 1);
   const daysOperating = Math.max(
     1,
-    Math.floor((today.getTime() - openingDate.getTime()) / (1000 * 60 * 60 * 24))
+    Math.floor((referenceDate.getTime() - openingDate.getTime()) / (1000 * 60 * 60 * 24))
   );
 
   const totalRevenueUSD = locationSales.reduce((sum, s) => sum + s.totalPrice.USD, 0);
@@ -119,12 +124,13 @@ function rankLocationsByPerformance(
   locations: Location[],
   sales: SaleTransaction[],
   wasteRecords: WasteRecord[],
-  menuItems: MenuItem[]
+  menuItems: MenuItem[],
+  referenceDate: Date
 ): Array<{ location: Location; score: number }> {
   return locations
     .map((location) => ({
       location,
-      score: scoreLocationPerformance(location, sales, wasteRecords, menuItems),
+      score: scoreLocationPerformance(location, sales, wasteRecords, menuItems, referenceDate),
     }))
     .sort((a, b) => b.score - a.score);
 }
@@ -268,6 +274,7 @@ function findExtremeLocationRevenue(
 
 export {
   calculateDailyRevenue,
+  getTimeZoneByCountry,
   calculateLocationMargin,
   calculateWasteCost,
   convertCurrency,

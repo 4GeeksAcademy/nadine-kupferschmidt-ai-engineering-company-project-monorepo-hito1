@@ -35,9 +35,8 @@ function validateSaleTransaction(sale: SaleTransaction): { valid: boolean; error
   return { valid: errors.length === 0, errors };
 }
 
-function validateLocation(location: Location): { valid: boolean; errors: string[] } {
+function validateLocation(location: Location, currentYear: number): { valid: boolean; errors: string[] } {
   const errors: string[] = [];
-  const currentYear = new Date().getFullYear();
 
   if (location.openingYear < 2008 || location.openingYear > currentYear) {
     errors.push(`El año de apertura debe estar entre 2008 y ${currentYear}.`);
