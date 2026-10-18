@@ -329,7 +329,20 @@
           <div class="w-full md:w-auto">
             <label
               class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
-              >Orden por precio (USD)</label
+              >Moneda</label
+            >
+            <select
+              id="menu-currency"
+              class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+            >
+              <option value="USD">USD</option>
+              <option value="COP">COP</option>
+            </select>
+          </div>
+          <div class="w-full md:w-auto">
+            <label
+              class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+              >Orden por precio</label
             >
             <select
               id="menu-order"
@@ -345,6 +358,29 @@
           >
             Buscar
           </button>
+        </div>
+
+        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end bg-white rounded-2xl shadow-sm p-5">
+          <div class="w-full md:w-auto">
+            <label
+              for="menu-name"
+              class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+              >Buscar ítem por nombre</label
+            >
+            <input
+              id="menu-name"
+              type="text"
+              placeholder="Picanha 250g"
+              class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+            />
+          </div>
+          <button
+            onclick="searchMenuItemByName()"
+            class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
+          >
+            Buscar
+          </button>
+          <div id="menu-name-result" class="w-full"></div>
         </div>
 
         <div
@@ -379,6 +415,34 @@
           <p class="text-sm text-brand-warmgray">
             Elegí un reporte para generarlo
           </p>
+        </div>
+
+        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end bg-white rounded-2xl shadow-sm p-5">
+          <div class="w-full md:w-auto">
+            <label
+              for="report-location"
+              class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+              >Ubicación</label
+            >
+            <select
+              id="report-location"
+              class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+            ></select>
+          </div>
+          <div class="w-full md:w-auto">
+            <label
+              for="report-currency"
+              class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+              >Moneda</label
+            >
+            <select
+              id="report-currency"
+              class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+            >
+              <option value="USD">USD</option>
+              <option value="COP">COP</option>
+            </select>
+          </div>
         </div>
 
         <div class="flex flex-col md:flex-row md:flex-wrap gap-4 mb-7 bg-white rounded-2xl shadow-sm p-5">
@@ -416,6 +480,13 @@
             class="report-button w-full md:w-auto px-5 py-2.5 text-sm font-medium rounded-lg"
           >
             Desperdicio por razón
+          </button>
+          <button
+            onclick="renderReport('locationRevenue')"
+            data-report="locationRevenue"
+            class="report-button w-full md:w-auto px-5 py-2.5 text-sm font-medium rounded-lg"
+          >
+            Ingresos por ubicación (máx/mín)
           </button>
         </div>
 
@@ -619,11 +690,12 @@
       function searchMenu() {
         const category = document.getElementById("menu-category").value;
         const order = document.getElementById("menu-order").value;
+        const currency = document.getElementById("menu-currency").value;
 
         let results = category
           ? B.filterMenuItemsByCategory(B.sampleMenuItems, category)
           : B.sampleMenuItems;
-        results = B.sortMenuItemsByPrice(results, "USD", order);
+        results = B.sortMenuItemsByPrice(results, currency, order);
 
         const tbody = document.getElementById("menu-results");
         if (results.length === 0) {
@@ -645,6 +717,22 @@
           .join("");
       }
 
+      function searchMenuItemByName() {
+        const name = document.getElementById("menu-name").value.trim();
+        const item = B.findMenuItemByName(B.sampleMenuItems, name);
+        const el = document.getElementById("menu-name-result");
+        if (!item) {
+          el.innerHTML = notFoundMessage("No se encontró ningún ítem con ese nombre");
+          return;
+        }
+        el.innerHTML = `<div class="bg-brand-ivory rounded-2xl p-6 flex flex-col gap-2">
+        <p class="text-xs text-brand-warmgray uppercase tracking-wide"><span class="text-brand-ochre mr-1.5">✦</span>${categoryLabel(item.category)}</p>
+        <p class="text-2xl font-semibold text-brand-darkbrown leading-tight">${item.name}</p>
+        <p class="text-sm text-brand-charcoal">$${item.basePrice.USD.toFixed(2)} USD · $${item.basePrice.COP.toLocaleString()} COP · ${item.prepTimeMinutes} min</p>
+        <p class="text-sm text-brand-warmgray">Alérgenos: ${item.allergens.length > 0 ? item.allergens.join(", ") : "Ninguno"}</p>
+      </div>`;
+      }
+
       // ---- Reportes ----
       function card(title, value) {
         return `<div class="bg-white rounded-2xl shadow-sm p-6 flex flex-col justify-between">
@@ -653,23 +741,42 @@
       </div>`;
       }
 
+      function formatMoney(amount, currency) {
+        return currency === "USD"
+          ? `$${amount.toFixed(2)} USD`
+          : `$${amount.toLocaleString()} COP`;
+      }
+
+      const reportLocationSelect = document.getElementById("report-location");
+      B.sampleLocations.forEach((loc) => {
+        reportLocationSelect.add(new Option(`${loc.name} — ${loc.city}`, loc.id));
+      });
+
       function renderReport(type) {
         const el = document.getElementById("report-results");
+        const currency = document.getElementById("report-currency").value;
         document.querySelectorAll(".report-button").forEach((button) => {
           button.classList.toggle("selected", button.dataset.report === type);
         });
 
         if (type === "margin") {
+          const locationId = reportLocationSelect.value;
+          const location = B.findLocationById(B.sampleLocations, locationId);
+          const locationName = location ? location.name : locationId;
           const margin = B.calculateLocationMargin(
             B.sampleSales,
             B.sampleMenuItems,
-            "LOC-MEDELLIN-01",
-            "USD",
+            locationId,
+            currency,
           );
-          el.innerHTML = card(
-            "Margen — Brasaland Medellín Centro",
-            margin.toFixed(2) + "%",
+          const wasteCost = B.calculateWasteCost(
+            B.sampleWasteRecords,
+            locationId,
+            currency,
           );
+          el.innerHTML =
+            card(`Margen — ${locationName}`, margin.toFixed(2) + "%") +
+            card(`Costo de desperdicio — ${locationName}`, formatMoney(wasteCost, currency));
         } else if (type === "ranking") {
           const ranking = B.rankLocationsByPerformance(
             B.sampleLocations,
@@ -735,6 +842,13 @@
             .filter(([_, records]) => records.length > 0)
             .map(([reason, records]) => card(reasonLabels[reason], `${records.length} registro(s)`))
             .join('');
+        } else if (type === 'locationRevenue') {
+          const extreme = B.findExtremeLocationRevenue(B.sampleSales, B.sampleLocations, currency);
+          const revenueCard = (title, entry) =>
+            card(title, entry ? `${entry.location.name} — ${formatMoney(entry.revenue, currency)}` : 'Sin datos');
+          el.innerHTML =
+            revenueCard('Ubicación con más ingresos', extreme && extreme.highest) +
+            revenueCard('Ubicación con menos ingresos', extreme && extreme.lowest);
         }
       }
 
