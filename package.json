@@ -1,8 +1,9 @@
 {
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "demo": "tsx src/demo.ts",
-    "test": "tsx src/tests.ts"
+    "test": "tsx src/tests.ts",
+    "build": "esbuild src/browser-entry.ts --bundle --outfile=src/bundle.js",
+    "start": "npx http-server src -p 3000 -a 0.0.0.0"
   },
   "devDependencies": {
     "@types/node": "^26.6.4",
