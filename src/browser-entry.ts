@@ -5,6 +5,7 @@ import {
   filterActiveLocations,
   filterMenuItemsByCategory,
   sortMenuItemsByPrice,
+  filterSalesByLocation,
   filterSalesByDateRange,
 } from "./utils/collections";
 import {
@@ -19,6 +20,7 @@ import {
   findTopSellingItems,
   groupWasteByReason,
   calculateCountryComparison,
+  getTimeZoneByCountry,
   findExtremeSales,
   findExtremeLocationRevenue,
 } from "./utils/transformations";
@@ -594,41 +596,45 @@ export const sampleWasteRecords: WasteRecord[] = [
 ];
 
 // ---- Exponer todo para el panel HTML ----
-(window as any).Brasaland = {
-  sampleMenuItems,
-  sampleLocations,
-  sampleSales,
-  sampleWasteRecords,
+Object.assign(window, {
+  Brasaland: {
+    sampleMenuItems,
+    sampleLocations,
+    sampleSales,
+    sampleWasteRecords,
 
-  // search
-  findLocationById,
-  findMenuItemByName,
-  binarySearchLocationByCapacity,
+    // search
+    findLocationById,
+    findMenuItemByName,
+    binarySearchLocationByCapacity,
 
-  // collections
-  sortLocationsByCapacity,
-  filterActiveLocations,
-  filterMenuItemsByCategory,
-  sortMenuItemsByPrice,
-  filterSalesByDateRange,
+    // collections
+    filterSalesByLocation,
+    sortLocationsByCapacity,
+    filterActiveLocations,
+    filterMenuItemsByCategory,
+    sortMenuItemsByPrice,
+    filterSalesByDateRange,
 
-  // transformations
-  calculateDailyRevenue,
-  calculateLocationMargin,
-  calculateWasteCost,
-  convertCurrency,
-  scoreLocationPerformance,
-  rankLocationsByPerformance,
-  countSalesByPaymentMethod,
-  calculateAverageTicket,
-  findTopSellingItems,
-  groupWasteByReason,
-  calculateCountryComparison,
-  findExtremeSales,
-  findExtremeLocationRevenue,
+    // transformations
+    getTimeZoneByCountry,
+    calculateDailyRevenue,
+    calculateLocationMargin,
+    calculateWasteCost,
+    convertCurrency,
+    scoreLocationPerformance,
+    rankLocationsByPerformance,
+    countSalesByPaymentMethod,
+    calculateAverageTicket,
+    findTopSellingItems,
+    groupWasteByReason,
+    calculateCountryComparison,
+    findExtremeSales,
+    findExtremeLocationRevenue,
 
-  // validations
-  validateMenuItem,
-  validateSaleTransaction,
-  validateLocation,
-};
+    // validations
+    validateMenuItem,
+    validateSaleTransaction,
+    validateLocation,
+  },
+});

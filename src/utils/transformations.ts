@@ -7,7 +7,9 @@ import {
   WasteReason,
   Price,
   Country,
+  CountryMetrics,
 } from "../types/models";
+import { filterSalesByLocation } from "./collections";
 
 const USD_TO_COP_RATE = 4000;
 
@@ -24,11 +26,6 @@ function isSameCalendarDay(a: Date, b: Date, timeZone: string): boolean {
     a.toLocaleDateString("en-CA", { timeZone }) ===
     b.toLocaleDateString("en-CA", { timeZone })
   );
-}
-
-function filterSalesByLocationLocal(sales: SaleTransaction[] | null, locationId: string): SaleTransaction[] {
-  if (sales === null) return [];
-  return sales.filter((sale) => sale.locationId === locationId);
 }
 
 function calculateDailyRevenue(
@@ -50,7 +47,7 @@ function calculateLocationMargin(
   currency: "USD" | "COP"
 ): number {
   if (sales === null || menuItems === null) return 0;
-  const locationSales = filterSalesByLocationLocal(sales, locationId);
+  const locationSales = filterSalesByLocation(sales, locationId);
 
   let totalRevenue = 0;
   let totalIngredientCost = 0;
@@ -103,8 +100,7 @@ function scoreLocationPerformance(
   const safeSales = sales ?? [];
   const safeWasteRecords = wasteRecords ?? [];
   const safeMenuItems = menuItems ?? [];
-  const locationSales = filterSalesByLocationLocal(safeSales, location.id);
-  const locationWaste = safeWasteRecords.filter((w) => w.locationId === location.id);
+  const locationSales = filterSalesByLocation(safeSales, location.id);
 
   const openingDate = new Date(location.openingYear, 0, 1);
   const daysOperating = Math.max(
@@ -118,7 +114,7 @@ function scoreLocationPerformance(
 
   const efficiencyScore = Math.min((locationSales.length / location.seatingCapacity) * 30, 30);
 
-  const totalWasteCostUSD = locationWaste.reduce((sum, w) => sum + w.cost.USD, 0);
+  const totalWasteCostUSD = calculateWasteCost(safeWasteRecords, location.id, "USD");
   const wastePercentage = totalRevenueUSD > 0 ? (totalWasteCostUSD / totalRevenueUSD) * 100 : 0;
   const wasteScore = Math.max(20 - wastePercentage * 2, 0);
 
@@ -148,20 +144,13 @@ function rankLocationsByPerformance(
 }
 
 function countSalesByPaymentMethod(sales: SaleTransaction[] | null): Record<PaymentMethod, number> {
-  if (sales === null) {
-    return {
-      Cash: 0,
-      "Credit card": 0,
-      "Debit card": 0,
-      "Digital wallet": 0,
-    };
-  }
   const counts: Record<PaymentMethod, number> = {
     Cash: 0,
     "Credit card": 0,
     "Debit card": 0,
     "Digital wallet": 0,
   };
+  if (sales === null) return counts;
   for (const sale of sales) {
     counts[sale.paymentMethod] += 1;
   }
@@ -198,15 +187,6 @@ function findTopSellingItems(
 }
 
 function groupWasteByReason(wasteRecords: WasteRecord[] | null): Record<WasteReason, WasteRecord[]> {
-  if (wasteRecords === null) {
-    return {
-      Expired: [],
-      "Cooking error": [],
-      "Customer return": [],
-      Damage: [],
-      Other: [],
-    };
-  }
   const groups: Record<WasteReason, WasteRecord[]> = {
     Expired: [],
     "Cooking error": [],
@@ -214,17 +194,11 @@ function groupWasteByReason(wasteRecords: WasteRecord[] | null): Record<WasteRea
     Damage: [],
     Other: [],
   };
+  if (wasteRecords === null) return groups;
   for (const record of wasteRecords) {
     groups[record.reason].push(record);
   }
   return groups;
-}
-
-interface CountryMetrics {
-  totalLocations: number;
-  totalRevenue: Price;
-  averageRevenuePerLocation: Price;
-  totalSales: number;
 }
 
 function calculateCountryComparison(
@@ -292,7 +266,7 @@ function findExtremeLocationRevenue(
   if (locations.length === 0) return { highest: null, lowest: null };
 
   const revenueByLocation = locations.map((location) => {
-    const locationSales = filterSalesByLocationLocal(safeSales, location.id);
+    const locationSales = filterSalesByLocation(safeSales, location.id);
     const revenue = round2(locationSales.reduce((sum, s) => sum + s.totalPrice[currency], 0));
     return { location, revenue };
   });
@@ -323,5 +297,4 @@ export {
   calculateCountryComparison,
   findExtremeSales,
   findExtremeLocationRevenue,
-  CountryMetrics,
 };

@@ -62,6 +62,13 @@ interface WasteRecord {
   reportedBy: string;
 }
 
+interface CountryMetrics {
+  totalLocations: number;
+  totalRevenue: Price;
+  averageRevenuePerLocation: Price;
+  totalSales: number;
+}
+
 export {
   Price,
   MenuCategory,
@@ -74,4 +81,5 @@ export {
   Location,
   WasteReason,
   WasteRecord,
+  CountryMetrics,
 };
