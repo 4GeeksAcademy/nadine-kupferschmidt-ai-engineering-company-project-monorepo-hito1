@@ -26,27 +26,30 @@ function isSameCalendarDay(a: Date, b: Date, timeZone: string): boolean {
   );
 }
 
-function filterSalesByLocationLocal(sales: SaleTransaction[], locationId: string): SaleTransaction[] {
+function filterSalesByLocationLocal(sales: SaleTransaction[] | null, locationId: string): SaleTransaction[] {
+  if (sales === null) return [];
   return sales.filter((sale) => sale.locationId === locationId);
 }
 
 function calculateDailyRevenue(
-  sales: SaleTransaction[],
-  date: Date,
+  sales: SaleTransaction[] | null,
+  date: Date | null,
   currency: "USD" | "COP",
   timeZone: string
 ): number {
+  if (sales === null || date === null) return 0;
   const dailySales = sales.filter((sale) => isSameCalendarDay(sale.timestamp, date, timeZone));
   const total = dailySales.reduce((sum, sale) => sum + sale.totalPrice[currency], 0);
   return round2(total);
 }
 
 function calculateLocationMargin(
-  sales: SaleTransaction[],
-  menuItems: MenuItem[],
+  sales: SaleTransaction[] | null,
+  menuItems: MenuItem[] | null,
   locationId: string,
   currency: "USD" | "COP"
 ): number {
+  if (sales === null || menuItems === null) return 0;
   const locationSales = filterSalesByLocationLocal(sales, locationId);
 
   let totalRevenue = 0;
@@ -67,10 +70,11 @@ function calculateLocationMargin(
 }
 
 function calculateWasteCost(
-  wasteRecords: WasteRecord[],
+  wasteRecords: WasteRecord[] | null,
   locationId: string,
   currency: "USD" | "COP"
 ): number {
+  if (wasteRecords === null) return 0;
   const total = wasteRecords
     .filter((record) => record.locationId === locationId)
     .reduce((sum, record) => sum + record.cost[currency], 0);
@@ -89,14 +93,18 @@ function convertCurrency(
 }
 
 function scoreLocationPerformance(
-  location: Location,
-  sales: SaleTransaction[],
-  wasteRecords: WasteRecord[],
-  menuItems: MenuItem[],
+  location: Location | null,
+  sales: SaleTransaction[] | null,
+  wasteRecords: WasteRecord[] | null,
+  menuItems: MenuItem[] | null,
   referenceDate: Date
 ): number {
-  const locationSales = filterSalesByLocationLocal(sales, location.id);
-  const locationWaste = wasteRecords.filter((w) => w.locationId === location.id);
+  if (location === null) return 0;
+  const safeSales = sales ?? [];
+  const safeWasteRecords = wasteRecords ?? [];
+  const safeMenuItems = menuItems ?? [];
+  const locationSales = filterSalesByLocationLocal(safeSales, location.id);
+  const locationWaste = safeWasteRecords.filter((w) => w.locationId === location.id);
 
   const openingDate = new Date(location.openingYear, 0, 1);
   const daysOperating = Math.max(
@@ -114,28 +122,40 @@ function scoreLocationPerformance(
   const wastePercentage = totalRevenueUSD > 0 ? (totalWasteCostUSD / totalRevenueUSD) * 100 : 0;
   const wasteScore = Math.max(20 - wastePercentage * 2, 0);
 
-  const margin = calculateLocationMargin(sales, menuItems, location.id, "USD");
+  const margin = calculateLocationMargin(safeSales, safeMenuItems, location.id, "USD");
   const marginScore = Math.min(margin / 10, 10);
 
   return round2(revenueScore + efficiencyScore + wasteScore + marginScore);
 }
 
 function rankLocationsByPerformance(
-  locations: Location[],
-  sales: SaleTransaction[],
-  wasteRecords: WasteRecord[],
-  menuItems: MenuItem[],
+  locations: Location[] | null,
+  sales: SaleTransaction[] | null,
+  wasteRecords: WasteRecord[] | null,
+  menuItems: MenuItem[] | null,
   referenceDate: Date
 ): Array<{ location: Location; score: number }> {
+  if (locations === null) return [];
+  const safeSales = sales ?? [];
+  const safeWasteRecords = wasteRecords ?? [];
+  const safeMenuItems = menuItems ?? [];
   return locations
     .map((location) => ({
       location,
-      score: scoreLocationPerformance(location, sales, wasteRecords, menuItems, referenceDate),
+      score: scoreLocationPerformance(location, safeSales, safeWasteRecords, safeMenuItems, referenceDate),
     }))
     .sort((a, b) => b.score - a.score);
 }
 
-function countSalesByPaymentMethod(sales: SaleTransaction[]): Record<PaymentMethod, number> {
+function countSalesByPaymentMethod(sales: SaleTransaction[] | null): Record<PaymentMethod, number> {
+  if (sales === null) {
+    return {
+      Cash: 0,
+      "Credit card": 0,
+      "Debit card": 0,
+      "Digital wallet": 0,
+    };
+  }
   const counts: Record<PaymentMethod, number> = {
     Cash: 0,
     "Credit card": 0,
@@ -148,17 +168,19 @@ function countSalesByPaymentMethod(sales: SaleTransaction[]): Record<PaymentMeth
   return counts;
 }
 
-function calculateAverageTicket(sales: SaleTransaction[], currency: "USD" | "COP"): number {
+function calculateAverageTicket(sales: SaleTransaction[] | null, currency: "USD" | "COP"): number {
+  if (sales === null) return 0;
   if (sales.length === 0) return 0;
   const total = sales.reduce((sum, sale) => sum + sale.totalPrice[currency], 0);
   return round2(total / sales.length);
 }
 
 function findTopSellingItems(
-  sales: SaleTransaction[],
-  menuItems: MenuItem[],
+  sales: SaleTransaction[] | null,
+  menuItems: MenuItem[] | null,
   topN: number
 ): Array<{ item: MenuItem; totalSold: number }> {
+  if (sales === null || menuItems === null || topN <= 0) return [];
   const quantityByItemId: Record<string, number> = {};
   for (const sale of sales) {
     quantityByItemId[sale.itemId] = (quantityByItemId[sale.itemId] ?? 0) + sale.quantity;
@@ -175,7 +197,16 @@ function findTopSellingItems(
   return result.sort((a, b) => b.totalSold - a.totalSold).slice(0, topN);
 }
 
-function groupWasteByReason(wasteRecords: WasteRecord[]): Record<WasteReason, WasteRecord[]> {
+function groupWasteByReason(wasteRecords: WasteRecord[] | null): Record<WasteReason, WasteRecord[]> {
+  if (wasteRecords === null) {
+    return {
+      Expired: [],
+      "Cooking error": [],
+      "Customer return": [],
+      Damage: [],
+      Other: [],
+    };
+  }
   const groups: Record<WasteReason, WasteRecord[]> = {
     Expired: [],
     "Cooking error": [],
@@ -197,14 +228,16 @@ interface CountryMetrics {
 }
 
 function calculateCountryComparison(
-  sales: SaleTransaction[],
-  locations: Location[],
-  menuItems: MenuItem[]
+  sales: SaleTransaction[] | null,
+  locations: Location[] | null,
+  menuItems: MenuItem[] | null
 ): { Colombia: CountryMetrics; USA: CountryMetrics } {
+  const safeSales = sales ?? [];
+  const safeLocations = locations ?? [];
   function metricsFor(country: "Colombia" | "USA"): CountryMetrics {
-    const countryLocations = locations.filter((loc) => loc.country === country);
+    const countryLocations = safeLocations.filter((loc) => loc.country === country);
     const locationIds = countryLocations.map((loc) => loc.id);
-    const countrySales = sales.filter((sale) => locationIds.includes(sale.locationId));
+    const countrySales = safeSales.filter((sale) => locationIds.includes(sale.locationId));
 
     const totalRevenue: Price = {
       USD: round2(countrySales.reduce((sum, s) => sum + s.totalPrice.USD, 0)),
@@ -232,9 +265,10 @@ function calculateCountryComparison(
 }
 
 function findExtremeSales(
-  sales: SaleTransaction[],
+  sales: SaleTransaction[] | null,
   currency: "USD" | "COP"
 ): { highest: SaleTransaction | null; lowest: SaleTransaction | null } {
+  if (sales === null) return { highest: null, lowest: null };
   if (sales.length === 0) return { highest: null, lowest: null };
 
   let highest = sales[0];
@@ -249,14 +283,16 @@ function findExtremeSales(
 }
 
 function findExtremeLocationRevenue(
-  sales: SaleTransaction[],
-  locations: Location[],
+  sales: SaleTransaction[] | null,
+  locations: Location[] | null,
   currency: "USD" | "COP"
 ): { highest: { location: Location; revenue: number } | null; lowest: { location: Location; revenue: number } | null } {
+  if (locations === null) return { highest: null, lowest: null };
+  const safeSales = sales ?? [];
   if (locations.length === 0) return { highest: null, lowest: null };
 
   const revenueByLocation = locations.map((location) => {
-    const locationSales = filterSalesByLocationLocal(sales, location.id);
+    const locationSales = filterSalesByLocationLocal(safeSales, location.id);
     const revenue = round2(locationSales.reduce((sum, s) => sum + s.totalPrice[currency], 0));
     return { location, revenue };
   });
