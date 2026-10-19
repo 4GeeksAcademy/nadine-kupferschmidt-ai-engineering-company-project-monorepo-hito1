@@ -4,11 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Panel Interno — Brasaland Hito 2</title>
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
+            fontFamily: { sans: ["Geist", "sans-serif"] },
             colors: {
               brand: {
                 ivory: "#FDF8F0",
@@ -23,43 +28,6 @@
         },
       };
     </script>
-    <style>
-      .nav-item {
-        cursor: pointer;
-        border-left: 3px solid transparent;
-        transition: background-color 180ms ease, color 180ms ease;
-      }
-      .nav-item.active {
-        background-color: rgba(242, 166, 90, 0.1);
-        color: #1a1410;
-        border-left-color: #f2a65a;
-        font-weight: 600;
-      }
-      .nav-item:not(.active) {
-        color: #2a2a2a;
-      }
-      .report-button {
-        border: 1px solid #f5ede0;
-        transition: background-color 180ms ease, color 180ms ease,
-          border-color 180ms ease;
-      }
-      .report-button:hover:not(.selected) {
-        background-color: #f5ede0;
-        color: #1a1410;
-      }
-      .report-button.selected {
-        background-color: #f2a65a;
-        border-color: #f2a65a;
-        color: #1a1410;
-        font-weight: 600;
-      }
-      .panel {
-        display: none;
-      }
-      .panel.active {
-        display: block;
-      }
-    </style>
   </head>
   <body
     class="bg-gray-50 text-brand-charcoal min-h-screen flex flex-col md:flex-row"
@@ -70,9 +38,10 @@
       class="sidebar group w-full md:w-48 md:[&.collapsed]:w-16 bg-white border-r border-brand-beige text-brand-charcoal flex-shrink-0 flex md:flex-col items-center md:items-stretch overflow-x-auto md:overflow-visible py-2 md:py-5 md:min-h-screen md:sticky md:top-0 transition-all duration-300"
     >
       <div class="px-3 py-2 md:pb-6 flex items-center md:flex-col gap-3 flex-shrink-0">
-        <div class="flex items-center justify-center" title="Brasaland" aria-label="Brasaland">
+        <div class="flex flex-col items-center justify-center" title="Brasaland" aria-label="Brasaland">
           <span class="font-serif text-xl font-semibold tracking-wide text-brand-ochre group-[.collapsed]:hidden">Brasaland</span>
           <span aria-hidden="true" class="hidden font-serif text-xl font-semibold tracking-wide text-brand-ochre group-[.collapsed]:block">B</span>
+          <span class="text-sm text-brand-warmgray group-[.collapsed]:hidden">Operaciones</span>
         </div>
         <button type="button" onclick="toggleSidebar()" aria-controls="sidebar" aria-expanded="true" aria-label="Alternar sidebar" title="Expandir o colapsar sidebar" class="w-8 h-8 flex items-center justify-center rounded-lg text-brand-warmgray hover:bg-brand-beige focus-visible:outline-brand-ochre transition-colors">
           <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
@@ -80,27 +49,27 @@
           </svg>
         </button>
       </div>
-      <button type="button" class="nav-item active flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0" data-panel="dashboard" onclick="showPanel('dashboard')" title="Dashboard" aria-label="Dashboard">
+      <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0 cursor-pointer border-l-4 border-brand-ochre bg-brand-ochre/10 text-brand-darkbrown font-semibold transition-colors" data-panel="dashboard" onclick="showPanel('dashboard')" title="Dashboard" aria-label="Dashboard">
         <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-7h6v7" /></svg>
         <span class="group-[.collapsed]:hidden">Dashboard</span>
       </button>
-      <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0" data-panel="ubicaciones" onclick="showPanel('ubicaciones')" title="Ubicaciones" aria-label="Ubicaciones">
+      <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0 cursor-pointer border-l-4 border-transparent text-brand-charcoal transition-colors" data-panel="ubicaciones" onclick="showPanel('ubicaciones')" title="Ubicaciones" aria-label="Ubicaciones">
         <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></svg>
         <span class="group-[.collapsed]:hidden">Ubicaciones</span>
       </button>
-      <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0" data-panel="menu" onclick="showPanel('menu')" title="Menú" aria-label="Menú">
+      <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0 cursor-pointer border-l-4 border-transparent text-brand-charcoal transition-colors" data-panel="menu" onclick="showPanel('menu')" title="Menú" aria-label="Menú">
         <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v5a3 3 0 0 0 6 0V3M7 3v18M20 3c-4 3-4 9 0 9V3Zm0 9v9" /></svg>
         <span class="group-[.collapsed]:hidden">Menú</span>
       </button>
-      <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0" data-panel="ventas" onclick="showPanel('ventas')" title="Ventas" aria-label="Ventas">
+      <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0 cursor-pointer border-l-4 border-transparent text-brand-charcoal transition-colors" data-panel="ventas" onclick="showPanel('ventas')" title="Ventas" aria-label="Ventas">
         <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M16.5 7H10a2.5 2.5 0 0 0 0 5h4a2.5 2.5 0 0 1 0 5H7" /></svg>
         <span class="group-[.collapsed]:hidden">Ventas</span>
       </button>
-      <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0" data-panel="reportes" onclick="showPanel('reportes')" title="Reportes" aria-label="Reportes">
+      <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0 cursor-pointer border-l-4 border-transparent text-brand-charcoal transition-colors" data-panel="reportes" onclick="showPanel('reportes')" title="Reportes" aria-label="Reportes">
         <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H5v18h14V8l-5-5Zm0 0v5h5M8 12h8M8 16h6" /></svg>
         <span class="group-[.collapsed]:hidden">Reportes</span>
       </button>
-      <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0" data-panel="validaciones" onclick="showPanel('validaciones')" title="Validaciones" aria-label="Validaciones">
+      <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0 cursor-pointer border-l-4 border-transparent text-brand-charcoal transition-colors" data-panel="validaciones" onclick="showPanel('validaciones')" title="Validaciones" aria-label="Validaciones">
         <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="m8 12 3 3 5-6" /></svg>
         <span class="group-[.collapsed]:hidden">Validaciones</span>
       </button>
@@ -109,14 +78,14 @@
     <!-- Main content -->
     <main class="flex-1 min-w-0 bg-gray-50 p-4 sm:p-6 md:p-10">
       <!-- ========== SECCIÓN: DASHBOARD ========== -->
-      <section id="panel-dashboard" class="panel active max-w-6xl md:px-6 md:py-4">
+      <section id="panel-dashboard" class="panel max-w-6xl md:px-6 md:py-4">
         <div class="mb-10">
           <p
             class="text-brand-ochre text-xs font-semibold uppercase tracking-widest mb-2"
           >
             ✦ Brasaland Ops
           </p>
-          <h2 class="text-2xl font-semibold mb-1">Dashboard</h2>
+          <h2 class="text-2xl font-semibold text-brand-darkbrown mb-1">Dashboard</h2>
           <p class="text-sm text-brand-warmgray">
             Resumen rápido de la operación
           </p>
@@ -126,11 +95,11 @@
           id="dashboard-results"
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7"
         ></div>
-        <div class="mt-7 bg-white rounded-2xl shadow-sm overflow-hidden">
-          <h3 class="px-5 py-5 text-sm font-semibold text-brand-darkbrown">Ranking de ubicaciones</h3>
+        <div class="mt-7 rounded-md border border-brand-beige bg-white p-6 overflow-hidden">
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Ranking de ubicaciones</h3>
           <div class="overflow-x-auto">
             <table class="w-full min-w-[560px] text-sm text-left">
-              <thead class="bg-brand-beige text-brand-warmgray text-xs uppercase">
+              <thead class="bg-gray-200 text-brand-warmgray text-xs uppercase">
                 <tr>
                   <th scope="col" class="px-5 py-3 font-medium">Ubicación</th>
                   <th scope="col" class="px-5 py-3 font-medium">Ciudad</th>
@@ -141,15 +110,15 @@
               <tbody id="dashboard-ranking"></tbody>
             </table>
           </div>
-          <p id="dashboard-ranking-summary" class="px-5 py-4 text-xs text-brand-warmgray"></p>
+          <p id="dashboard-ranking-summary" class="pt-4 text-xs text-brand-warmgray"></p>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-7 mt-7">
-          <div class="min-w-0 bg-white rounded-2xl shadow-sm p-6">
-            <h3 class="text-sm font-semibold text-brand-darkbrown mb-5">Ventas por método de pago</h3>
+          <div class="min-w-0 rounded-md border border-brand-beige bg-white p-6">
+            <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Ventas por método de pago</h3>
             <div id="dashboard-payment-bars" class="space-y-4"></div>
           </div>
-          <div class="min-w-0 bg-white rounded-2xl shadow-sm p-6">
-            <h3 class="text-sm font-semibold text-brand-darkbrown mb-5">Ubicaciones activas</h3>
+          <div class="min-w-0 rounded-md border border-brand-beige bg-white p-6">
+            <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Ubicaciones activas</h3>
             <div class="relative w-32 h-32 mx-auto">
               <svg id="dashboard-active-chart" role="img" viewBox="0 0 100 100" class="w-full h-full -rotate-90">
                 <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="10" class="text-brand-beige" />
@@ -161,34 +130,34 @@
             </div>
             <p id="dashboard-active-summary" class="mt-4 text-center text-sm text-brand-warmgray"></p>
           </div>
-          <div class="min-w-0 bg-white rounded-2xl shadow-sm p-6">
-            <h3 class="text-sm font-semibold text-brand-darkbrown mb-5">Ingresos por país · USD</h3>
+          <div class="min-w-0 rounded-md border border-brand-beige bg-white p-6">
+            <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Ingresos por país · USD</h3>
             <div id="dashboard-country-bars" class="space-y-6"></div>
           </div>
         </div>
       </section>
 
       <!-- ========== SECCIÓN: UBICACIONES ========== -->
-      <section id="panel-ubicaciones" class="panel max-w-6xl md:px-6 md:py-4">
+      <section id="panel-ubicaciones" class="panel hidden max-w-6xl md:px-6 md:py-4">
         <div class="mb-10">
           <p
             class="text-brand-ochre text-xs font-semibold uppercase tracking-widest mb-2"
           >
             ✦ Brasaland Ops
           </p>
-          <h2 class="text-2xl font-semibold mb-1">Buscar ubicaciones</h2>
+          <h2 class="text-2xl font-semibold text-brand-darkbrown mb-1">Buscar ubicaciones</h2>
           <p class="text-sm text-brand-warmgray">Filtrá por país y estado</p>
         </div>
 
-        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end bg-white rounded-2xl shadow-sm p-5">
+        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end rounded-md border border-brand-beige bg-white p-6">
           <div class="w-full md:w-auto">
             <label
-              class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+              class="block text-sm text-brand-warmgray mb-2"
               >País</label
             >
             <select
               id="loc-country"
-              class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
             >
               <option value="">Todos</option>
               <option value="Colombia">Colombia</option>
@@ -197,12 +166,12 @@
           </div>
           <div class="w-full md:w-auto">
             <label
-              class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+              class="block text-sm text-brand-warmgray mb-2"
               >Estado</label
             >
             <select
               id="loc-status"
-              class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
             >
               <option value="">Todos</option>
               <option value="Active">Activa</option>
@@ -212,12 +181,12 @@
           </div>
           <div class="w-full md:w-auto">
             <label
-              class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+              class="block text-sm text-brand-warmgray mb-2"
               >Ordenar por capacidad</label
             >
             <select
               id="loc-sort"
-              class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
             >
               <option value="">Sin ordenar</option>
               <option value="asc">Menor a mayor</option>
@@ -226,52 +195,52 @@
           </div>
           <button
             onclick="searchLocations()"
-            class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
+            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
           >
             Buscar
           </button>
         </div>
 
-        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end bg-white rounded-2xl shadow-sm p-5">
+        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end rounded-md border border-brand-beige bg-white p-6">
           <div class="w-full md:w-auto">
             <label
               for="loc-id"
-              class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+              class="block text-sm text-brand-warmgray mb-2"
               >Buscar ubicación por ID</label
             >
             <input
               id="loc-id"
               type="text"
               placeholder="LOC-MEDELLIN-01"
-              class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
             />
           </div>
           <button
             onclick="searchLocationById()"
-            class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
+            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
           >
             Buscar
           </button>
           <div id="loc-id-result" class="w-full"></div>
         </div>
 
-        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end bg-white rounded-2xl shadow-sm p-5">
+        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end rounded-md border border-brand-beige bg-white p-6">
           <div class="w-full md:w-auto">
             <label
               for="loc-capacity"
-              class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+              class="block text-sm text-brand-warmgray mb-2"
               >Buscar por capacidad exacta (búsqueda binaria)</label
             >
             <input
               id="loc-capacity"
               type="number"
               min="0"
-              class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
             />
           </div>
           <button
             onclick="searchLocationByCapacity()"
-            class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
+            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
           >
             Buscar
           </button>
@@ -279,12 +248,12 @@
         </div>
 
         <div
-          class="overflow-x-auto bg-white rounded-2xl p-5 md:p-7 shadow-sm"
+          class="overflow-x-auto rounded-md border border-brand-beige bg-white p-6"
         >
           <table class="w-full min-w-[560px] text-sm">
-            <thead>
+            <thead class="bg-gray-200">
               <tr
-                class="bg-brand-beige text-brand-warmgray text-left text-xs uppercase tracking-wide [&>th]:px-3"
+                class="text-brand-warmgray text-left text-xs uppercase tracking-wide [&>th]:px-3"
               >
                 <th class="py-3 pr-4 font-medium">Ubicación</th>
                 <th class="py-3 pr-4 font-medium">Ciudad</th>
@@ -299,28 +268,28 @@
       </section>
 
       <!-- ========== SECCIÓN: MENÚ ========== -->
-      <section id="panel-menu" class="panel max-w-6xl md:px-6 md:py-4">
+      <section id="panel-menu" class="panel hidden max-w-6xl md:px-6 md:py-4">
         <div class="mb-10">
           <p
             class="text-brand-ochre text-xs font-semibold uppercase tracking-widest mb-2"
           >
             ✦ Brasaland Ops
           </p>
-          <h2 class="text-2xl font-semibold mb-1">Explorar menú</h2>
+          <h2 class="text-2xl font-semibold text-brand-darkbrown mb-1">Explorar menú</h2>
           <p class="text-sm text-brand-warmgray">
             Filtrá por categoría, ordená por precio
           </p>
         </div>
 
-        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end bg-white rounded-2xl shadow-sm p-5">
+        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end rounded-md border border-brand-beige bg-white p-6">
           <div class="w-full md:w-auto">
             <label
-              class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+              class="block text-sm text-brand-warmgray mb-2"
               >Categoría</label
             >
             <select
               id="menu-category"
-              class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
             >
               <option value="">Todas</option>
               <option value="Meat">Carnes</option>
@@ -332,12 +301,12 @@
           </div>
           <div class="w-full md:w-auto">
             <label
-              class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+              class="block text-sm text-brand-warmgray mb-2"
               >Moneda</label
             >
             <select
               id="menu-currency"
-              class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
             >
               <option value="USD">USD</option>
               <option value="COP">COP</option>
@@ -345,12 +314,12 @@
           </div>
           <div class="w-full md:w-auto">
             <label
-              class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+              class="block text-sm text-brand-warmgray mb-2"
               >Orden por precio</label
             >
             <select
               id="menu-order"
-              class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
             >
               <option value="asc">Menor a mayor</option>
               <option value="desc">Mayor a menor</option>
@@ -358,29 +327,29 @@
           </div>
           <button
             onclick="searchMenu()"
-            class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
+            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
           >
             Buscar
           </button>
         </div>
 
-        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end bg-white rounded-2xl shadow-sm p-5">
+        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end rounded-md border border-brand-beige bg-white p-6">
           <div class="w-full md:w-auto">
             <label
               for="menu-name"
-              class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+              class="block text-sm text-brand-warmgray mb-2"
               >Buscar ítem por nombre</label
             >
             <input
               id="menu-name"
               type="text"
               placeholder="Picanha 250g"
-              class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
             />
           </div>
           <button
             onclick="searchMenuItemByName()"
-            class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
+            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
           >
             Buscar
           </button>
@@ -388,12 +357,12 @@
         </div>
 
         <div
-          class="overflow-x-auto bg-white rounded-2xl p-5 md:p-7 shadow-sm"
+          class="overflow-x-auto rounded-md border border-brand-beige bg-white p-6"
         >
           <table class="w-full min-w-[560px] text-sm">
-            <thead>
+            <thead class="bg-gray-200">
               <tr
-                class="bg-brand-beige text-brand-warmgray text-left text-xs uppercase tracking-wide [&>th]:px-3"
+                class="text-brand-warmgray text-left text-xs uppercase tracking-wide [&>th]:px-3"
               >
                 <th class="py-3 pr-4 font-medium">Ítem</th>
                 <th class="py-3 pr-4 font-medium">Categoría</th>
@@ -408,55 +377,55 @@
       </section>
 
       <!-- ========== SECCIÓN: VENTAS ========== -->
-      <section id="panel-ventas" class="panel max-w-6xl md:px-6 md:py-4">
+      <section id="panel-ventas" class="panel hidden max-w-6xl md:px-6 md:py-4">
         <div class="mb-10">
           <p
             class="text-brand-ochre text-xs font-semibold uppercase tracking-widest mb-2"
           >
             ✦ Brasaland Ops
           </p>
-          <h2 class="text-2xl font-semibold mb-1">Ventas</h2>
+          <h2 class="text-2xl font-semibold text-brand-darkbrown mb-1">Ventas</h2>
           <p class="text-sm text-brand-warmgray">
             Ingresos diarios, ventas por rango y conversión de moneda
           </p>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-sm p-5 mb-7">
-          <h3 class="text-sm font-semibold text-brand-darkbrown mb-5">Ingreso del día por ubicación</h3>
+        <div class="rounded-md border border-brand-beige bg-white p-6 mb-7">
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Ingreso del día por ubicación</h3>
           <div class="flex flex-col md:flex-row md:flex-wrap gap-5 md:items-end mb-5">
             <div class="w-full md:w-auto">
               <label
                 for="daily-location"
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >Ubicación</label
               >
               <select
                 id="daily-location"
-                class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               ></select>
             </div>
             <div class="w-full md:w-auto">
               <label
                 for="daily-date"
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >Fecha</label
               >
               <input
                 id="daily-date"
                 type="date"
                 value="2024-03-15"
-                class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
             <div class="w-full md:w-auto">
               <label
                 for="daily-currency"
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >Moneda</label
               >
               <select
                 id="daily-currency"
-                class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               >
                 <option value="USD">USD</option>
                 <option value="COP">COP</option>
@@ -464,7 +433,7 @@
             </div>
             <button
               onclick="renderDailyRevenue()"
-              class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
+              class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
             >
               Calcular
             </button>
@@ -472,44 +441,44 @@
           <div id="daily-result"></div>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-sm p-5 mb-7">
-          <h3 class="text-sm font-semibold text-brand-darkbrown mb-5">Ventas por rango de fechas</h3>
+        <div class="rounded-md border border-brand-beige bg-white p-6 mb-7">
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Ventas por rango de fechas</h3>
           <div class="flex flex-col md:flex-row md:flex-wrap gap-5 md:items-end">
             <div class="w-full md:w-auto">
               <label
                 for="range-from"
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >Desde</label
               >
               <input
                 id="range-from"
                 type="date"
                 value="2024-03-01"
-                class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
             <div class="w-full md:w-auto">
               <label
                 for="range-to"
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >Hasta</label
               >
               <input
                 id="range-to"
                 type="date"
                 value="2024-04-30"
-                class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
             <div class="w-full md:w-auto">
               <label
                 for="range-currency"
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >Moneda</label
               >
               <select
                 id="range-currency"
-                class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               >
                 <option value="USD">USD</option>
                 <option value="COP">COP</option>
@@ -517,7 +486,7 @@
             </div>
             <button
               onclick="renderSalesByRange()"
-              class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
+              class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
             >
               Filtrar
             </button>
@@ -530,12 +499,12 @@
         ></div>
 
         <div
-          class="overflow-x-auto bg-white rounded-2xl p-5 md:p-7 shadow-sm mb-7"
+          class="overflow-x-auto rounded-md border border-brand-beige bg-white p-6 mb-7"
         >
           <table class="w-full min-w-[720px] text-sm">
-            <thead>
+            <thead class="bg-gray-200">
               <tr
-                class="bg-brand-beige text-brand-warmgray text-left text-xs uppercase tracking-wide [&>th]:px-3"
+                class="text-brand-warmgray text-left text-xs uppercase tracking-wide [&>th]:px-3"
               >
                 <th class="py-3 pr-4 font-medium">ID</th>
                 <th class="py-3 pr-4 font-medium">Ubicación</th>
@@ -550,13 +519,13 @@
           </table>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-sm p-5">
-          <h3 class="text-sm font-semibold text-brand-darkbrown mb-5">Conversor de moneda</h3>
+        <div class="rounded-md border border-brand-beige bg-white p-6">
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Conversor de moneda</h3>
           <div class="flex flex-col md:flex-row md:flex-wrap gap-5 md:items-end mb-5">
             <div class="w-full md:w-auto">
               <label
                 for="convert-amount"
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >Monto</label
               >
               <input
@@ -565,18 +534,18 @@
                 min="0"
                 step="any"
                 value="1"
-                class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
             <div class="w-full md:w-auto">
               <label
                 for="convert-from"
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >De</label
               >
               <select
                 id="convert-from"
-                class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               >
                 <option value="USD">USD</option>
                 <option value="COP">COP</option>
@@ -585,12 +554,12 @@
             <div class="w-full md:w-auto">
               <label
                 for="convert-to"
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >A</label
               >
               <select
                 id="convert-to"
-                class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               >
                 <option value="COP">COP</option>
                 <option value="USD">USD</option>
@@ -598,7 +567,7 @@
             </div>
             <button
               onclick="runCurrencyConversion()"
-              class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
+              class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
             >
               Convertir
             </button>
@@ -609,40 +578,40 @@
       </section>
 
       <!-- ========== SECCIÓN: REPORTES ========== -->
-      <section id="panel-reportes" class="panel max-w-6xl md:px-6 md:py-4">
+      <section id="panel-reportes" class="panel hidden max-w-6xl md:px-6 md:py-4">
         <div class="mb-10">
           <p
             class="text-brand-ochre text-xs font-semibold uppercase tracking-widest mb-2"
           >
             ✦ Brasaland Ops
           </p>
-          <h2 class="text-2xl font-semibold mb-1">Reportes</h2>
+          <h2 class="text-2xl font-semibold text-brand-darkbrown mb-1">Reportes</h2>
           <p class="text-sm text-brand-warmgray">
             Elegí un reporte para generarlo
           </p>
         </div>
 
-        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end bg-white rounded-2xl shadow-sm p-5">
+        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end rounded-md border border-brand-beige bg-white p-6">
           <div class="w-full md:w-auto">
             <label
               for="report-location"
-              class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+              class="block text-sm text-brand-warmgray mb-2"
               >Ubicación</label
             >
             <select
               id="report-location"
-              class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
             ></select>
           </div>
           <div class="w-full md:w-auto">
             <label
               for="report-currency"
-              class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+              class="block text-sm text-brand-warmgray mb-2"
               >Moneda</label
             >
             <select
               id="report-currency"
-              class="w-full md:w-auto bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
             >
               <option value="USD">USD</option>
               <option value="COP">COP</option>
@@ -650,46 +619,46 @@
           </div>
         </div>
 
-        <div class="flex flex-col md:flex-row md:flex-wrap gap-4 mb-7 bg-white rounded-2xl shadow-sm p-5">
+        <div class="flex flex-col md:flex-row md:flex-wrap gap-4 mb-7 rounded-md border border-brand-beige bg-white p-6">
           <button
             onclick="renderReport('margin')"
             data-report="margin"
-            class="report-button w-full md:w-auto px-5 py-2.5 text-sm font-medium rounded-lg"
+            class="report-button w-full md:w-auto rounded px-4 py-2 text-sm border border-brand-beige bg-white text-brand-darkbrown hover:border-brand-ochre"
           >
             Margen por ubicación
           </button>
           <button
             onclick="renderReport('ranking')"
             data-report="ranking"
-            class="report-button selected w-full md:w-auto px-5 py-2.5 text-sm font-medium rounded-lg"
+            class="report-button w-full md:w-auto rounded px-4 py-2 text-sm border border-brand-ochre bg-brand-ochre font-semibold text-brand-darkbrown hover:border-brand-ochre"
           >
             Ranking performance
           </button>
           <button
             onclick="renderReport('topItems')"
             data-report="topItems"
-            class="report-button w-full md:w-auto px-5 py-2.5 text-sm font-medium rounded-lg"
+            class="report-button w-full md:w-auto rounded px-4 py-2 text-sm border border-brand-beige bg-white text-brand-darkbrown hover:border-brand-ochre"
           >
             Ítems más vendidos
           </button>
           <button
             onclick="renderReport('extremeSales')"
             data-report="extremeSales"
-            class="report-button w-full md:w-auto px-5 py-2.5 text-sm font-medium rounded-lg"
+            class="report-button w-full md:w-auto rounded px-4 py-2 text-sm border border-brand-beige bg-white text-brand-darkbrown hover:border-brand-ochre"
           >
             Venta más cara/barata
           </button>
           <button
             onclick="renderReport('waste')"
             data-report="waste"
-            class="report-button w-full md:w-auto px-5 py-2.5 text-sm font-medium rounded-lg"
+            class="report-button w-full md:w-auto rounded px-4 py-2 text-sm border border-brand-beige bg-white text-brand-darkbrown hover:border-brand-ochre"
           >
             Desperdicio por razón
           </button>
           <button
             onclick="renderReport('locationRevenue')"
             data-report="locationRevenue"
-            class="report-button w-full md:w-auto px-5 py-2.5 text-sm font-medium rounded-lg"
+            class="report-button w-full md:w-auto rounded px-4 py-2 text-sm border border-brand-beige bg-white text-brand-darkbrown hover:border-brand-ochre"
           >
             Ingresos por ubicación (máx/mín)
           </button>
@@ -702,76 +671,76 @@
       </section>
 
       <!-- ========== SECCIÓN: VALIDACIONES ========== -->
-      <section id="panel-validaciones" class="panel max-w-6xl md:px-6 md:py-4">
+      <section id="panel-validaciones" class="panel hidden max-w-6xl md:px-6 md:py-4">
         <div class="mb-10">
           <p
             class="text-brand-ochre text-xs font-semibold uppercase tracking-widest mb-2"
           >
             ✦ Brasaland Ops
           </p>
-          <h2 class="text-2xl font-semibold mb-1">Validar datos</h2>
+          <h2 class="text-2xl font-semibold text-brand-darkbrown mb-1">Validar datos</h2>
           <p class="text-sm text-brand-warmgray">
             Probá si un ítem, una venta o una locación cumplen las reglas de negocio
           </p>
         </div>
 
         <div
-          class="bg-white rounded-2xl p-7 md:p-9 mb-7 max-w-2xl shadow-sm"
+          class="rounded-md border border-brand-beige bg-white p-6 mb-7 max-w-2xl"
         >
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-7">
             <div>
               <label
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >Nombre</label
               >
               <input
                 id="val-name"
                 type="text"
                 value="Picanha 250g"
-                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
             <div>
               <label
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >Precio USD</label
               >
               <input
                 id="val-usd"
                 type="number"
                 value="18.5"
-                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
             <div>
               <label
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >Precio COP</label
               >
               <input
                 id="val-cop"
                 type="number"
                 value="74000"
-                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
             <div>
               <label
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >Tiempo de preparación (min)</label
               >
               <input
                 id="val-prep"
                 type="number"
                 value="15"
-                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
-            <label class="flex items-center gap-2 text-sm text-brand-charcoal">
+            <label class="flex items-center gap-2 text-sm text-brand-warmgray">
               <input id="val-colombia" type="checkbox" checked class="w-4 h-4 accent-brand-ochre" />
               Disponible en Colombia
             </label>
-            <label class="flex items-center gap-2 text-sm text-brand-charcoal">
+            <label class="flex items-center gap-2 text-sm text-brand-warmgray">
               <input id="val-usa" type="checkbox" checked class="w-4 h-4 accent-brand-ochre" />
               Disponible en USA
             </label>
@@ -779,7 +748,7 @@
 
           <button
             onclick="runValidation()"
-            class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
+            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
           >
             Validar
           </button>
@@ -789,67 +758,67 @@
         <p class="mt-4 max-w-2xl text-xs text-brand-warmgray">Esta herramienta verifica que los datos de un ítem de menú cumplan las reglas del negocio antes de ingresarlos al sistema: precios válidos, tiempo de preparación razonable (hasta 60 minutos), nombre completo, y disponibilidad en al menos un país.</p>
 
         <div
-          class="bg-white rounded-2xl p-7 md:p-9 mt-10 mb-7 max-w-2xl shadow-sm"
+          class="rounded-md border border-brand-beige bg-white p-6 mt-10 mb-7 max-w-2xl"
         >
-          <h3 class="text-sm font-semibold text-brand-darkbrown mb-5">Validar una venta</h3>
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Validar una venta</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-7">
             <div>
               <label
                 for="sale-quantity"
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >Cantidad</label
               >
               <input
                 id="sale-quantity"
                 type="number"
                 value="1"
-                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
             <div>
               <label
                 for="sale-waiter"
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >Nombre del mesero</label
               >
               <input
                 id="sale-waiter"
                 type="text"
                 value="María González"
-                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
             <div>
               <label
                 for="sale-usd"
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >Precio total USD</label
               >
               <input
                 id="sale-usd"
                 type="number"
                 value="37"
-                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
             <div>
               <label
                 for="sale-cop"
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >Precio total COP</label
               >
               <input
                 id="sale-cop"
                 type="number"
                 value="148000"
-                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
           </div>
 
           <button
             onclick="runSaleValidation()"
-            class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
+            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
           >
             Validar venta
           </button>
@@ -858,107 +827,107 @@
         <div id="sale-validation-result" class="max-w-2xl"></div>
 
         <div
-          class="bg-white rounded-2xl p-7 md:p-9 mt-10 mb-7 max-w-2xl shadow-sm"
+          class="rounded-md border border-brand-beige bg-white p-6 mt-10 mb-7 max-w-2xl"
         >
-          <h3 class="text-sm font-semibold text-brand-darkbrown mb-5">Validar una locación</h3>
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Validar una locación</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-7">
             <div>
               <label
                 for="loc-val-year"
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >Año de apertura</label
               >
               <input
                 id="loc-val-year"
                 type="number"
                 value="2008"
-                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
             <div>
               <label
                 for="loc-val-capacity"
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >Capacidad de asientos</label
               >
               <input
                 id="loc-val-capacity"
                 type="number"
                 value="80"
-                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
             <div>
               <label
                 for="loc-val-staff"
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >Cantidad de empleados</label
               >
               <input
                 id="loc-val-staff"
                 type="number"
                 value="12"
-                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
             <div class="hidden md:block"></div>
             <div>
               <label
                 for="loc-val-rent-usd"
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >Renta mensual USD</label
               >
               <input
                 id="loc-val-rent-usd"
                 type="number"
                 value="1500"
-                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
             <div>
               <label
                 for="loc-val-rent-cop"
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >Renta mensual COP</label
               >
               <input
                 id="loc-val-rent-cop"
                 type="number"
                 value="6000000"
-                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
             <div>
               <label
                 for="loc-val-utilities-usd"
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >Servicios mensuales USD</label
               >
               <input
                 id="loc-val-utilities-usd"
                 type="number"
                 value="400"
-                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
             <div>
               <label
                 for="loc-val-utilities-cop"
-                class="block text-xs text-brand-warmgray uppercase tracking-wide mb-2"
+                class="block text-sm text-brand-warmgray mb-2"
                 >Servicios mensuales COP</label
               >
               <input
                 id="loc-val-utilities-cop"
                 type="number"
                 value="1600000"
-                class="w-full bg-brand-ivory border border-brand-beige rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
           </div>
 
           <button
             onclick="runLocationValidation()"
-            class="w-full md:w-auto bg-brand-ochre text-brand-darkbrown px-6 py-2.5 text-sm font-semibold rounded-lg hover:bg-brand-darkbrown hover:text-brand-ivory transition-colors"
+            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
           >
             Validar locación
           </button>
@@ -977,29 +946,32 @@
       function showPanel(name) {
         document
           .querySelectorAll(".panel")
-          .forEach((p) => p.classList.remove("active"));
-        document.getElementById("panel-" + name).classList.add("active");
-        document
-          .querySelectorAll(".nav-item")
-          .forEach((n) => n.classList.remove("active"));
-        document
-          .querySelector(`.nav-item[data-panel="${name}"]`)
-          .classList.add("active");
+          .forEach((p) => p.classList.add("hidden"));
+        document.getElementById("panel-" + name).classList.remove("hidden");
+        document.querySelectorAll(".nav-item").forEach((n) => {
+          const isActive = n.dataset.panel === name;
+          n.classList.toggle("bg-brand-ochre/10", isActive);
+          n.classList.toggle("text-brand-darkbrown", isActive);
+          n.classList.toggle("border-brand-ochre", isActive);
+          n.classList.toggle("font-semibold", isActive);
+          n.classList.toggle("border-transparent", !isActive);
+          n.classList.toggle("text-brand-charcoal", !isActive);
+        });
       }
 
       // ---- Ubicaciones ----
       function statusLabel(status) {
         const colors = {
-          Active: "bg-brand-beige text-brand-darkbrown",
-          "Temporarily closed": "bg-brand-ivory text-brand-warmgray",
-          "Under renovation": "bg-brand-ochre/20 text-brand-darkbrown",
+          Active: "border-green-600 text-green-700",
+          "Temporarily closed": "border-red-600 text-red-700",
+          "Under renovation": "border-brand-ochre text-orange-700",
         };
         const labels = {
           Active: "Activa",
           "Temporarily closed": "Cerrada temp.",
           "Under renovation": "En renovación",
         };
-        return `<span class="${colors[status]} inline-flex text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap">${labels[status]}</span>`;
+        return `<span class="${colors[status]} inline-block rounded-full border px-2 py-0 text-xs font-medium whitespace-nowrap">${labels[status]}</span>`;
       }
 
       function searchLocations() {
@@ -1021,7 +993,7 @@
         tbody.innerHTML = results
           .map(
             (loc) => `
-        <tr class="border-b border-brand-beige [&>td]:px-3">
+        <tr class="border-b border-brand-beige hover:bg-brand-ivory [&>td]:px-3">
           <td class="py-2">${loc.name}</td>
           <td class="py-2">${loc.city}</td>
           <td class="py-2">${loc.seatingCapacity}</td>
@@ -1034,8 +1006,8 @@
       }
 
       function locationCard(loc) {
-        return `<div class="bg-brand-ivory rounded-2xl p-6 flex flex-col gap-2">
-        <p class="text-xs text-brand-warmgray uppercase tracking-wide"><span class="text-brand-ochre mr-1.5">✦</span>${loc.id}</p>
+        return `<div class="rounded-md border border-brand-beige bg-white p-6 flex flex-col gap-2">
+        <p class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray"><span class="text-brand-ochre mr-1.5">✦</span>${loc.id}</p>
         <p class="text-2xl font-semibold text-brand-darkbrown leading-tight">${loc.name}</p>
         <p class="text-sm text-brand-charcoal">${loc.city} · ${loc.seatingCapacity} lugares · ${loc.manager}</p>
         <div>${statusLabel(loc.status)}</div>
@@ -1096,7 +1068,7 @@
         tbody.innerHTML = results
           .map(
             (item) => `
-        <tr class="border-b border-brand-beige [&>td]:px-3">
+        <tr class="border-b border-brand-beige hover:bg-brand-ivory [&>td]:px-3">
           <td class="py-2">${item.name}</td>
           <td class="py-2">${categoryLabel(item.category)}</td>
           <td class="py-2">$${item.basePrice.USD.toFixed(2)}</td>
@@ -1116,8 +1088,8 @@
           el.innerHTML = notFoundMessage("No se encontró ningún ítem con ese nombre");
           return;
         }
-        el.innerHTML = `<div class="bg-brand-ivory rounded-2xl p-6 flex flex-col gap-2">
-        <p class="text-xs text-brand-warmgray uppercase tracking-wide"><span class="text-brand-ochre mr-1.5">✦</span>${categoryLabel(item.category)}</p>
+        el.innerHTML = `<div class="rounded-md border border-brand-beige bg-white p-6 flex flex-col gap-2">
+        <p class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray"><span class="text-brand-ochre mr-1.5">✦</span>${categoryLabel(item.category)}</p>
         <p class="text-2xl font-semibold text-brand-darkbrown leading-tight">${item.name}</p>
         <p class="text-sm text-brand-charcoal">$${item.basePrice.USD.toFixed(2)} USD · $${item.basePrice.COP.toLocaleString()} COP · ${item.prepTimeMinutes} min</p>
         <p class="text-sm text-brand-warmgray">Alérgenos: ${item.allergens.length > 0 ? item.allergens.join(", ") : "Ninguno"}</p>
@@ -1126,8 +1098,8 @@
 
       // ---- Reportes ----
       function card(title, value) {
-        return `<div class="bg-white rounded-2xl shadow-sm p-6 flex flex-col justify-between">
-        <p class="text-xs text-brand-warmgray uppercase tracking-wide mb-4"><span class="text-brand-ochre mr-1.5">✦</span>${title}</p>
+        return `<div class="rounded-md border border-brand-beige bg-white p-6 flex flex-col justify-between">
+        <p class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-4"><span class="text-brand-ochre mr-1.5">✦</span>${title}</p>
         <p class="text-2xl font-semibold text-brand-darkbrown leading-tight">${value}</p>
       </div>`;
       }
@@ -1147,7 +1119,12 @@
         const el = document.getElementById("report-results");
         const currency = document.getElementById("report-currency").value;
         document.querySelectorAll(".report-button").forEach((button) => {
-          button.classList.toggle("selected", button.dataset.report === type);
+          const isSelected = button.dataset.report === type;
+          button.classList.toggle("bg-brand-ochre", isSelected);
+          button.classList.toggle("border-brand-ochre", isSelected);
+          button.classList.toggle("font-semibold", isSelected);
+          button.classList.toggle("bg-white", !isSelected);
+          button.classList.toggle("border-brand-beige", !isSelected);
         });
 
         if (type === "margin") {
@@ -1178,11 +1155,11 @@
           );
           const activeRanking = ranking.filter(r => r.location.status === "Active");
           const excludedCount = ranking.length - activeRanking.length;
-          el.innerHTML = `<div class="col-span-full min-w-0 bg-white rounded-2xl shadow-sm overflow-hidden">
+          el.innerHTML = `<div class="col-span-full min-w-0 rounded-md border border-brand-beige bg-white p-6 overflow-hidden">
             <div class="overflow-x-auto">
               <table class="w-full min-w-[560px] text-sm text-left">
                 <caption class="sr-only">Ranking performance de ubicaciones activas</caption>
-                <thead class="bg-brand-beige text-brand-warmgray text-xs uppercase">
+                <thead class="bg-gray-200 text-brand-warmgray text-xs uppercase">
                   <tr>
                     <th scope="col" class="px-5 py-3 font-medium">Posición</th>
                     <th scope="col" class="px-5 py-3 font-medium">Ubicación</th>
@@ -1190,7 +1167,7 @@
                     <th scope="col" class="px-5 py-3 font-medium text-right">Puntaje</th>
                   </tr>
                 </thead>
-                <tbody>${activeRanking.map((r, i) => `<tr class="border-b border-brand-beige last:border-0">
+                <tbody>${activeRanking.map((r, i) => `<tr class="border-b border-brand-beige last:border-0 hover:bg-brand-ivory">
                   <td class="px-5 py-3 text-brand-warmgray">${i + 1}</td>
                   <td class="px-5 py-3 font-medium text-brand-darkbrown">${r.location.name}</td>
                   <td class="px-5 py-3 text-brand-charcoal">${r.location.city}</td>
@@ -1198,8 +1175,8 @@
                 </tr>`).join("") || '<tr><td colspan="4" class="px-5 py-4 text-center text-brand-warmgray">Sin ubicaciones activas</td></tr>'}</tbody>
               </table>
             </div>
-            <p class="px-5 py-4 text-xs text-brand-warmgray">Se excluyen ubicaciones cerradas temporalmente o en renovación (${excludedCount} de ${ranking.length}).</p>
-            <p class="px-5 pb-4 text-xs text-brand-warmgray">El puntaje de performance (sobre 100) combina cuatro factores: ingresos generados, eficiencia de uso del local según su capacidad, control de desperdicio, y margen de ganancia. Un puntaje más alto indica mejor desempeño general de la ubicación.</p>
+            <p class="pt-4 text-xs text-brand-warmgray">Se excluyen ubicaciones cerradas temporalmente o en renovación (${excludedCount} de ${ranking.length}).</p>
+            <p class="pt-2 text-xs text-brand-warmgray">El puntaje de performance (sobre 100) combina cuatro factores: ingresos generados, eficiencia de uso del local según su capacidad, control de desperdicio, y margen de ganancia. Un puntaje más alto indica mejor desempeño general de la ubicación.</p>
           </div>`;
         } else if (type === "topItems") {
           const top = B.findTopSellingItems(
@@ -1273,8 +1250,8 @@
           currency,
           timeZone,
         );
-        el.innerHTML = `<div class="bg-brand-ivory rounded-2xl p-6 flex flex-col gap-2">
-        <p class="text-xs text-brand-warmgray uppercase tracking-wide"><span class="text-brand-ochre mr-1.5">✦</span>${location.name} · ${dateValue}</p>
+        el.innerHTML = `<div class="rounded-md border border-brand-beige bg-white p-6 flex flex-col gap-2">
+        <p class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray"><span class="text-brand-ochre mr-1.5">✦</span>${location.name} · ${dateValue}</p>
         <p class="text-2xl font-semibold text-brand-darkbrown leading-tight">${formatMoney(revenue, currency)}</p>
         <p class="text-sm text-brand-warmgray">Zona horaria: ${timeZone}</p>
       </div>`;
@@ -1313,7 +1290,7 @@
             const location = B.findLocationById(B.sampleLocations, sale.locationId);
             const item = B.sampleMenuItems.find((i) => i.id === sale.itemId);
             return `
-        <tr class="border-b border-brand-beige [&>td]:px-3">
+        <tr class="border-b border-brand-beige hover:bg-brand-ivory [&>td]:px-3">
           <td class="py-2">${sale.id}</td>
           <td class="py-2">${location ? location.name : sale.locationId}</td>
           <td class="py-2">${item ? item.name : sale.itemId}</td>
@@ -1336,8 +1313,8 @@
           return;
         }
         const result = B.convertCurrency(amount, from, to);
-        el.innerHTML = `<div class="bg-brand-ivory rounded-2xl p-6 flex flex-col gap-2">
-        <p class="text-xs text-brand-warmgray uppercase tracking-wide"><span class="text-brand-ochre mr-1.5">✦</span>${formatMoney(amount, from)}</p>
+        el.innerHTML = `<div class="rounded-md border border-brand-beige bg-white p-6 flex flex-col gap-2">
+        <p class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray"><span class="text-brand-ochre mr-1.5">✦</span>${formatMoney(amount, from)}</p>
         <p class="text-2xl font-semibold text-brand-darkbrown leading-tight">${formatMoney(result, to)}</p>
       </div>`;
       }
@@ -1407,9 +1384,9 @@
 
       function renderValidationResult(el, result) {
         if (result.valid) {
-          el.innerHTML = `<div class="bg-white text-brand-darkbrown rounded-2xl shadow-sm p-4 text-sm">✓ Los datos cumplen todas las reglas de negocio.</div>`;
+          el.innerHTML = `<div class="rounded-md border border-brand-beige bg-white p-6 text-sm text-green-700">✓ Los datos cumplen todas las reglas de negocio.</div>`;
         } else {
-          el.innerHTML = `<div class="bg-white text-brand-darkbrown rounded-2xl shadow-sm p-4 text-sm">
+          el.innerHTML = `<div class="rounded-md border border-brand-beige bg-white p-6 text-sm text-red-600">
           <p class="font-semibold mb-2">✗ Se encontraron ${result.errors.length} error(es):</p>
           <ul class="list-disc list-inside space-y-1">
             ${result.errors.map((e) => `<li>${e}</li>`).join("")}
@@ -1420,8 +1397,8 @@
 
       // ---- Dashboard ----
       function cardDashboard(icon, title, value, detail, extraClasses = "") {
-        return `<div class="bg-white rounded-2xl shadow-sm p-6 flex flex-col justify-between ${extraClasses}">
-        <p class="text-xs text-brand-warmgray uppercase tracking-wide mb-4"><span class="text-brand-ochre mr-1.5">${icon}</span>${title}</p>
+        return `<div class="rounded-md border border-brand-beige bg-white p-6 flex flex-col justify-between ${extraClasses}">
+        <p class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-4"><span class="text-brand-ochre mr-1.5">${icon}</span>${title}</p>
         <div>
           <p class="text-3xl font-bold text-brand-darkbrown leading-tight">${value}</p>
           ${detail ? `<p class="text-sm text-brand-warmgray mt-2">${detail}</p>` : ""}
@@ -1430,12 +1407,12 @@
       }
 
       function cardHighlight(icon, title, value, detail, extraClasses = "") {
-        return `<div class="bg-brand-ochre text-brand-ivory rounded-2xl shadow-sm p-6 sm:p-8 flex flex-col justify-between ${extraClasses}">
-        <p class="text-xs text-brand-ivory uppercase tracking-widest font-semibold mb-6"><span class="mr-1.5">${icon}</span>${title}</p>
+        return `<div class="bg-brand-ochre text-brand-darkbrown rounded-md border border-brand-beige p-6 flex flex-col justify-between ${extraClasses}">
+        <p class="text-xs text-brand-darkbrown uppercase tracking-widest font-semibold mb-6"><span class="mr-1.5">${icon}</span>${title}</p>
         <div>
           <span class="inline-flex bg-brand-darkbrown text-brand-ivory text-xs font-semibold px-3 py-1 rounded-full mb-4">Top performance</span>
-          <p class="text-5xl font-bold text-brand-ivory leading-none">${value}</p>
-          ${detail ? `<p class="text-lg font-semibold text-brand-ivory mt-4">${detail}</p>` : ""}
+          <p class="text-5xl font-bold text-brand-darkbrown leading-none">${value}</p>
+          ${detail ? `<p class="text-lg font-semibold text-brand-darkbrown mt-4">${detail}</p>` : ""}
         </div>
       </div>`;
       }
@@ -1446,19 +1423,19 @@
         const usPct = 100 - coPct;
         const column = (label, swatch, m, pct, align) => `
           <div class="${align}">
-            <p class="text-xs text-brand-warmgray uppercase tracking-wide mb-2"><span class="inline-block w-2 h-2 rounded-full ${swatch} mr-1.5"></span>${label}</p>
+            <p class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-2"><span class="inline-block w-2 h-2 rounded-full ${swatch} mr-1.5"></span>${label}</p>
             <p class="text-3xl font-bold text-brand-darkbrown leading-tight">$${m.totalRevenue.USD.toFixed(2)}</p>
             <p class="text-sm text-brand-warmgray mt-1">${m.totalLocations} ubicación(es) · ${m.totalSales} venta(s) · ${pct.toFixed(0)}%</p>
           </div>`;
-        return `<div class="bg-white rounded-2xl shadow-sm p-6 ${extraClasses}">
-        <p class="text-xs text-brand-warmgray uppercase tracking-wide mb-4"><span class="text-brand-ochre mr-1.5">✦</span>Colombia vs USA · Ingresos USD</p>
+        return `<div class="rounded-md border border-brand-beige bg-white p-6 ${extraClasses}">
+        <p class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-4"><span class="text-brand-ochre mr-1.5">✦</span>Colombia vs USA · Ingresos USD</p>
         <div class="flex flex-wrap justify-between gap-6 mb-5">
           ${column("Colombia", "bg-brand-ochre", colombia, coPct, "text-left")}
           ${column("USA", "bg-brand-charcoal", usa, usPct, "text-right")}
         </div>
         <div class="flex h-2.5 w-full rounded-full overflow-hidden bg-brand-ivory">
-          <div class="bg-brand-ochre" style="width: ${coPct}%"></div>
-          <div class="bg-brand-charcoal" style="width: ${usPct}%"></div>
+          <div class="bg-brand-ochre w-[${coPct.toFixed(0)}%]"></div>
+          <div class="bg-brand-charcoal w-[${usPct.toFixed(0)}%]"></div>
         </div>
       </div>`;
       }
@@ -1504,7 +1481,7 @@
           cardHighlight(
             "★",
             "Mejor performance",
-            best ? `${best.score.toFixed(2)}<span class="text-2xl text-brand-ivory/60 font-semibold"> / 100</span>` : "—",
+            best ? `${best.score.toFixed(2)}<span class="text-2xl text-brand-darkbrown font-semibold"> / 100</span>` : "—",
             best ? best.location.name : "Sin datos",
             "sm:col-span-2 lg:row-span-2",
           ) +
@@ -1559,7 +1536,7 @@
         );
         const topLocations = ranking.slice(0, 5);
         document.getElementById("dashboard-ranking").innerHTML = topLocations
-          .map((entry) => `<tr class="border-b border-brand-beige last:border-0">
+          .map((entry) => `<tr class="border-b border-brand-beige last:border-0 hover:bg-brand-ivory">
             <td class="px-5 py-3 font-medium text-brand-darkbrown">${entry.location.name}</td>
             <td class="px-5 py-3 text-brand-charcoal">${entry.location.city}</td>
             <td class="px-5 py-3 text-right font-semibold text-brand-darkbrown whitespace-nowrap">${entry.score.toFixed(2)} / 100</td>
@@ -1589,7 +1566,7 @@
                 <span class="font-semibold text-brand-darkbrown">${count} trans. · ${percent.toFixed(0)}%</span>
               </div>
               <div class="h-2.5 bg-brand-beige rounded-full overflow-hidden">
-                <div class="h-full rounded-full ${paymentColors[index % paymentColors.length]}" style="width: ${percent}%"></div>
+                <div class="h-full rounded-full ${paymentColors[index % paymentColors.length]} w-[${percent.toFixed(0)}%]"></div>
               </div>
             </div>`;
           })
@@ -1616,7 +1593,7 @@
                 <span class="font-semibold text-brand-darkbrown">$${revenue.toFixed(2)}</span>
               </div>
               <div class="h-3 bg-brand-beige rounded-full overflow-hidden">
-                <div class="h-full rounded-full ${index === 0 ? "bg-brand-ochre" : "bg-brand-charcoal"}" style="width: ${(revenue / maxRevenue) * 100}%"></div>
+                <div class="h-full rounded-full ${index === 0 ? "bg-brand-ochre" : "bg-brand-charcoal"} w-[${((revenue / maxRevenue) * 100).toFixed(0)}%]"></div>
               </div>
             </div>`;
           })
