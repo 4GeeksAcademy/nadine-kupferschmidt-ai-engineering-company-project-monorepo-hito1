@@ -201,52 +201,6 @@
           </button>
         </div>
 
-        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end rounded-md border border-brand-beige bg-white p-6">
-          <div class="w-full md:w-auto">
-            <label
-              for="loc-id"
-              class="block text-sm text-brand-warmgray mb-2"
-              >Buscar ubicación por ID</label
-            >
-            <input
-              id="loc-id"
-              type="text"
-              placeholder="LOC-MEDELLIN-01"
-              class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
-            />
-          </div>
-          <button
-            onclick="searchLocationById()"
-            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
-          >
-            Buscar
-          </button>
-          <div id="loc-id-result" class="w-full"></div>
-        </div>
-
-        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end rounded-md border border-brand-beige bg-white p-6">
-          <div class="w-full md:w-auto">
-            <label
-              for="loc-capacity"
-              class="block text-sm text-brand-warmgray mb-2"
-              >Buscar por capacidad exacta (búsqueda binaria)</label
-            >
-            <input
-              id="loc-capacity"
-              type="number"
-              min="0"
-              class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
-            />
-          </div>
-          <button
-            onclick="searchLocationByCapacity()"
-            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
-          >
-            Buscar
-          </button>
-          <div id="loc-capacity-result" class="w-full"></div>
-        </div>
-
         <div
           class="overflow-x-auto rounded-md border border-brand-beige bg-white p-6"
         >
@@ -264,6 +218,53 @@
             </thead>
             <tbody id="loc-results"></tbody>
           </table>
+        </div>
+
+        <h3 class="text-lg font-semibold text-brand-darkbrown mt-7 mb-5">Búsquedas puntuales</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-7">
+          <div class="min-w-0 rounded-md border border-brand-beige bg-white p-6">
+            <h4 class="text-base font-semibold text-brand-darkbrown mb-2">
+              <label for="loc-id">Buscar por ID</label>
+            </h4>
+            <p class="text-sm text-brand-warmgray mb-5">Cada local tiene un código único con el formato LOC-CIUDAD-NÚMERO. Por ejemplo: LOC-MEDELLIN-01 o LOC-MIAMI-01. Escribilo completo; no importa si usás mayúsculas o minúsculas.</p>
+            <div class="flex gap-3">
+              <input
+                id="loc-id"
+                type="text"
+                placeholder="LOC-MEDELLIN-01"
+                class="min-w-0 flex-1 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+              <button
+                onclick="searchLocationById()"
+                class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
+              >
+                Buscar
+              </button>
+            </div>
+            <div id="loc-id-result" class="mt-4 empty:hidden [&>div]:border-0 [&>div]:bg-transparent [&>div]:p-0"></div>
+          </div>
+
+          <div class="min-w-0 rounded-md border border-brand-beige bg-white p-6">
+            <h4 class="text-base font-semibold text-brand-darkbrown mb-2">
+              <label for="loc-capacity">Buscar por capacidad exacta</label>
+            </h4>
+            <p class="text-sm text-brand-warmgray mb-5">Escribí un número exacto de asientos (por ejemplo 80). Usa búsqueda binaria: ordena los locales por capacidad y busca partiendo la lista a la mitad cada vez. Si varios locales tienen la misma capacidad, muestra uno de ellos.</p>
+            <div class="flex gap-3">
+              <input
+                id="loc-capacity"
+                type="number"
+                min="0"
+                class="min-w-0 flex-1 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+              <button
+                onclick="searchLocationByCapacity()"
+                class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
+              >
+                Buscar
+              </button>
+            </div>
+            <div id="loc-capacity-result" class="mt-4 empty:hidden [&>div]:border-0 [&>div]:bg-transparent [&>div]:p-0"></div>
+          </div>
         </div>
       </section>
 
@@ -306,6 +307,7 @@
             >
             <select
               id="menu-currency"
+              onchange="searchMenu()"
               class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
             >
               <option value="USD">USD</option>
@@ -333,27 +335,28 @@
           </button>
         </div>
 
-        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end rounded-md border border-brand-beige bg-white p-6">
-          <div class="w-full md:w-auto">
-            <label
-              for="menu-name"
-              class="block text-sm text-brand-warmgray mb-2"
-              >Buscar ítem por nombre</label
-            >
+        <div class="mb-7 rounded-md border border-brand-beige bg-white p-6">
+          <h3 class="text-base font-semibold text-brand-darkbrown mb-2">
+            <label for="menu-name">Buscar ítem por nombre</label>
+          </h3>
+          <p class="text-sm text-brand-warmgray mb-5">Escribí el nombre del plato o bebida y elegí una de las sugerencias. Tiene que coincidir con el nombre completo del menú (por ejemplo, Picanha 250g); no importa si usás mayúsculas o minúsculas.</p>
+          <div class="flex gap-3">
             <input
               id="menu-name"
               type="text"
+              list="menu-names"
               placeholder="Picanha 250g"
-              class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              class="min-w-0 flex-1 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
             />
+            <button
+              onclick="searchMenuItemByName()"
+              class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
+            >
+              Buscar
+            </button>
           </div>
-          <button
-            onclick="searchMenuItemByName()"
-            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
-          >
-            Buscar
-          </button>
-          <div id="menu-name-result" class="w-full"></div>
+          <datalist id="menu-names"></datalist>
+          <div id="menu-name-result" class="mt-4 empty:hidden [&>div]:border-0 [&>div]:bg-transparent [&>div]:p-0"></div>
         </div>
 
         <div
@@ -366,8 +369,7 @@
               >
                 <th class="py-3 pr-4 font-medium">Ítem</th>
                 <th class="py-3 pr-4 font-medium">Categoría</th>
-                <th class="py-3 pr-4 font-medium">Precio USD</th>
-                <th class="py-3 pr-4 font-medium">Precio COP</th>
+                <th id="menu-price-heading" class="py-3 pr-4 font-medium">Precio (USD)</th>
                 <th class="py-3 pr-4 font-medium">Tiempo prep.</th>
               </tr>
             </thead>
@@ -1019,7 +1021,7 @@
       }
 
       function searchLocationById() {
-        const id = document.getElementById("loc-id").value.trim();
+        const id = document.getElementById("loc-id").value.trim().toUpperCase();
         const location = B.findLocationById(B.sampleLocations, id);
         document.getElementById("loc-id-result").innerHTML = location
           ? locationCard(location)
@@ -1054,6 +1056,7 @@
         const category = document.getElementById("menu-category").value;
         const order = document.getElementById("menu-order").value;
         const currency = document.getElementById("menu-currency").value;
+        document.getElementById("menu-price-heading").textContent = `Precio (${currency})`;
 
         let results = category
           ? B.filterMenuItemsByCategory(B.sampleMenuItems, category)
@@ -1062,7 +1065,7 @@
 
         const tbody = document.getElementById("menu-results");
         if (results.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-brand-warmgray text-center">Sin resultados</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="4" class="py-4 text-brand-warmgray text-center">Sin resultados</td></tr>`;
           return;
         }
         tbody.innerHTML = results
@@ -1071,8 +1074,7 @@
         <tr class="border-b border-brand-beige hover:bg-brand-ivory [&>td]:px-3">
           <td class="py-2">${item.name}</td>
           <td class="py-2">${categoryLabel(item.category)}</td>
-          <td class="py-2">$${item.basePrice.USD.toFixed(2)}</td>
-          <td class="py-2">$${item.basePrice.COP.toLocaleString()}</td>
+          <td class="py-2">${formatMoney(item.basePrice[currency], currency)}</td>
           <td class="py-2">${item.prepTimeMinutes} min</td>
         </tr>
       `,
@@ -1512,6 +1514,10 @@
       }
 
       // ---- Cargar resultados iniciales al abrir la página ----
+      const menuNames = document.getElementById("menu-names");
+      B.sampleMenuItems.forEach((item) => {
+        menuNames.append(new Option(item.name, item.name));
+      });
       searchLocations();
       searchMenu();
       renderDashboard();
