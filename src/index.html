@@ -93,7 +93,7 @@
 
         <div
           id="dashboard-results"
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7"
         ></div>
         <div class="mt-7 rounded-md border border-brand-beige bg-white p-6 overflow-hidden">
           <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Ranking de ubicaciones</h3>
@@ -393,9 +393,10 @@
         </div>
 
         <div class="rounded-md border border-brand-beige bg-white p-6 mb-7">
-          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Ingreso del día por ubicación</h3>
-          <div class="flex flex-col md:flex-row md:flex-wrap gap-5 md:items-end mb-5">
-            <div class="w-full md:w-auto">
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-2">Ingreso del día por ubicación</h3>
+          <p class="text-sm text-brand-warmgray mb-5">Suma lo que vendió un local en un día. Usa la zona horaria de ese local (Colombia o Florida), así una venta de la noche no se cuenta en el día equivocado.</p>
+          <div class="flex flex-wrap items-end gap-3 mb-5">
+            <div class="min-w-0 flex-1 basis-32">
               <label
                 for="daily-location"
                 class="block text-sm text-brand-warmgray mb-2"
@@ -403,10 +404,10 @@
               >
               <select
                 id="daily-location"
-                class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full min-w-0 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               ></select>
             </div>
-            <div class="w-full md:w-auto">
+            <div class="min-w-0 flex-1 basis-32">
               <label
                 for="daily-date"
                 class="block text-sm text-brand-warmgray mb-2"
@@ -416,10 +417,10 @@
                 id="daily-date"
                 type="date"
                 value="2024-03-15"
-                class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full min-w-0 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
-            <div class="w-full md:w-auto">
+            <div class="min-w-0 flex-1 basis-32">
               <label
                 for="daily-currency"
                 class="block text-sm text-brand-warmgray mb-2"
@@ -427,7 +428,7 @@
               >
               <select
                 id="daily-currency"
-                class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full min-w-0 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               >
                 <option value="USD">USD</option>
                 <option value="COP">COP</option>
@@ -435,7 +436,7 @@
             </div>
             <button
               onclick="renderDailyRevenue()"
-              class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
+              class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
             >
               Calcular
             </button>
@@ -444,9 +445,10 @@
         </div>
 
         <div class="rounded-md border border-brand-beige bg-white p-6 mb-7">
-          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Ventas por rango de fechas</h3>
-          <div class="flex flex-col md:flex-row md:flex-wrap gap-5 md:items-end">
-            <div class="w-full md:w-auto">
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-2">Ventas por rango de fechas</h3>
+          <p class="text-sm text-brand-warmgray mb-5">Lista las ventas entre dos fechas, incluidas ambas, con la cantidad, el ticket promedio y la venta más alta del período. Los datos de ejemplo son de marzo y abril de 2024.</p>
+          <div class="flex flex-wrap items-end gap-3">
+            <div class="min-w-0 flex-1 basis-32">
               <label
                 for="range-from"
                 class="block text-sm text-brand-warmgray mb-2"
@@ -456,10 +458,10 @@
                 id="range-from"
                 type="date"
                 value="2024-03-01"
-                class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full min-w-0 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
-            <div class="w-full md:w-auto">
+            <div class="min-w-0 flex-1 basis-32">
               <label
                 for="range-to"
                 class="block text-sm text-brand-warmgray mb-2"
@@ -469,10 +471,10 @@
                 id="range-to"
                 type="date"
                 value="2024-04-30"
-                class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full min-w-0 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
-            <div class="w-full md:w-auto">
+            <div class="min-w-0 flex-1 basis-32">
               <label
                 for="range-currency"
                 class="block text-sm text-brand-warmgray mb-2"
@@ -480,7 +482,7 @@
               >
               <select
                 id="range-currency"
-                class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full min-w-0 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               >
                 <option value="USD">USD</option>
                 <option value="COP">COP</option>
@@ -488,43 +490,44 @@
             </div>
             <button
               onclick="renderSalesByRange()"
-              class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
+              class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
             >
               Filtrar
             </button>
           </div>
-        </div>
-
-        <div
-          id="range-summary"
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 mb-7"
-        ></div>
-
-        <div
-          class="overflow-x-auto rounded-md border border-brand-beige bg-white p-6 mb-7"
-        >
-          <table class="w-full min-w-[720px] text-sm">
-            <thead class="bg-gray-200">
-              <tr
-                class="text-brand-warmgray text-left text-xs uppercase tracking-wide [&>th]:px-3"
-              >
-                <th class="py-3 pr-4 font-medium">ID</th>
-                <th class="py-3 pr-4 font-medium">Ubicación</th>
-                <th class="py-3 pr-4 font-medium">Ítem</th>
-                <th class="py-3 pr-4 font-medium">Cantidad</th>
-                <th class="py-3 pr-4 font-medium">Total</th>
-                <th class="py-3 pr-4 font-medium">Método de pago</th>
-                <th class="py-3 pr-4 font-medium">Fecha</th>
-              </tr>
-            </thead>
-            <tbody id="range-results"></tbody>
-          </table>
+          <p id="range-error" role="alert" class="hidden mt-4 text-sm text-red-600"></p>
+          <div class="mt-7 border-t border-brand-beige pt-6">
+            <h4 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Resultados</h4>
+            <div
+              id="range-summary"
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 mb-7 [&>div]:border-0 [&>div]:bg-transparent [&>div]:p-0 [&>div]:min-w-0 [&>div]:break-words"
+            ></div>
+            <div class="overflow-x-auto">
+              <table class="w-full min-w-[720px] text-sm">
+                <thead class="bg-gray-200">
+                  <tr
+                    class="text-brand-warmgray text-left text-xs uppercase tracking-wide [&>th]:px-3"
+                  >
+                    <th class="py-3 pr-4 font-medium">ID</th>
+                    <th class="py-3 pr-4 font-medium">Ubicación</th>
+                    <th class="py-3 pr-4 font-medium">Ítem</th>
+                    <th class="py-3 pr-4 font-medium">Cantidad</th>
+                    <th class="py-3 pr-4 font-medium">Total</th>
+                    <th class="py-3 pr-4 font-medium">Método de pago</th>
+                    <th class="py-3 pr-4 font-medium">Fecha</th>
+                  </tr>
+                </thead>
+                <tbody id="range-results"></tbody>
+              </table>
+            </div>
+          </div>
         </div>
 
         <div class="rounded-md border border-brand-beige bg-white p-6">
-          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Conversor de moneda</h3>
-          <div class="flex flex-col md:flex-row md:flex-wrap gap-5 md:items-end mb-5">
-            <div class="w-full md:w-auto">
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-2">Conversor de moneda</h3>
+          <p class="text-sm text-brand-warmgray mb-5">Convierte montos entre dólares y pesos colombianos con la tasa fija de la empresa.</p>
+          <div class="flex flex-wrap items-end gap-3 mb-5">
+            <div class="min-w-0 flex-1 basis-32">
               <label
                 for="convert-amount"
                 class="block text-sm text-brand-warmgray mb-2"
@@ -536,10 +539,10 @@
                 min="0"
                 step="any"
                 value="1"
-                class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full min-w-0 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               />
             </div>
-            <div class="w-full md:w-auto">
+            <div class="min-w-0 flex-1 basis-32">
               <label
                 for="convert-from"
                 class="block text-sm text-brand-warmgray mb-2"
@@ -547,13 +550,13 @@
               >
               <select
                 id="convert-from"
-                class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full min-w-0 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               >
                 <option value="USD">USD</option>
                 <option value="COP">COP</option>
               </select>
             </div>
-            <div class="w-full md:w-auto">
+            <div class="min-w-0 flex-1 basis-32">
               <label
                 for="convert-to"
                 class="block text-sm text-brand-warmgray mb-2"
@@ -561,7 +564,7 @@
               >
               <select
                 id="convert-to"
-                class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                class="w-full min-w-0 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
               >
                 <option value="COP">COP</option>
                 <option value="USD">USD</option>
@@ -569,7 +572,7 @@
             </div>
             <button
               onclick="runCurrencyConversion()"
-              class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
+              class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
             >
               Convertir
             </button>
@@ -1265,14 +1268,25 @@
         const currency = document.getElementById("range-currency").value;
         const summary = document.getElementById("range-summary");
         const tbody = document.getElementById("range-results");
+        const error = document.getElementById("range-error");
+        error.textContent = "";
+        error.classList.add("hidden");
 
-        const sales = fromValue && toValue
-          ? B.filterSalesByDateRange(
-              B.sampleSales,
-              new Date(fromValue + "T00:00:00"),
-              new Date(toValue + "T23:59:59"),
-            )
-          : [];
+        if (!fromValue || !toValue || fromValue > toValue) {
+          summary.innerHTML = "";
+          tbody.innerHTML = "";
+          error.textContent = !fromValue || !toValue
+            ? "Elegí las dos fechas para filtrar."
+            : "La fecha 'Desde' no puede ser posterior a 'Hasta'. Revisá el orden de las fechas.";
+          error.classList.remove("hidden");
+          return;
+        }
+
+        const sales = B.filterSalesByDateRange(
+          B.sampleSales,
+          new Date(fromValue + "T00:00:00"),
+          new Date(toValue + "T23:59:59"),
+        );
 
         if (sales.length === 0) {
           summary.innerHTML = "";
@@ -1399,7 +1413,7 @@
 
       // ---- Dashboard ----
       function cardDashboard(icon, title, value, detail, extraClasses = "") {
-        return `<div class="rounded-md border border-brand-beige bg-white p-6 flex flex-col justify-between ${extraClasses}">
+        return `<div class="min-w-0 break-words rounded-md border border-brand-beige bg-white p-6 flex flex-col justify-between ${extraClasses}">
         <p class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-4"><span class="text-brand-ochre mr-1.5">${icon}</span>${title}</p>
         <div>
           <p class="text-3xl font-bold text-brand-darkbrown leading-tight">${value}</p>
@@ -1409,12 +1423,12 @@
       }
 
       function cardHighlight(icon, title, value, detail, extraClasses = "") {
-        return `<div class="bg-brand-ochre text-brand-darkbrown rounded-md border border-brand-beige p-6 flex flex-col justify-between ${extraClasses}">
-        <p class="text-xs text-brand-darkbrown uppercase tracking-widest font-semibold mb-6"><span class="mr-1.5">${icon}</span>${title}</p>
+        return `<div class="min-w-0 break-words bg-white text-brand-darkbrown rounded-md border border-brand-beige border-l-4 border-l-brand-ochre p-6 flex flex-col justify-between ${extraClasses}">
+        <p class="text-sm text-brand-warmgray uppercase tracking-wide font-semibold mb-4"><span class="text-brand-ochre mr-1.5">${icon}</span>${title}</p>
         <div>
-          <span class="inline-flex bg-brand-darkbrown text-brand-ivory text-xs font-semibold px-3 py-1 rounded-full mb-4">Top performance</span>
-          <p class="text-5xl font-bold text-brand-darkbrown leading-none">${value}</p>
-          ${detail ? `<p class="text-lg font-semibold text-brand-darkbrown mt-4">${detail}</p>` : ""}
+          <span class="inline-flex bg-brand-darkbrown text-brand-ivory text-xs font-semibold px-3 py-1 rounded-full mb-2">Top performance</span>
+          <p class="text-3xl font-bold text-brand-darkbrown leading-tight">${value}</p>
+          ${detail ? `<p class="text-sm text-brand-warmgray mt-2">${detail}</p>` : ""}
         </div>
       </div>`;
       }
@@ -1483,9 +1497,8 @@
           cardHighlight(
             "★",
             "Mejor performance",
-            best ? `${best.score.toFixed(2)}<span class="text-2xl text-brand-darkbrown font-semibold"> / 100</span>` : "—",
+            best ? `${best.score.toFixed(2)}<span class="text-sm text-brand-warmgray font-semibold"> / 100</span>` : "—",
             best ? best.location.name : "Sin datos",
-            "sm:col-span-2 lg:row-span-2",
           ) +
           cardDashboard(
             "✦",
@@ -1504,12 +1517,11 @@
             "Método de pago más usado",
             paymentLabels[topMethod] || topMethod,
             `${topMethodCount} transacción(es)`,
-            "sm:col-span-2 lg:col-span-1",
           ) +
           cardCountryComparison(
             comparison.Colombia,
             comparison.USA,
-            "sm:col-span-2",
+            "col-span-full",
           );
       }
 
