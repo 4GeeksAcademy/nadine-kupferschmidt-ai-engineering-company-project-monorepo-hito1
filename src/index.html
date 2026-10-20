@@ -195,7 +195,7 @@
           </div>
           <button
             onclick="searchLocations()"
-            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
+            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre/80 text-brand-darkbrown hover:bg-brand-ochre transition-colors"
           >
             Buscar
           </button>
@@ -236,7 +236,7 @@
               />
               <button
                 onclick="searchLocationById()"
-                class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
+                class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre/80 text-brand-darkbrown hover:bg-brand-ochre transition-colors"
               >
                 Buscar
               </button>
@@ -258,7 +258,7 @@
               />
               <button
                 onclick="searchLocationByCapacity()"
-                class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
+                class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre/80 text-brand-darkbrown hover:bg-brand-ochre transition-colors"
               >
                 Buscar
               </button>
@@ -329,7 +329,7 @@
           </div>
           <button
             onclick="searchMenu()"
-            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
+            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre/80 text-brand-darkbrown hover:bg-brand-ochre transition-colors"
           >
             Buscar
           </button>
@@ -350,7 +350,7 @@
             />
             <button
               onclick="searchMenuItemByName()"
-              class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
+              class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre/80 text-brand-darkbrown hover:bg-brand-ochre transition-colors"
             >
               Buscar
             </button>
@@ -436,7 +436,7 @@
             </div>
             <button
               onclick="renderDailyRevenue()"
-              class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
+              class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre/80 text-brand-darkbrown hover:bg-brand-ochre transition-colors"
             >
               Calcular
             </button>
@@ -490,7 +490,7 @@
             </div>
             <button
               onclick="renderSalesByRange()"
-              class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
+              class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre/80 text-brand-darkbrown hover:bg-brand-ochre transition-colors"
             >
               Filtrar
             </button>
@@ -572,7 +572,7 @@
             </div>
             <button
               onclick="runCurrencyConversion()"
-              class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
+              class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre/80 text-brand-darkbrown hover:bg-brand-ochre transition-colors"
             >
               Convertir
             </button>
@@ -596,35 +596,9 @@
           </p>
         </div>
 
-        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end rounded-md border border-brand-beige bg-white p-6">
-          <div class="w-full md:w-auto">
-            <label
-              for="report-location"
-              class="block text-sm text-brand-warmgray mb-2"
-              >Ubicación</label
-            >
-            <select
-              id="report-location"
-              class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
-            ></select>
-          </div>
-          <div class="w-full md:w-auto">
-            <label
-              for="report-currency"
-              class="block text-sm text-brand-warmgray mb-2"
-              >Moneda</label
-            >
-            <select
-              id="report-currency"
-              class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
-            >
-              <option value="USD">USD</option>
-              <option value="COP">COP</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="flex flex-col md:flex-row md:flex-wrap gap-4 mb-7 rounded-md border border-brand-beige bg-white p-6">
+        <div class="mb-7 rounded-md border border-brand-beige bg-white p-6">
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Elegí un reporte</h3>
+          <div class="flex flex-col md:flex-row md:flex-wrap gap-3">
           <button
             onclick="renderReport('margin')"
             data-report="margin"
@@ -635,7 +609,7 @@
           <button
             onclick="renderReport('ranking')"
             data-report="ranking"
-            class="report-button w-full md:w-auto rounded px-4 py-2 text-sm border border-brand-ochre bg-brand-ochre font-semibold text-brand-darkbrown hover:border-brand-ochre"
+            class="report-button w-full md:w-auto rounded px-4 py-2 text-sm border border-brand-ochre bg-brand-ochre/80 font-semibold text-brand-darkbrown hover:border-brand-ochre hover:bg-brand-ochre"
           >
             Ranking performance
           </button>
@@ -667,8 +641,43 @@
           >
             Ingresos por ubicación (máx/mín)
           </button>
+          </div>
+          <div class="mt-6 border-t border-brand-beige pt-6">
+            <h4 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-2">Filtros</h4>
+            <p class="text-sm text-brand-warmgray mb-5">La ubicación se usa en 'Margen por ubicación'. La moneda se usa en 'Margen por ubicación' e 'Ingresos por ubicación (máx/mín)'.</p>
+            <div class="flex flex-col md:flex-row md:flex-wrap gap-3 md:items-end">
+              <div class="w-full md:w-auto">
+                <label
+                  for="report-location"
+                  class="block text-sm text-brand-warmgray mb-2"
+                  >Ubicación</label
+                >
+                <select
+                  id="report-location"
+                  onchange="renderReport(selectedReport)"
+                  class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                ></select>
+              </div>
+              <div class="w-full md:w-auto">
+                <label
+                  for="report-currency"
+                  class="block text-sm text-brand-warmgray mb-2"
+                  >Moneda</label
+                >
+                <select
+                  id="report-currency"
+                  onchange="renderReport(selectedReport)"
+                  class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                >
+                  <option value="USD">USD</option>
+                  <option value="COP">COP</option>
+                </select>
+              </div>
+            </div>
+          </div>
         </div>
 
+        <p id="report-description" aria-live="polite" class="text-sm text-brand-warmgray mb-5"></p>
         <div
           id="report-results"
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7"
@@ -687,11 +696,14 @@
           <p class="text-sm text-brand-warmgray">
             Probá si un ítem, una venta o una locación cumplen las reglas de negocio
           </p>
+          <p class="mt-4 max-w-2xl text-sm text-brand-warmgray">Antes de guardar un dato en el sistema, Brasaland verifica que cumpla las reglas del negocio. Cargá valores de prueba en cualquiera de los tres formularios y mirá si pasan o qué errores aparecen.</p>
         </div>
 
         <div
           class="rounded-md border border-brand-beige bg-white p-6 mb-7 max-w-2xl"
         >
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-2">Validar un ítem de menú</h3>
+          <p class="text-sm text-brand-warmgray mb-5">Reglas: precios en USD y COP mayores a 0, preparación entre 1 y 60 minutos, nombre no vacío y disponible en al menos un país.</p>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-7">
             <div>
               <label
@@ -753,19 +765,19 @@
 
           <button
             onclick="runValidation()"
-            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
+            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre/80 text-brand-darkbrown hover:bg-brand-ochre transition-colors"
           >
             Validar
           </button>
         </div>
 
         <div id="validation-result" class="max-w-2xl"></div>
-        <p class="mt-4 max-w-2xl text-xs text-brand-warmgray">Esta herramienta verifica que los datos de un ítem de menú cumplan las reglas del negocio antes de ingresarlos al sistema: precios válidos, tiempo de preparación razonable (hasta 60 minutos), nombre completo, y disponibilidad en al menos un país.</p>
 
         <div
           class="rounded-md border border-brand-beige bg-white p-6 mt-10 mb-7 max-w-2xl"
         >
-          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Validar una venta</h3>
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-2">Validar una venta</h3>
+          <p class="text-sm text-brand-warmgray mb-5">Reglas: cantidad mayor a 0, precios en USD y COP mayores a 0 y nombre del mesero no vacío.</p>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-7">
             <div>
               <label
@@ -823,7 +835,7 @@
 
           <button
             onclick="runSaleValidation()"
-            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
+            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre/80 text-brand-darkbrown hover:bg-brand-ochre transition-colors"
           >
             Validar venta
           </button>
@@ -834,7 +846,8 @@
         <div
           class="rounded-md border border-brand-beige bg-white p-6 mt-10 mb-7 max-w-2xl"
         >
-          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Validar una locación</h3>
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-2">Validar una locación</h3>
+          <p class="text-sm text-brand-warmgray mb-5">Reglas: año de apertura entre 2008 y el año actual, capacidad y empleados mayores a 0, renta y servicios en USD y COP mayores a 0.</p>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-7">
             <div>
               <label
@@ -932,7 +945,7 @@
 
           <button
             onclick="runLocationValidation()"
-            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre text-brand-darkbrown hover:opacity-90 transition-opacity"
+            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre/80 text-brand-darkbrown hover:bg-brand-ochre transition-colors"
           >
             Validar locación
           </button>
@@ -1115,17 +1128,29 @@
           : `$${amount.toLocaleString()} COP`;
       }
 
+      let selectedReport = "ranking";
+      const reportDescriptions = {
+        margin: "Porcentaje que le queda al local después de pagar los ingredientes, y cuánto perdió por desperdicio.",
+        ranking: "Puntaje de 0 a 100 que combina ingresos, uso de la capacidad, control de desperdicio y margen.",
+        topItems: "Los 5 productos con más unidades vendidas en todas las ubicaciones.",
+        extremeSales: "La venta individual de mayor y de menor monto registrada.",
+        waste: "Cantidad de registros de desperdicio agrupados por motivo.",
+        locationRevenue: "El local que más facturó y el que menos, en la moneda elegida.",
+      };
       const reportLocationSelect = document.getElementById("report-location");
       B.sampleLocations.forEach((loc) => {
         reportLocationSelect.add(new Option(`${loc.name} — ${loc.city}`, loc.id));
       });
 
       function renderReport(type) {
+        selectedReport = type;
+        document.getElementById("report-description").textContent = reportDescriptions[type];
         const el = document.getElementById("report-results");
         const currency = document.getElementById("report-currency").value;
         document.querySelectorAll(".report-button").forEach((button) => {
           const isSelected = button.dataset.report === type;
-          button.classList.toggle("bg-brand-ochre", isSelected);
+          button.classList.toggle("bg-brand-ochre/80", isSelected);
+          button.classList.toggle("hover:bg-brand-ochre", isSelected);
           button.classList.toggle("border-brand-ochre", isSelected);
           button.classList.toggle("font-semibold", isSelected);
           button.classList.toggle("bg-white", !isSelected);
