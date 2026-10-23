@@ -122,3 +122,4 @@ Elige Brasaland si te atraen:
 - **Un dominio universalmente comprensible** — todo el mundo entiende qué hace un restaurante, lo que facilita centrarse en la ingeniería.
 
 Los retos de IA en Brasaland van desde la predicción de demanda de ingredientes y la personalización del menú hasta agentes de soporte multilingüe y telemetría de ventas en tiempo real. Si quieres construir sistemas cuyo valor una persona no técnica entienda de inmediato, Brasaland es tu empresa.
+
