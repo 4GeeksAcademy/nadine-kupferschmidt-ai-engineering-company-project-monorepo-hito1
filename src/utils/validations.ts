@@ -1,6 +1,7 @@
 import { MenuItem, SaleTransaction, Location } from "../types/models";
 
-function validateMenuItem(item: MenuItem): { valid: boolean; errors: string[] } {
+function validateMenuItem(item: MenuItem | null): { valid: boolean; errors: string[] } {
+  if (item === null) return { valid: false, errors: ["El ítem de menú no puede estar vacío."] };
   const errors: string[] = [];
 
   if (item.basePrice.USD <= 0 || item.basePrice.COP <= 0) {
@@ -19,7 +20,8 @@ function validateMenuItem(item: MenuItem): { valid: boolean; errors: string[] } 
   return { valid: errors.length === 0, errors };
 }
 
-function validateSaleTransaction(sale: SaleTransaction): { valid: boolean; errors: string[] } {
+function validateSaleTransaction(sale: SaleTransaction | null): { valid: boolean; errors: string[] } {
+  if (sale === null) return { valid: false, errors: ["La venta no puede estar vacía."] };
   const errors: string[] = [];
 
   if (sale.quantity <= 0) {
@@ -35,9 +37,9 @@ function validateSaleTransaction(sale: SaleTransaction): { valid: boolean; error
   return { valid: errors.length === 0, errors };
 }
 
-function validateLocation(location: Location): { valid: boolean; errors: string[] } {
+function validateLocation(location: Location | null, currentYear: number): { valid: boolean; errors: string[] } {
+  if (location === null) return { valid: false, errors: ["La locación no puede estar vacía."] };
   const errors: string[] = [];
-  const currentYear = new Date().getFullYear();
 
   if (location.openingYear < 2008 || location.openingYear > currentYear) {
     errors.push(`El año de apertura debe estar entre 2008 y ${currentYear}.`);

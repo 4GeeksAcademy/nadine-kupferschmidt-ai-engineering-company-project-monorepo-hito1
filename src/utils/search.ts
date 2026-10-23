@@ -1,13 +1,15 @@
 import { Location, MenuItem } from "../types/models";
 
-function findLocationById(locations: Location[], id: string): Location | null {
+function findLocationById(locations: Location[] | null, id: string): Location | null {
+  if (locations === null) return null;
   for (const location of locations) {
     if (location.id === id) return location;
   }
   return null;
 }
 
-function findMenuItemByName(items: MenuItem[], name: string): MenuItem | null {
+function findMenuItemByName(items: MenuItem[] | null, name: string | null): MenuItem | null {
+  if (items === null || name === null) return null;
   const targetName = name.toLowerCase();
   for (const item of items) {
     if (item.name.toLowerCase() === targetName) return item;
@@ -16,9 +18,10 @@ function findMenuItemByName(items: MenuItem[], name: string): MenuItem | null {
 }
 
 function binarySearchLocationByCapacity(
-  sortedLocations: Location[],
+  sortedLocations: Location[] | null,
   targetCapacity: number
 ): number {
+  if (sortedLocations === null) return -1;
   let low = 0;
   let high = sortedLocations.length - 1;
 

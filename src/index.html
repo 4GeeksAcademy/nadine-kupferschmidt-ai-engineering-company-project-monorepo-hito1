@@ -1,0 +1,1650 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel Interno — Brasaland Hito 2</title>
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ["Geist", "sans-serif"] },
+            colors: {
+              brand: {
+                ivory: "#FDF8F0",
+                beige: "#F5EDE0",
+                charcoal: "#2A2A2A",
+                darkbrown: "#1A1410",
+                ochre: "#F2A65A",
+                warmgray: "#6B6258",
+              },
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body
+    class="bg-gray-50 text-brand-charcoal min-h-screen flex flex-col md:flex-row"
+  >
+    <!-- Sidebar -->
+    <aside
+      id="sidebar"
+      class="sidebar group w-full md:w-48 md:[&.collapsed]:w-16 bg-white border-r border-brand-beige text-brand-charcoal flex-shrink-0 flex md:flex-col items-center md:items-stretch overflow-x-auto md:overflow-visible py-2 md:py-5 md:min-h-screen md:sticky md:top-0 transition-all duration-300"
+    >
+      <div class="px-3 py-2 md:pb-6 flex items-center md:flex-col gap-3 flex-shrink-0">
+        <div class="flex flex-col items-center justify-center" title="Brasaland" aria-label="Brasaland">
+          <span class="font-serif text-xl font-semibold tracking-wide text-brand-ochre group-[.collapsed]:hidden">Brasaland</span>
+          <span aria-hidden="true" class="hidden font-serif text-xl font-semibold tracking-wide text-brand-ochre group-[.collapsed]:block">B</span>
+          <span class="text-sm text-brand-warmgray group-[.collapsed]:hidden">Operaciones</span>
+        </div>
+        <button type="button" onclick="toggleSidebar()" aria-controls="sidebar" aria-expanded="true" aria-label="Alternar sidebar" title="Expandir o colapsar sidebar" class="w-8 h-8 flex items-center justify-center rounded-lg text-brand-warmgray hover:bg-brand-beige focus-visible:outline-brand-ochre transition-colors">
+          <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <path d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+      <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0 cursor-pointer border-l-4 border-brand-ochre bg-brand-ochre/10 text-brand-darkbrown font-semibold transition-colors" data-panel="dashboard" onclick="showPanel('dashboard')" title="Dashboard" aria-label="Dashboard">
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-7h6v7" /></svg>
+        <span class="group-[.collapsed]:hidden">Dashboard</span>
+      </button>
+      <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0 cursor-pointer border-l-4 border-transparent text-brand-charcoal transition-colors" data-panel="ubicaciones" onclick="showPanel('ubicaciones')" title="Ubicaciones" aria-label="Ubicaciones">
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></svg>
+        <span class="group-[.collapsed]:hidden">Ubicaciones</span>
+      </button>
+      <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0 cursor-pointer border-l-4 border-transparent text-brand-charcoal transition-colors" data-panel="menu" onclick="showPanel('menu')" title="Menú" aria-label="Menú">
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v5a3 3 0 0 0 6 0V3M7 3v18M20 3c-4 3-4 9 0 9V3Zm0 9v9" /></svg>
+        <span class="group-[.collapsed]:hidden">Menú</span>
+      </button>
+      <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0 cursor-pointer border-l-4 border-transparent text-brand-charcoal transition-colors" data-panel="ventas" onclick="showPanel('ventas')" title="Ventas" aria-label="Ventas">
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M16.5 7H10a2.5 2.5 0 0 0 0 5h4a2.5 2.5 0 0 1 0 5H7" /></svg>
+        <span class="group-[.collapsed]:hidden">Ventas</span>
+      </button>
+      <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0 cursor-pointer border-l-4 border-transparent text-brand-charcoal transition-colors" data-panel="reportes" onclick="showPanel('reportes')" title="Reportes" aria-label="Reportes">
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H5v18h14V8l-5-5Zm0 0v5h5M8 12h8M8 16h6" /></svg>
+        <span class="group-[.collapsed]:hidden">Reportes</span>
+      </button>
+      <button type="button" class="nav-item flex items-center gap-3 px-4 py-3 text-sm text-left whitespace-nowrap flex-shrink-0 group-[.collapsed]:justify-center group-[.collapsed]:px-0 cursor-pointer border-l-4 border-transparent text-brand-charcoal transition-colors" data-panel="validaciones" onclick="showPanel('validaciones')" title="Validaciones" aria-label="Validaciones">
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="m8 12 3 3 5-6" /></svg>
+        <span class="group-[.collapsed]:hidden">Validaciones</span>
+      </button>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 min-w-0 bg-gray-50 p-4 sm:p-6 md:p-10">
+      <!-- ========== SECCIÓN: DASHBOARD ========== -->
+      <section id="panel-dashboard" class="panel max-w-6xl md:px-6 md:py-4">
+        <div class="mb-10">
+          <p
+            class="text-brand-ochre text-xs font-semibold uppercase tracking-widest mb-2"
+          >
+            ✦ Brasaland Ops
+          </p>
+          <h2 class="text-2xl font-semibold text-brand-darkbrown mb-1">Dashboard</h2>
+          <p class="text-sm text-brand-warmgray">
+            Resumen rápido de la operación
+          </p>
+        </div>
+
+        <div
+          id="dashboard-results"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7"
+        ></div>
+        <div class="mt-7 rounded-md border border-brand-beige bg-white p-6 overflow-hidden">
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Ranking de ubicaciones</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[560px] text-sm text-left">
+              <thead class="bg-gray-200 text-brand-warmgray text-xs uppercase">
+                <tr>
+                  <th scope="col" class="px-5 py-3 font-medium">Ubicación</th>
+                  <th scope="col" class="px-5 py-3 font-medium">Ciudad</th>
+                  <th scope="col" class="px-5 py-3 font-medium text-right">Puntaje</th>
+                  <th scope="col" class="px-5 py-3 font-medium">Estado</th>
+                </tr>
+              </thead>
+              <tbody id="dashboard-ranking"></tbody>
+            </table>
+          </div>
+          <p id="dashboard-ranking-summary" class="pt-4 text-xs text-brand-warmgray"></p>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-7 mt-7">
+          <div class="min-w-0 rounded-md border border-brand-beige bg-white p-6">
+            <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Ventas por método de pago</h3>
+            <div id="dashboard-payment-bars" class="space-y-4"></div>
+          </div>
+          <div class="min-w-0 rounded-md border border-brand-beige bg-white p-6">
+            <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Ubicaciones activas</h3>
+            <div class="relative w-32 h-32 mx-auto">
+              <svg id="dashboard-active-chart" role="img" viewBox="0 0 100 100" class="w-full h-full -rotate-90">
+                <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="10" class="text-brand-beige" />
+                <circle id="dashboard-active-arc" cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="10" stroke-dasharray="0 251.327" class="text-brand-ochre" />
+              </svg>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <span id="dashboard-active-percent" class="text-2xl font-bold text-brand-darkbrown"></span>
+              </div>
+            </div>
+            <p id="dashboard-active-summary" class="mt-4 text-center text-sm text-brand-warmgray"></p>
+          </div>
+          <div class="min-w-0 rounded-md border border-brand-beige bg-white p-6">
+            <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Ingresos por país · USD</h3>
+            <div id="dashboard-country-bars" class="space-y-6"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== SECCIÓN: UBICACIONES ========== -->
+      <section id="panel-ubicaciones" class="panel hidden max-w-6xl md:px-6 md:py-4">
+        <div class="mb-10">
+          <p
+            class="text-brand-ochre text-xs font-semibold uppercase tracking-widest mb-2"
+          >
+            ✦ Brasaland Ops
+          </p>
+          <h2 class="text-2xl font-semibold text-brand-darkbrown mb-1">Buscar ubicaciones</h2>
+          <p class="text-sm text-brand-warmgray">Filtrá por país y estado</p>
+        </div>
+
+        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end rounded-md border border-brand-beige bg-white p-6">
+          <div class="w-full md:w-auto">
+            <label
+              class="block text-sm text-brand-warmgray mb-2"
+              >País</label
+            >
+            <select
+              id="loc-country"
+              class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+            >
+              <option value="">Todos</option>
+              <option value="Colombia">Colombia</option>
+              <option value="USA">Estados Unidos</option>
+            </select>
+          </div>
+          <div class="w-full md:w-auto">
+            <label
+              class="block text-sm text-brand-warmgray mb-2"
+              >Estado</label
+            >
+            <select
+              id="loc-status"
+              class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+            >
+              <option value="">Todos</option>
+              <option value="Active">Activa</option>
+              <option value="Temporarily closed">Cerrada temporalmente</option>
+              <option value="Under renovation">En renovación</option>
+            </select>
+          </div>
+          <div class="w-full md:w-auto">
+            <label
+              class="block text-sm text-brand-warmgray mb-2"
+              >Ordenar por capacidad</label
+            >
+            <select
+              id="loc-sort"
+              class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+            >
+              <option value="">Sin ordenar</option>
+              <option value="asc">Menor a mayor</option>
+              <option value="desc">Mayor a menor</option>
+            </select>
+          </div>
+          <button
+            onclick="searchLocations()"
+            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre/80 text-brand-darkbrown hover:bg-brand-ochre transition-colors"
+          >
+            Buscar
+          </button>
+        </div>
+
+        <div
+          class="overflow-x-auto rounded-md border border-brand-beige bg-white p-6"
+        >
+          <table class="w-full min-w-[560px] text-sm">
+            <thead class="bg-gray-200">
+              <tr
+                class="text-brand-warmgray text-left text-xs uppercase tracking-wide [&>th]:px-3"
+              >
+                <th class="py-3 pr-4 font-medium">Ubicación</th>
+                <th class="py-3 pr-4 font-medium">Ciudad</th>
+                <th class="py-3 pr-4 font-medium">Capacidad</th>
+                <th class="py-3 pr-4 font-medium">Gerente</th>
+                <th class="py-3 pr-4 font-medium">Estado</th>
+              </tr>
+            </thead>
+            <tbody id="loc-results"></tbody>
+          </table>
+        </div>
+
+        <h3 class="text-lg font-semibold text-brand-darkbrown mt-7 mb-5">Búsquedas puntuales</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-7">
+          <div class="min-w-0 rounded-md border border-brand-beige bg-white p-6">
+            <h4 class="text-base font-semibold text-brand-darkbrown mb-2">
+              <label for="loc-id">Buscar por ID</label>
+            </h4>
+            <p class="text-sm text-brand-warmgray mb-5">Cada local tiene un código único con el formato LOC-CIUDAD-NÚMERO. Por ejemplo: LOC-MEDELLIN-01 o LOC-MIAMI-01. Escribilo completo; no importa si usás mayúsculas o minúsculas.</p>
+            <div class="flex gap-3">
+              <input
+                id="loc-id"
+                type="text"
+                placeholder="LOC-MEDELLIN-01"
+                class="min-w-0 flex-1 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+              <button
+                onclick="searchLocationById()"
+                class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre/80 text-brand-darkbrown hover:bg-brand-ochre transition-colors"
+              >
+                Buscar
+              </button>
+            </div>
+            <div id="loc-id-result" class="mt-4 empty:hidden [&>div]:border-0 [&>div]:bg-transparent [&>div]:p-0"></div>
+          </div>
+
+          <div class="min-w-0 rounded-md border border-brand-beige bg-white p-6">
+            <h4 class="text-base font-semibold text-brand-darkbrown mb-2">
+              <label for="loc-capacity">Buscar por capacidad exacta</label>
+            </h4>
+            <p class="text-sm text-brand-warmgray mb-5">Escribí un número exacto de asientos (por ejemplo 80). Usa búsqueda binaria: ordena los locales por capacidad y busca partiendo la lista a la mitad cada vez. Si varios locales tienen la misma capacidad, muestra uno de ellos.</p>
+            <div class="flex gap-3">
+              <input
+                id="loc-capacity"
+                type="number"
+                min="0"
+                class="min-w-0 flex-1 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+              <button
+                onclick="searchLocationByCapacity()"
+                class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre/80 text-brand-darkbrown hover:bg-brand-ochre transition-colors"
+              >
+                Buscar
+              </button>
+            </div>
+            <div id="loc-capacity-result" class="mt-4 empty:hidden [&>div]:border-0 [&>div]:bg-transparent [&>div]:p-0"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== SECCIÓN: MENÚ ========== -->
+      <section id="panel-menu" class="panel hidden max-w-6xl md:px-6 md:py-4">
+        <div class="mb-10">
+          <p
+            class="text-brand-ochre text-xs font-semibold uppercase tracking-widest mb-2"
+          >
+            ✦ Brasaland Ops
+          </p>
+          <h2 class="text-2xl font-semibold text-brand-darkbrown mb-1">Explorar menú</h2>
+          <p class="text-sm text-brand-warmgray">
+            Filtrá por categoría, ordená por precio
+          </p>
+        </div>
+
+        <div class="flex flex-col md:flex-row md:flex-wrap gap-5 mb-7 md:items-end rounded-md border border-brand-beige bg-white p-6">
+          <div class="w-full md:w-auto">
+            <label
+              class="block text-sm text-brand-warmgray mb-2"
+              >Categoría</label
+            >
+            <select
+              id="menu-category"
+              class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+            >
+              <option value="">Todas</option>
+              <option value="Meat">Carnes</option>
+              <option value="Side">Acompañamientos</option>
+              <option value="Beverage">Bebidas</option>
+              <option value="Dessert">Postres</option>
+              <option value="Combo">Combos</option>
+            </select>
+          </div>
+          <div class="w-full md:w-auto">
+            <label
+              class="block text-sm text-brand-warmgray mb-2"
+              >Moneda</label
+            >
+            <select
+              id="menu-currency"
+              onchange="searchMenu()"
+              class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+            >
+              <option value="USD">USD</option>
+              <option value="COP">COP</option>
+            </select>
+          </div>
+          <div class="w-full md:w-auto">
+            <label
+              class="block text-sm text-brand-warmgray mb-2"
+              >Orden por precio</label
+            >
+            <select
+              id="menu-order"
+              class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+            >
+              <option value="asc">Menor a mayor</option>
+              <option value="desc">Mayor a menor</option>
+            </select>
+          </div>
+          <button
+            onclick="searchMenu()"
+            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre/80 text-brand-darkbrown hover:bg-brand-ochre transition-colors"
+          >
+            Buscar
+          </button>
+        </div>
+
+        <div class="mb-7 rounded-md border border-brand-beige bg-white p-6">
+          <h3 class="text-base font-semibold text-brand-darkbrown mb-2">
+            <label for="menu-name">Buscar ítem por nombre</label>
+          </h3>
+          <p class="text-sm text-brand-warmgray mb-5">Escribí el nombre del plato o bebida y elegí una de las sugerencias. Tiene que coincidir con el nombre completo del menú (por ejemplo, Picanha 250g); no importa si usás mayúsculas o minúsculas.</p>
+          <div class="flex gap-3">
+            <input
+              id="menu-name"
+              type="text"
+              list="menu-names"
+              placeholder="Picanha 250g"
+              class="min-w-0 flex-1 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+            />
+            <button
+              onclick="searchMenuItemByName()"
+              class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre/80 text-brand-darkbrown hover:bg-brand-ochre transition-colors"
+            >
+              Buscar
+            </button>
+          </div>
+          <datalist id="menu-names"></datalist>
+          <div id="menu-name-result" class="mt-4 empty:hidden [&>div]:border-0 [&>div]:bg-transparent [&>div]:p-0"></div>
+        </div>
+
+        <div
+          class="overflow-x-auto rounded-md border border-brand-beige bg-white p-6"
+        >
+          <table class="w-full min-w-[560px] text-sm">
+            <thead class="bg-gray-200">
+              <tr
+                class="text-brand-warmgray text-left text-xs uppercase tracking-wide [&>th]:px-3"
+              >
+                <th class="py-3 pr-4 font-medium">Ítem</th>
+                <th class="py-3 pr-4 font-medium">Categoría</th>
+                <th id="menu-price-heading" class="py-3 pr-4 font-medium">Precio (USD)</th>
+                <th class="py-3 pr-4 font-medium">Tiempo prep.</th>
+              </tr>
+            </thead>
+            <tbody id="menu-results"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ========== SECCIÓN: VENTAS ========== -->
+      <section id="panel-ventas" class="panel hidden max-w-6xl md:px-6 md:py-4">
+        <div class="mb-10">
+          <p
+            class="text-brand-ochre text-xs font-semibold uppercase tracking-widest mb-2"
+          >
+            ✦ Brasaland Ops
+          </p>
+          <h2 class="text-2xl font-semibold text-brand-darkbrown mb-1">Ventas</h2>
+          <p class="text-sm text-brand-warmgray">
+            Ingresos diarios, ventas por rango y conversión de moneda
+          </p>
+        </div>
+
+        <div class="rounded-md border border-brand-beige bg-white p-6 mb-7">
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-2">Ingreso del día por ubicación</h3>
+          <p class="text-sm text-brand-warmgray mb-5">Suma lo que vendió un local en un día. Usa la zona horaria de ese local (Colombia o Florida), así una venta de la noche no se cuenta en el día equivocado.</p>
+          <div class="flex flex-wrap items-end gap-3 mb-5">
+            <div class="min-w-0 flex-1 basis-32">
+              <label
+                for="daily-location"
+                class="block text-sm text-brand-warmgray mb-2"
+                >Ubicación</label
+              >
+              <select
+                id="daily-location"
+                class="w-full min-w-0 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              ></select>
+            </div>
+            <div class="min-w-0 flex-1 basis-32">
+              <label
+                for="daily-date"
+                class="block text-sm text-brand-warmgray mb-2"
+                >Fecha</label
+              >
+              <input
+                id="daily-date"
+                type="date"
+                value="2024-03-15"
+                class="w-full min-w-0 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div class="min-w-0 flex-1 basis-32">
+              <label
+                for="daily-currency"
+                class="block text-sm text-brand-warmgray mb-2"
+                >Moneda</label
+              >
+              <select
+                id="daily-currency"
+                class="w-full min-w-0 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              >
+                <option value="USD">USD</option>
+                <option value="COP">COP</option>
+              </select>
+            </div>
+            <button
+              onclick="renderDailyRevenue()"
+              class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre/80 text-brand-darkbrown hover:bg-brand-ochre transition-colors"
+            >
+              Calcular
+            </button>
+          </div>
+          <div id="daily-result"></div>
+        </div>
+
+        <div class="rounded-md border border-brand-beige bg-white p-6 mb-7">
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-2">Ventas por rango de fechas</h3>
+          <p class="text-sm text-brand-warmgray mb-5">Lista las ventas entre dos fechas, incluidas ambas, con la cantidad, el ticket promedio y la venta más alta del período. Los datos de ejemplo son de marzo y abril de 2024.</p>
+          <div class="flex flex-wrap items-end gap-3">
+            <div class="min-w-0 flex-1 basis-32">
+              <label
+                for="range-from"
+                class="block text-sm text-brand-warmgray mb-2"
+                >Desde</label
+              >
+              <input
+                id="range-from"
+                type="date"
+                value="2024-03-01"
+                class="w-full min-w-0 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div class="min-w-0 flex-1 basis-32">
+              <label
+                for="range-to"
+                class="block text-sm text-brand-warmgray mb-2"
+                >Hasta</label
+              >
+              <input
+                id="range-to"
+                type="date"
+                value="2024-04-30"
+                class="w-full min-w-0 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div class="min-w-0 flex-1 basis-32">
+              <label
+                for="range-currency"
+                class="block text-sm text-brand-warmgray mb-2"
+                >Moneda</label
+              >
+              <select
+                id="range-currency"
+                class="w-full min-w-0 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              >
+                <option value="USD">USD</option>
+                <option value="COP">COP</option>
+              </select>
+            </div>
+            <button
+              onclick="renderSalesByRange()"
+              class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre/80 text-brand-darkbrown hover:bg-brand-ochre transition-colors"
+            >
+              Filtrar
+            </button>
+          </div>
+          <p id="range-error" role="alert" class="hidden mt-4 text-sm text-red-600"></p>
+          <div class="mt-7 border-t border-brand-beige pt-6">
+            <h4 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Resultados</h4>
+            <div
+              id="range-summary"
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 mb-7 [&>div]:border-0 [&>div]:bg-transparent [&>div]:p-0 [&>div]:min-w-0 [&>div]:break-words"
+            ></div>
+            <div class="overflow-x-auto">
+              <table class="w-full min-w-[720px] text-sm">
+                <thead class="bg-gray-200">
+                  <tr
+                    class="text-brand-warmgray text-left text-xs uppercase tracking-wide [&>th]:px-3"
+                  >
+                    <th class="py-3 pr-4 font-medium">ID</th>
+                    <th class="py-3 pr-4 font-medium">Ubicación</th>
+                    <th class="py-3 pr-4 font-medium">Ítem</th>
+                    <th class="py-3 pr-4 font-medium">Cantidad</th>
+                    <th class="py-3 pr-4 font-medium">Total</th>
+                    <th class="py-3 pr-4 font-medium">Método de pago</th>
+                    <th class="py-3 pr-4 font-medium">Fecha</th>
+                  </tr>
+                </thead>
+                <tbody id="range-results"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-md border border-brand-beige bg-white p-6">
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-2">Conversor de moneda</h3>
+          <p class="text-sm text-brand-warmgray mb-5">Convierte montos entre dólares y pesos colombianos con la tasa fija de la empresa.</p>
+          <div class="flex flex-wrap items-end gap-3 mb-5">
+            <div class="min-w-0 flex-1 basis-32">
+              <label
+                for="convert-amount"
+                class="block text-sm text-brand-warmgray mb-2"
+                >Monto</label
+              >
+              <input
+                id="convert-amount"
+                type="number"
+                min="0"
+                step="any"
+                value="1"
+                class="w-full min-w-0 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div class="min-w-0 flex-1 basis-32">
+              <label
+                for="convert-from"
+                class="block text-sm text-brand-warmgray mb-2"
+                >De</label
+              >
+              <select
+                id="convert-from"
+                class="w-full min-w-0 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              >
+                <option value="USD">USD</option>
+                <option value="COP">COP</option>
+              </select>
+            </div>
+            <div class="min-w-0 flex-1 basis-32">
+              <label
+                for="convert-to"
+                class="block text-sm text-brand-warmgray mb-2"
+                >A</label
+              >
+              <select
+                id="convert-to"
+                class="w-full min-w-0 rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              >
+                <option value="COP">COP</option>
+                <option value="USD">USD</option>
+              </select>
+            </div>
+            <button
+              onclick="runCurrencyConversion()"
+              class="shrink-0 rounded px-4 py-2 text-sm bg-brand-ochre/80 text-brand-darkbrown hover:bg-brand-ochre transition-colors"
+            >
+              Convertir
+            </button>
+          </div>
+          <div id="convert-result"></div>
+          <p class="mt-4 text-xs text-brand-warmgray">Tasa fija: 1 USD = 4000 COP</p>
+        </div>
+      </section>
+
+      <!-- ========== SECCIÓN: REPORTES ========== -->
+      <section id="panel-reportes" class="panel hidden max-w-6xl md:px-6 md:py-4">
+        <div class="mb-10">
+          <p
+            class="text-brand-ochre text-xs font-semibold uppercase tracking-widest mb-2"
+          >
+            ✦ Brasaland Ops
+          </p>
+          <h2 class="text-2xl font-semibold text-brand-darkbrown mb-1">Reportes</h2>
+          <p class="text-sm text-brand-warmgray">
+            Elegí un reporte para generarlo
+          </p>
+        </div>
+
+        <div class="mb-7 rounded-md border border-brand-beige bg-white p-6">
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-5">Elegí un reporte</h3>
+          <div class="flex flex-col md:flex-row md:flex-wrap gap-3">
+          <button
+            onclick="renderReport('margin')"
+            data-report="margin"
+            class="report-button w-full md:w-auto rounded px-4 py-2 text-sm border border-brand-beige bg-white text-brand-darkbrown hover:border-brand-ochre"
+          >
+            Margen por ubicación
+          </button>
+          <button
+            onclick="renderReport('ranking')"
+            data-report="ranking"
+            class="report-button w-full md:w-auto rounded px-4 py-2 text-sm border border-brand-ochre bg-brand-ochre/80 font-semibold text-brand-darkbrown hover:border-brand-ochre hover:bg-brand-ochre"
+          >
+            Ranking performance
+          </button>
+          <button
+            onclick="renderReport('topItems')"
+            data-report="topItems"
+            class="report-button w-full md:w-auto rounded px-4 py-2 text-sm border border-brand-beige bg-white text-brand-darkbrown hover:border-brand-ochre"
+          >
+            Ítems más vendidos
+          </button>
+          <button
+            onclick="renderReport('extremeSales')"
+            data-report="extremeSales"
+            class="report-button w-full md:w-auto rounded px-4 py-2 text-sm border border-brand-beige bg-white text-brand-darkbrown hover:border-brand-ochre"
+          >
+            Venta más cara/barata
+          </button>
+          <button
+            onclick="renderReport('waste')"
+            data-report="waste"
+            class="report-button w-full md:w-auto rounded px-4 py-2 text-sm border border-brand-beige bg-white text-brand-darkbrown hover:border-brand-ochre"
+          >
+            Desperdicio por razón
+          </button>
+          <button
+            onclick="renderReport('locationRevenue')"
+            data-report="locationRevenue"
+            class="report-button w-full md:w-auto rounded px-4 py-2 text-sm border border-brand-beige bg-white text-brand-darkbrown hover:border-brand-ochre"
+          >
+            Ingresos por ubicación (máx/mín)
+          </button>
+          </div>
+          <div class="mt-6 border-t border-brand-beige pt-6">
+            <h4 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-2">Filtros</h4>
+            <p class="text-sm text-brand-warmgray mb-5">La ubicación se usa en 'Margen por ubicación'. La moneda se usa en 'Margen por ubicación' e 'Ingresos por ubicación (máx/mín)'.</p>
+            <div class="flex flex-col md:flex-row md:flex-wrap gap-3 md:items-end">
+              <div class="w-full md:w-auto">
+                <label
+                  for="report-location"
+                  class="block text-sm text-brand-warmgray mb-2"
+                  >Ubicación</label
+                >
+                <select
+                  id="report-location"
+                  onchange="renderReport(selectedReport)"
+                  class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                ></select>
+              </div>
+              <div class="w-full md:w-auto">
+                <label
+                  for="report-currency"
+                  class="block text-sm text-brand-warmgray mb-2"
+                  >Moneda</label
+                >
+                <select
+                  id="report-currency"
+                  onchange="renderReport(selectedReport)"
+                  class="w-full md:w-auto rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+                >
+                  <option value="USD">USD</option>
+                  <option value="COP">COP</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p id="report-description" aria-live="polite" class="text-sm text-brand-warmgray mb-5"></p>
+        <div
+          id="report-results"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7"
+        ></div>
+      </section>
+
+      <!-- ========== SECCIÓN: VALIDACIONES ========== -->
+      <section id="panel-validaciones" class="panel hidden max-w-6xl md:px-6 md:py-4">
+        <div class="mb-10">
+          <p
+            class="text-brand-ochre text-xs font-semibold uppercase tracking-widest mb-2"
+          >
+            ✦ Brasaland Ops
+          </p>
+          <h2 class="text-2xl font-semibold text-brand-darkbrown mb-1">Validar datos</h2>
+          <p class="text-sm text-brand-warmgray">
+            Probá si un ítem, una venta o una locación cumplen las reglas de negocio
+          </p>
+          <p class="mt-4 max-w-2xl text-sm text-brand-warmgray">Antes de guardar un dato en el sistema, Brasaland verifica que cumpla las reglas del negocio. Cargá valores de prueba en cualquiera de los tres formularios y mirá si pasan o qué errores aparecen.</p>
+        </div>
+
+        <div
+          class="rounded-md border border-brand-beige bg-white p-6 mb-7 max-w-2xl"
+        >
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-2">Validar un ítem de menú</h3>
+          <p class="text-sm text-brand-warmgray mb-5">Reglas: precios en USD y COP mayores a 0, preparación entre 1 y 60 minutos, nombre no vacío y disponible en al menos un país.</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-7">
+            <div>
+              <label
+                class="block text-sm text-brand-warmgray mb-2"
+                >Nombre</label
+              >
+              <input
+                id="val-name"
+                type="text"
+                value="Picanha 250g"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-sm text-brand-warmgray mb-2"
+                >Precio USD</label
+              >
+              <input
+                id="val-usd"
+                type="number"
+                value="18.5"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-sm text-brand-warmgray mb-2"
+                >Precio COP</label
+              >
+              <input
+                id="val-cop"
+                type="number"
+                value="74000"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-sm text-brand-warmgray mb-2"
+                >Tiempo de preparación (min)</label
+              >
+              <input
+                id="val-prep"
+                type="number"
+                value="15"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <label class="flex items-center gap-2 text-sm text-brand-warmgray">
+              <input id="val-colombia" type="checkbox" checked class="w-4 h-4 accent-brand-ochre" />
+              Disponible en Colombia
+            </label>
+            <label class="flex items-center gap-2 text-sm text-brand-warmgray">
+              <input id="val-usa" type="checkbox" checked class="w-4 h-4 accent-brand-ochre" />
+              Disponible en USA
+            </label>
+          </div>
+
+          <button
+            onclick="runValidation()"
+            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre/80 text-brand-darkbrown hover:bg-brand-ochre transition-colors"
+          >
+            Validar
+          </button>
+        </div>
+
+        <div id="validation-result" class="max-w-2xl"></div>
+
+        <div
+          class="rounded-md border border-brand-beige bg-white p-6 mt-10 mb-7 max-w-2xl"
+        >
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-2">Validar una venta</h3>
+          <p class="text-sm text-brand-warmgray mb-5">Reglas: cantidad mayor a 0, precios en USD y COP mayores a 0 y nombre del mesero no vacío.</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-7">
+            <div>
+              <label
+                for="sale-quantity"
+                class="block text-sm text-brand-warmgray mb-2"
+                >Cantidad</label
+              >
+              <input
+                id="sale-quantity"
+                type="number"
+                value="1"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div>
+              <label
+                for="sale-waiter"
+                class="block text-sm text-brand-warmgray mb-2"
+                >Nombre del mesero</label
+              >
+              <input
+                id="sale-waiter"
+                type="text"
+                value="María González"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div>
+              <label
+                for="sale-usd"
+                class="block text-sm text-brand-warmgray mb-2"
+                >Precio total USD</label
+              >
+              <input
+                id="sale-usd"
+                type="number"
+                value="37"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div>
+              <label
+                for="sale-cop"
+                class="block text-sm text-brand-warmgray mb-2"
+                >Precio total COP</label
+              >
+              <input
+                id="sale-cop"
+                type="number"
+                value="148000"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+          </div>
+
+          <button
+            onclick="runSaleValidation()"
+            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre/80 text-brand-darkbrown hover:bg-brand-ochre transition-colors"
+          >
+            Validar venta
+          </button>
+        </div>
+
+        <div id="sale-validation-result" class="max-w-2xl"></div>
+
+        <div
+          class="rounded-md border border-brand-beige bg-white p-6 mt-10 mb-7 max-w-2xl"
+        >
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-2">Validar una locación</h3>
+          <p class="text-sm text-brand-warmgray mb-5">Reglas: año de apertura entre 2008 y el año actual, capacidad y empleados mayores a 0, renta y servicios en USD y COP mayores a 0.</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-7">
+            <div>
+              <label
+                for="loc-val-year"
+                class="block text-sm text-brand-warmgray mb-2"
+                >Año de apertura</label
+              >
+              <input
+                id="loc-val-year"
+                type="number"
+                value="2008"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div>
+              <label
+                for="loc-val-capacity"
+                class="block text-sm text-brand-warmgray mb-2"
+                >Capacidad de asientos</label
+              >
+              <input
+                id="loc-val-capacity"
+                type="number"
+                value="80"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div>
+              <label
+                for="loc-val-staff"
+                class="block text-sm text-brand-warmgray mb-2"
+                >Cantidad de empleados</label
+              >
+              <input
+                id="loc-val-staff"
+                type="number"
+                value="12"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div class="hidden md:block"></div>
+            <div>
+              <label
+                for="loc-val-rent-usd"
+                class="block text-sm text-brand-warmgray mb-2"
+                >Renta mensual USD</label
+              >
+              <input
+                id="loc-val-rent-usd"
+                type="number"
+                value="1500"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div>
+              <label
+                for="loc-val-rent-cop"
+                class="block text-sm text-brand-warmgray mb-2"
+                >Renta mensual COP</label
+              >
+              <input
+                id="loc-val-rent-cop"
+                type="number"
+                value="6000000"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div>
+              <label
+                for="loc-val-utilities-usd"
+                class="block text-sm text-brand-warmgray mb-2"
+                >Servicios mensuales USD</label
+              >
+              <input
+                id="loc-val-utilities-usd"
+                type="number"
+                value="400"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+            <div>
+              <label
+                for="loc-val-utilities-cop"
+                class="block text-sm text-brand-warmgray mb-2"
+                >Servicios mensuales COP</label
+              >
+              <input
+                id="loc-val-utilities-cop"
+                type="number"
+                value="1600000"
+                class="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm focus:outline-none focus:border-brand-ochre focus:ring-1 focus:ring-brand-ochre"
+              />
+            </div>
+          </div>
+
+          <button
+            onclick="runLocationValidation()"
+            class="w-full md:w-auto rounded px-4 py-2 text-sm bg-brand-ochre/80 text-brand-darkbrown hover:bg-brand-ochre transition-colors"
+          >
+            Validar locación
+          </button>
+        </div>
+
+        <div id="location-validation-result" class="max-w-2xl"></div>
+      </section>
+    </main>
+
+    <script src="bundle.js"></script>
+    <script>
+      const B = window.Brasaland;
+      const REFERENCE_DATE = new Date();
+
+      // ---- Navegación del menú lateral ----
+      function showPanel(name) {
+        document
+          .querySelectorAll(".panel")
+          .forEach((p) => p.classList.add("hidden"));
+        document.getElementById("panel-" + name).classList.remove("hidden");
+        document.querySelectorAll(".nav-item").forEach((n) => {
+          const isActive = n.dataset.panel === name;
+          n.classList.toggle("bg-brand-ochre/10", isActive);
+          n.classList.toggle("text-brand-darkbrown", isActive);
+          n.classList.toggle("border-brand-ochre", isActive);
+          n.classList.toggle("font-semibold", isActive);
+          n.classList.toggle("border-transparent", !isActive);
+          n.classList.toggle("text-brand-charcoal", !isActive);
+        });
+      }
+
+      // ---- Ubicaciones ----
+      function statusLabel(status) {
+        const colors = {
+          Active: "border-green-600 text-green-700",
+          "Temporarily closed": "border-red-600 text-red-700",
+          "Under renovation": "border-brand-ochre text-orange-700",
+        };
+        const labels = {
+          Active: "Activa",
+          "Temporarily closed": "Cerrada temp.",
+          "Under renovation": "En renovación",
+        };
+        return `<span class="${colors[status]} inline-block rounded-full border px-2 py-0 text-xs font-medium whitespace-nowrap">${labels[status]}</span>`;
+      }
+
+      function searchLocations() {
+        const country = document.getElementById("loc-country").value;
+        const status = document.getElementById("loc-status").value;
+        const sortOrder = document.getElementById("loc-sort").value;
+
+        let results = B.sampleLocations;
+        if (country) results = results.filter((l) => l.country === country);
+        if (status === "Active") results = B.filterActiveLocations(results);
+        else if (status) results = results.filter((l) => l.status === status);
+        if (sortOrder) results = B.sortLocationsByCapacity(results, sortOrder);
+
+        const tbody = document.getElementById("loc-results");
+        if (results.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-brand-warmgray text-center">Sin resultados</td></tr>`;
+          return;
+        }
+        tbody.innerHTML = results
+          .map(
+            (loc) => `
+        <tr class="border-b border-brand-beige hover:bg-brand-ivory [&>td]:px-3">
+          <td class="py-2">${loc.name}</td>
+          <td class="py-2">${loc.city}</td>
+          <td class="py-2">${loc.seatingCapacity}</td>
+          <td class="py-2">${loc.manager}</td>
+          <td class="py-2">${statusLabel(loc.status)}</td>
+        </tr>
+      `,
+          )
+          .join("");
+      }
+
+      function locationCard(loc) {
+        return `<div class="rounded-md border border-brand-beige bg-white p-6 flex flex-col gap-2">
+        <p class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray"><span class="text-brand-ochre mr-1.5">✦</span>${loc.id}</p>
+        <p class="text-2xl font-semibold text-brand-darkbrown leading-tight">${loc.name}</p>
+        <p class="text-sm text-brand-charcoal">${loc.city} · ${loc.seatingCapacity} lugares · ${loc.manager}</p>
+        <div>${statusLabel(loc.status)}</div>
+      </div>`;
+      }
+
+      function notFoundMessage(text) {
+        return `<p class="text-sm text-brand-warmgray">${text}</p>`;
+      }
+
+      function searchLocationById() {
+        const id = document.getElementById("loc-id").value.trim().toUpperCase();
+        const location = B.findLocationById(B.sampleLocations, id);
+        document.getElementById("loc-id-result").innerHTML = location
+          ? locationCard(location)
+          : notFoundMessage("No se encontró ninguna ubicación con ese ID");
+      }
+
+      function searchLocationByCapacity() {
+        const capacity = parseInt(document.getElementById("loc-capacity").value, 10);
+        const sorted = B.sortLocationsByCapacity(B.sampleLocations, "asc");
+        const index = Number.isNaN(capacity)
+          ? -1
+          : B.binarySearchLocationByCapacity(sorted, capacity);
+        document.getElementById("loc-capacity-result").innerHTML =
+          index !== -1
+            ? locationCard(sorted[index])
+            : notFoundMessage("No hay ninguna ubicación con esa capacidad");
+      }
+
+      // ---- Menú ----
+      function categoryLabel(cat) {
+        const map = {
+          Meat: "Carnes",
+          Side: "Acompañamientos",
+          Beverage: "Bebidas",
+          Dessert: "Postres",
+          Combo: "Combos",
+        };
+        return map[cat] || cat;
+      }
+
+      function searchMenu() {
+        const category = document.getElementById("menu-category").value;
+        const order = document.getElementById("menu-order").value;
+        const currency = document.getElementById("menu-currency").value;
+        document.getElementById("menu-price-heading").textContent = `Precio (${currency})`;
+
+        let results = category
+          ? B.filterMenuItemsByCategory(B.sampleMenuItems, category)
+          : B.sampleMenuItems;
+        results = B.sortMenuItemsByPrice(results, currency, order);
+
+        const tbody = document.getElementById("menu-results");
+        if (results.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="4" class="py-4 text-brand-warmgray text-center">Sin resultados</td></tr>`;
+          return;
+        }
+        tbody.innerHTML = results
+          .map(
+            (item) => `
+        <tr class="border-b border-brand-beige hover:bg-brand-ivory [&>td]:px-3">
+          <td class="py-2">${item.name}</td>
+          <td class="py-2">${categoryLabel(item.category)}</td>
+          <td class="py-2">${formatMoney(item.basePrice[currency], currency)}</td>
+          <td class="py-2">${item.prepTimeMinutes} min</td>
+        </tr>
+      `,
+          )
+          .join("");
+      }
+
+      function searchMenuItemByName() {
+        const name = document.getElementById("menu-name").value.trim();
+        const item = B.findMenuItemByName(B.sampleMenuItems, name);
+        const el = document.getElementById("menu-name-result");
+        if (!item) {
+          el.innerHTML = notFoundMessage("No se encontró ningún ítem con ese nombre");
+          return;
+        }
+        el.innerHTML = `<div class="rounded-md border border-brand-beige bg-white p-6 flex flex-col gap-2">
+        <p class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray"><span class="text-brand-ochre mr-1.5">✦</span>${categoryLabel(item.category)}</p>
+        <p class="text-2xl font-semibold text-brand-darkbrown leading-tight">${item.name}</p>
+        <p class="text-sm text-brand-charcoal">$${item.basePrice.USD.toFixed(2)} USD · $${item.basePrice.COP.toLocaleString()} COP · ${item.prepTimeMinutes} min</p>
+        <p class="text-sm text-brand-warmgray">Alérgenos: ${item.allergens.length > 0 ? item.allergens.join(", ") : "Ninguno"}</p>
+      </div>`;
+      }
+
+      // ---- Reportes ----
+      function card(title, value) {
+        return `<div class="rounded-md border border-brand-beige bg-white p-6 flex flex-col justify-between">
+        <p class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-4"><span class="text-brand-ochre mr-1.5">✦</span>${title}</p>
+        <p class="text-2xl font-semibold text-brand-darkbrown leading-tight">${value}</p>
+      </div>`;
+      }
+
+      function formatMoney(amount, currency) {
+        return currency === "USD"
+          ? `$${amount.toFixed(2)} USD`
+          : `$${amount.toLocaleString()} COP`;
+      }
+
+      let selectedReport = "ranking";
+      const reportDescriptions = {
+        margin: "Porcentaje que le queda al local después de pagar los ingredientes, y cuánto perdió por desperdicio.",
+        ranking: "Puntaje de 0 a 100 que combina ingresos, uso de la capacidad, control de desperdicio y margen.",
+        topItems: "Los 5 productos con más unidades vendidas en todas las ubicaciones.",
+        extremeSales: "La venta individual de mayor y de menor monto registrada.",
+        waste: "Cantidad de registros de desperdicio agrupados por motivo.",
+        locationRevenue: "El local que más facturó y el que menos, en la moneda elegida.",
+      };
+      const reportLocationSelect = document.getElementById("report-location");
+      B.sampleLocations.forEach((loc) => {
+        reportLocationSelect.add(new Option(`${loc.name} — ${loc.city}`, loc.id));
+      });
+
+      function renderReport(type) {
+        selectedReport = type;
+        document.getElementById("report-description").textContent = reportDescriptions[type];
+        const el = document.getElementById("report-results");
+        const currency = document.getElementById("report-currency").value;
+        document.querySelectorAll(".report-button").forEach((button) => {
+          const isSelected = button.dataset.report === type;
+          button.classList.toggle("bg-brand-ochre/80", isSelected);
+          button.classList.toggle("hover:bg-brand-ochre", isSelected);
+          button.classList.toggle("border-brand-ochre", isSelected);
+          button.classList.toggle("font-semibold", isSelected);
+          button.classList.toggle("bg-white", !isSelected);
+          button.classList.toggle("border-brand-beige", !isSelected);
+        });
+
+        if (type === "margin") {
+          const locationId = reportLocationSelect.value;
+          const location = B.findLocationById(B.sampleLocations, locationId);
+          const locationName = location ? location.name : locationId;
+          const margin = B.calculateLocationMargin(
+            B.sampleSales,
+            B.sampleMenuItems,
+            locationId,
+            currency,
+          );
+          const wasteCost = B.calculateWasteCost(
+            B.sampleWasteRecords,
+            locationId,
+            currency,
+          );
+          el.innerHTML =
+            card(`Margen — ${locationName}`, margin.toFixed(2) + "%") +
+            card(`Costo de desperdicio — ${locationName}`, formatMoney(wasteCost, currency));
+        } else if (type === "ranking") {
+          const ranking = B.rankLocationsByPerformance(
+            B.sampleLocations,
+            B.sampleSales,
+            B.sampleWasteRecords,
+            B.sampleMenuItems,
+            REFERENCE_DATE,
+          );
+          const activeRanking = ranking.filter(r => r.location.status === "Active");
+          const excludedCount = ranking.length - activeRanking.length;
+          el.innerHTML = `<div class="col-span-full min-w-0 rounded-md border border-brand-beige bg-white p-6 overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full min-w-[560px] text-sm text-left">
+                <caption class="sr-only">Ranking performance de ubicaciones activas</caption>
+                <thead class="bg-gray-200 text-brand-warmgray text-xs uppercase">
+                  <tr>
+                    <th scope="col" class="px-5 py-3 font-medium">Posición</th>
+                    <th scope="col" class="px-5 py-3 font-medium">Ubicación</th>
+                    <th scope="col" class="px-5 py-3 font-medium">Ciudad</th>
+                    <th scope="col" class="px-5 py-3 font-medium text-right">Puntaje</th>
+                  </tr>
+                </thead>
+                <tbody>${activeRanking.map((r, i) => `<tr class="border-b border-brand-beige last:border-0 hover:bg-brand-ivory">
+                  <td class="px-5 py-3 text-brand-warmgray">${i + 1}</td>
+                  <td class="px-5 py-3 font-medium text-brand-darkbrown">${r.location.name}</td>
+                  <td class="px-5 py-3 text-brand-charcoal">${r.location.city}</td>
+                  <td class="px-5 py-3 text-right font-semibold text-brand-darkbrown whitespace-nowrap">${Math.round(r.score)} / 100</td>
+                </tr>`).join("") || '<tr><td colspan="4" class="px-5 py-4 text-center text-brand-warmgray">Sin ubicaciones activas</td></tr>'}</tbody>
+              </table>
+            </div>
+            <p class="pt-4 text-xs text-brand-warmgray">Se excluyen ubicaciones cerradas temporalmente o en renovación (${excludedCount} de ${ranking.length}).</p>
+            <p class="pt-2 text-xs text-brand-warmgray">El puntaje de performance (sobre 100) combina cuatro factores: ingresos generados, eficiencia de uso del local según su capacidad, control de desperdicio, y margen de ganancia. Un puntaje más alto indica mejor desempeño general de la ubicación.</p>
+          </div>`;
+        } else if (type === "topItems") {
+          const top = B.findTopSellingItems(
+            B.sampleSales,
+            B.sampleMenuItems,
+            5,
+          );
+          el.innerHTML = top
+            .map((t) => card(t.item.name, `${t.totalSold} unidades vendidas`))
+            .join("");
+        } else if (type === 'extremeSales') {
+          const extreme = B.findExtremeSales(B.sampleSales, 'USD');
+          if (!extreme.highest || !extreme.lowest) {
+            el.innerHTML = card('Venta más cara/barata', 'Sin ventas registradas');
+          } else {
+            el.innerHTML =
+              card('Venta más alta', `${extreme.highest.id} — $${extreme.highest.totalPrice.USD}`) +
+              card('Venta más baja', `${extreme.lowest.id} — $${extreme.lowest.totalPrice.USD}`);
+          }
+
+        } else if (type === 'waste') {
+          const grouped = B.groupWasteByReason(B.sampleWasteRecords);
+          const reasonLabels = {
+            'Expired': 'Vencido',
+            'Cooking error': 'Error de cocción',
+            'Customer return': 'Devolución de cliente',
+            'Damage': 'Daño',
+            'Other': 'Otro',
+          };
+          el.innerHTML = Object.entries(grouped)
+            .filter(([_, records]) => records.length > 0)
+            .map(([reason, records]) => card(reasonLabels[reason], `${records.length} registro(s)`))
+            .join('');
+        } else if (type === 'locationRevenue') {
+          const extreme = B.findExtremeLocationRevenue(B.sampleSales, B.sampleLocations, currency);
+          const revenueCard = (title, entry) =>
+            card(title, entry ? `${entry.location.name} — ${formatMoney(entry.revenue, currency)}` : 'Sin datos');
+          el.innerHTML =
+            revenueCard('Ubicación con más ingresos', extreme && extreme.highest) +
+            revenueCard('Ubicación con menos ingresos', extreme && extreme.lowest);
+        }
+      }
+
+      // ---- Ventas ----
+      const salesPaymentLabels = {
+        Cash: "Efectivo",
+        "Credit card": "Tarjeta de crédito",
+        "Debit card": "Tarjeta de débito",
+        "Digital wallet": "Billetera digital",
+      };
+
+      const dailyLocationSelect = document.getElementById("daily-location");
+      B.sampleLocations.forEach((loc) => {
+        dailyLocationSelect.add(new Option(`${loc.name} — ${loc.city}`, loc.id));
+      });
+
+      function renderDailyRevenue() {
+        const el = document.getElementById("daily-result");
+        const dateValue = document.getElementById("daily-date").value;
+        const currency = document.getElementById("daily-currency").value;
+        const location = B.findLocationById(B.sampleLocations, dailyLocationSelect.value);
+        if (!location || !dateValue) {
+          el.innerHTML = notFoundMessage("Elegí una ubicación y una fecha válidas");
+          return;
+        }
+        const locationSales = B.filterSalesByLocation(B.sampleSales, location.id);
+        const timeZone = B.getTimeZoneByCountry(location.country);
+        const revenue = B.calculateDailyRevenue(
+          locationSales,
+          new Date(dateValue + "T12:00:00"),
+          currency,
+          timeZone,
+        );
+        el.innerHTML = `<div class="rounded-md border border-brand-beige bg-white p-6 flex flex-col gap-2">
+        <p class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray"><span class="text-brand-ochre mr-1.5">✦</span>${location.name} · ${dateValue}</p>
+        <p class="text-2xl font-semibold text-brand-darkbrown leading-tight">${formatMoney(revenue, currency)}</p>
+        <p class="text-sm text-brand-warmgray">Zona horaria: ${timeZone}</p>
+      </div>`;
+      }
+
+      function renderSalesByRange() {
+        const fromValue = document.getElementById("range-from").value;
+        const toValue = document.getElementById("range-to").value;
+        const currency = document.getElementById("range-currency").value;
+        const summary = document.getElementById("range-summary");
+        const tbody = document.getElementById("range-results");
+        const error = document.getElementById("range-error");
+        error.textContent = "";
+        error.classList.add("hidden");
+
+        if (!fromValue || !toValue || fromValue > toValue) {
+          summary.innerHTML = "";
+          tbody.innerHTML = "";
+          error.textContent = !fromValue || !toValue
+            ? "Elegí las dos fechas para filtrar."
+            : "La fecha 'Desde' no puede ser posterior a 'Hasta'. Revisá el orden de las fechas.";
+          error.classList.remove("hidden");
+          return;
+        }
+
+        const sales = B.filterSalesByDateRange(
+          B.sampleSales,
+          new Date(fromValue + "T00:00:00"),
+          new Date(toValue + "T23:59:59"),
+        );
+
+        if (sales.length === 0) {
+          summary.innerHTML = "";
+          tbody.innerHTML = `<tr><td colspan="7" class="py-4 text-brand-warmgray text-center">No hay ventas en ese rango de fechas</td></tr>`;
+          return;
+        }
+
+        const averageTicket = B.calculateAverageTicket(sales, currency);
+        const highest = B.findExtremeSales(sales, currency).highest;
+        summary.innerHTML =
+          card("Cantidad de ventas", `${sales.length}`) +
+          card("Ticket promedio", formatMoney(averageTicket, currency)) +
+          card("Venta más alta", highest ? `${highest.id} — ${formatMoney(highest.totalPrice[currency], currency)}` : "Sin datos");
+
+        tbody.innerHTML = sales
+          .map((sale) => {
+            const location = B.findLocationById(B.sampleLocations, sale.locationId);
+            const item = B.sampleMenuItems.find((i) => i.id === sale.itemId);
+            return `
+        <tr class="border-b border-brand-beige hover:bg-brand-ivory [&>td]:px-3">
+          <td class="py-2">${sale.id}</td>
+          <td class="py-2">${location ? location.name : sale.locationId}</td>
+          <td class="py-2">${item ? item.name : sale.itemId}</td>
+          <td class="py-2">${sale.quantity}</td>
+          <td class="py-2 whitespace-nowrap">${formatMoney(sale.totalPrice[currency], currency)}</td>
+          <td class="py-2">${salesPaymentLabels[sale.paymentMethod] || sale.paymentMethod}</td>
+          <td class="py-2 whitespace-nowrap">${new Date(sale.timestamp).toLocaleString("es")}</td>
+        </tr>`;
+          })
+          .join("");
+      }
+
+      function runCurrencyConversion() {
+        const amount = parseFloat(document.getElementById("convert-amount").value);
+        const from = document.getElementById("convert-from").value;
+        const to = document.getElementById("convert-to").value;
+        const el = document.getElementById("convert-result");
+        if (Number.isNaN(amount)) {
+          el.innerHTML = notFoundMessage("Ingresá un monto válido");
+          return;
+        }
+        const result = B.convertCurrency(amount, from, to);
+        el.innerHTML = `<div class="rounded-md border border-brand-beige bg-white p-6 flex flex-col gap-2">
+        <p class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray"><span class="text-brand-ochre mr-1.5">✦</span>${formatMoney(amount, from)}</p>
+        <p class="text-2xl font-semibold text-brand-darkbrown leading-tight">${formatMoney(result, to)}</p>
+      </div>`;
+      }
+
+      // ---- Validaciones ----
+      function runValidation() {
+        const testItem = {
+          id: "ITEM-TEST",
+          name: document.getElementById("val-name").value,
+          category: "Meat",
+          basePrice: {
+            USD: parseFloat(document.getElementById("val-usd").value),
+            COP: parseFloat(document.getElementById("val-cop").value),
+          },
+          ingredientCost: { USD: 1, COP: 1000 },
+          prepTimeMinutes: parseInt(document.getElementById("val-prep").value),
+          isAvailableInColombia: document.getElementById("val-colombia").checked,
+          isAvailableInUSA: document.getElementById("val-usa").checked,
+          allergens: [],
+          status: "Active",
+        };
+
+        renderValidationResult(
+          document.getElementById("validation-result"),
+          B.validateMenuItem(testItem),
+        );
+      }
+
+      function runSaleValidation() {
+        const sale = {
+          ...B.sampleSales[0],
+          quantity: parseInt(document.getElementById("sale-quantity").value, 10),
+          totalPrice: {
+            USD: parseFloat(document.getElementById("sale-usd").value),
+            COP: parseFloat(document.getElementById("sale-cop").value),
+          },
+          waiterName: document.getElementById("sale-waiter").value,
+        };
+
+        renderValidationResult(
+          document.getElementById("sale-validation-result"),
+          B.validateSaleTransaction(sale),
+        );
+      }
+
+      function runLocationValidation() {
+        const location = {
+          ...B.sampleLocations[0],
+          openingYear: parseInt(document.getElementById("loc-val-year").value, 10),
+          seatingCapacity: parseInt(document.getElementById("loc-val-capacity").value, 10),
+          staffCount: parseInt(document.getElementById("loc-val-staff").value, 10),
+          monthlyRentCost: {
+            USD: parseFloat(document.getElementById("loc-val-rent-usd").value),
+            COP: parseFloat(document.getElementById("loc-val-rent-cop").value),
+          },
+          averageMonthlyUtilities: {
+            USD: parseFloat(document.getElementById("loc-val-utilities-usd").value),
+            COP: parseFloat(document.getElementById("loc-val-utilities-cop").value),
+          },
+        };
+
+        renderValidationResult(
+          document.getElementById("location-validation-result"),
+          B.validateLocation(location, new Date().getFullYear()),
+        );
+      }
+
+      function renderValidationResult(el, result) {
+        if (result.valid) {
+          el.innerHTML = `<div class="rounded-md border border-brand-beige bg-white p-6 text-sm text-green-700">✓ Los datos cumplen todas las reglas de negocio.</div>`;
+        } else {
+          el.innerHTML = `<div class="rounded-md border border-brand-beige bg-white p-6 text-sm text-red-600">
+          <p class="font-semibold mb-2">✗ Se encontraron ${result.errors.length} error(es):</p>
+          <ul class="list-disc list-inside space-y-1">
+            ${result.errors.map((e) => `<li>${e}</li>`).join("")}
+          </ul>
+        </div>`;
+        }
+      }
+
+      // ---- Dashboard ----
+      function cardDashboard(icon, title, value, detail, extraClasses = "") {
+        return `<div class="min-w-0 break-words rounded-md border border-brand-beige bg-white p-6 flex flex-col justify-between ${extraClasses}">
+        <p class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-4"><span class="text-brand-ochre mr-1.5">${icon}</span>${title}</p>
+        <div>
+          <p class="text-3xl font-bold text-brand-darkbrown leading-tight">${value}</p>
+          ${detail ? `<p class="text-sm text-brand-warmgray mt-2">${detail}</p>` : ""}
+        </div>
+      </div>`;
+      }
+
+      function cardHighlight(icon, title, value, detail, extraClasses = "") {
+        return `<div class="min-w-0 break-words bg-white text-brand-darkbrown rounded-md border border-brand-beige border-l-4 border-l-brand-ochre p-6 flex flex-col justify-between ${extraClasses}">
+        <p class="text-sm text-brand-warmgray uppercase tracking-wide font-semibold mb-4"><span class="text-brand-ochre mr-1.5">${icon}</span>${title}</p>
+        <div>
+          <span class="inline-flex bg-brand-darkbrown text-brand-ivory text-xs font-semibold px-3 py-1 rounded-full mb-2">Top performance</span>
+          <p class="text-3xl font-bold text-brand-darkbrown leading-tight">${value}</p>
+          ${detail ? `<p class="text-sm text-brand-warmgray mt-2">${detail}</p>` : ""}
+        </div>
+      </div>`;
+      }
+
+      function cardCountryComparison(colombia, usa, extraClasses = "") {
+        const total = colombia.totalRevenue.USD + usa.totalRevenue.USD;
+        const coPct = total > 0 ? (colombia.totalRevenue.USD / total) * 100 : 50;
+        const usPct = 100 - coPct;
+        const column = (label, swatch, m, pct, align) => `
+          <div class="${align}">
+            <p class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-2"><span class="inline-block w-2 h-2 rounded-full ${swatch} mr-1.5"></span>${label}</p>
+            <p class="text-3xl font-bold text-brand-darkbrown leading-tight">$${m.totalRevenue.USD.toFixed(2)}</p>
+            <p class="text-sm text-brand-warmgray mt-1">${m.totalLocations} ubicación(es) · ${m.totalSales} venta(s) · ${pct.toFixed(0)}%</p>
+          </div>`;
+        return `<div class="rounded-md border border-brand-beige bg-white p-6 ${extraClasses}">
+        <p class="text-sm font-semibold uppercase tracking-wide text-brand-warmgray mb-4"><span class="text-brand-ochre mr-1.5">✦</span>Colombia vs USA · Ingresos USD</p>
+        <div class="flex flex-wrap justify-between gap-6 mb-5">
+          ${column("Colombia", "bg-brand-ochre", colombia, coPct, "text-left")}
+          ${column("USA", "bg-brand-charcoal", usa, usPct, "text-right")}
+        </div>
+        <div class="flex h-2.5 w-full rounded-full overflow-hidden bg-brand-ivory">
+          <div class="bg-brand-ochre w-[${coPct.toFixed(0)}%]"></div>
+          <div class="bg-brand-charcoal w-[${usPct.toFixed(0)}%]"></div>
+        </div>
+      </div>`;
+      }
+
+      function renderDashboard() {
+        const el = document.getElementById("dashboard-results");
+
+        const activeLocations = B.filterActiveLocations(B.sampleLocations);
+
+        const ranking = B.rankLocationsByPerformance(
+          B.sampleLocations,
+          B.sampleSales,
+          B.sampleWasteRecords,
+          B.sampleMenuItems,
+          REFERENCE_DATE,
+        );
+        const best = ranking[0];
+
+        const topItem = B.findTopSellingItems(
+          B.sampleSales,
+          B.sampleMenuItems,
+          1,
+        )[0];
+
+        const comparison = B.calculateCountryComparison(
+          B.sampleSales,
+          B.sampleLocations,
+          B.sampleMenuItems,
+        );
+
+        const paymentLabels = {
+          Cash: "Efectivo",
+          "Credit card": "Tarjeta de crédito",
+          "Debit card": "Tarjeta de débito",
+          "Digital wallet": "Billetera digital",
+        };
+        const paymentCounts = B.countSalesByPaymentMethod(B.sampleSales);
+        const [topMethod, topMethodCount] = Object.entries(paymentCounts).sort(
+          (a, b) => b[1] - a[1],
+        )[0];
+
+        el.innerHTML =
+          cardHighlight(
+            "★",
+            "Mejor performance",
+            best ? `${best.score.toFixed(2)}<span class="text-sm text-brand-warmgray font-semibold"> / 100</span>` : "—",
+            best ? best.location.name : "Sin datos",
+          ) +
+          cardDashboard(
+            "✦",
+            "Ubicaciones activas",
+            `${activeLocations.length}`,
+            `de ${B.sampleLocations.length} ubicaciones totales`,
+          ) +
+          cardDashboard(
+            "✦",
+            "Ítem más vendido",
+            topItem ? topItem.item.name : "Sin datos",
+            topItem ? `${topItem.totalSold} unidades vendidas` : "",
+          ) +
+          cardDashboard(
+            "✦",
+            "Método de pago más usado",
+            paymentLabels[topMethod] || topMethod,
+            `${topMethodCount} transacción(es)`,
+          ) +
+          cardCountryComparison(
+            comparison.Colombia,
+            comparison.USA,
+            "col-span-full",
+          );
+      }
+
+      // ---- Cargar resultados iniciales al abrir la página ----
+      const menuNames = document.getElementById("menu-names");
+      B.sampleMenuItems.forEach((item) => {
+        menuNames.append(new Option(item.name, item.name));
+      });
+      searchLocations();
+      searchMenu();
+      renderDashboard();
+      renderReport("ranking");
+      renderDailyRevenue();
+      renderSalesByRange();
+    </script>
+    <script>
+      function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        const collapsed = sidebar.classList.toggle("collapsed");
+        sidebar.querySelector("[aria-controls='sidebar']").setAttribute("aria-expanded", String(!collapsed));
+      }
+
+      function renderDashboardRanking() {
+        const ranking = B.rankLocationsByPerformance(
+          B.sampleLocations,
+          B.sampleSales,
+          B.sampleWasteRecords,
+          B.sampleMenuItems,
+          REFERENCE_DATE,
+        );
+        const topLocations = ranking.slice(0, 5);
+        document.getElementById("dashboard-ranking").innerHTML = topLocations
+          .map((entry) => `<tr class="border-b border-brand-beige last:border-0 hover:bg-brand-ivory">
+            <td class="px-5 py-3 font-medium text-brand-darkbrown">${entry.location.name}</td>
+            <td class="px-5 py-3 text-brand-charcoal">${entry.location.city}</td>
+            <td class="px-5 py-3 text-right font-semibold text-brand-darkbrown whitespace-nowrap">${entry.score.toFixed(2)} / 100</td>
+            <td class="px-5 py-3">${statusLabel(entry.location.status)}</td>
+          </tr>`)
+          .join("");
+        document.getElementById("dashboard-ranking-summary").textContent =
+          `Mostrando las ${topLocations.length} mejores ubicaciones de ${ranking.length}`;
+      }
+
+      function renderDashboardInsights() {
+        const paymentLabels = {
+          Cash: "Efectivo",
+          "Credit card": "Tarjeta de crédito",
+          "Debit card": "Tarjeta de débito",
+          "Digital wallet": "Billetera digital",
+        };
+        const paymentColors = ["bg-brand-ochre", "bg-brand-ochre/80", "bg-brand-ochre/60", "bg-brand-charcoal"];
+        const paymentCounts = B.countSalesByPaymentMethod(B.sampleSales);
+        const totalPayments = Object.values(paymentCounts).reduce((sum, count) => sum + count, 0);
+        document.getElementById("dashboard-payment-bars").innerHTML = Object.entries(paymentCounts)
+          .map(([method, count], index) => {
+            const percent = totalPayments > 0 ? (count / totalPayments) * 100 : 0;
+            return `<div>
+              <div class="flex flex-wrap justify-between gap-x-3 gap-y-1 text-xs mb-2">
+                <span class="text-brand-charcoal">${paymentLabels[method] || method}</span>
+                <span class="font-semibold text-brand-darkbrown">${count} trans. · ${percent.toFixed(0)}%</span>
+              </div>
+              <div class="h-2.5 bg-brand-beige rounded-full overflow-hidden">
+                <div class="h-full rounded-full ${paymentColors[index % paymentColors.length]} w-[${percent.toFixed(0)}%]"></div>
+              </div>
+            </div>`;
+          })
+          .join("");
+
+        const activeCount = B.filterActiveLocations(B.sampleLocations).length;
+        const totalLocations = B.sampleLocations.length;
+        const activePercent = totalLocations > 0 ? (activeCount / totalLocations) * 100 : 0;
+        const circumference = 2 * Math.PI * 40;
+        document.getElementById("dashboard-active-arc").setAttribute("stroke-dasharray", `${(activePercent / 100) * circumference} ${circumference}`);
+        document.getElementById("dashboard-active-chart").setAttribute("aria-label", `${activeCount} de ${totalLocations} ubicaciones activas, ${activePercent.toFixed(0)}%`);
+        document.getElementById("dashboard-active-percent").textContent = `${activePercent.toFixed(0)}%`;
+        document.getElementById("dashboard-active-summary").textContent = `${activeCount}/${totalLocations} activas`;
+
+        const comparison = B.calculateCountryComparison(B.sampleSales, B.sampleLocations, B.sampleMenuItems);
+        const countries = [["Colombia", comparison.Colombia], ["USA", comparison.USA]];
+        const maxRevenue = Math.max(1, ...countries.map(([, metrics]) => metrics.totalRevenue.USD));
+        document.getElementById("dashboard-country-bars").innerHTML = countries
+          .map(([country, metrics], index) => {
+            const revenue = metrics.totalRevenue.USD;
+            return `<div>
+              <div class="flex flex-wrap justify-between gap-x-3 gap-y-1 text-sm mb-2">
+                <span class="text-brand-charcoal">${country}</span>
+                <span class="font-semibold text-brand-darkbrown">$${revenue.toFixed(2)}</span>
+              </div>
+              <div class="h-3 bg-brand-beige rounded-full overflow-hidden">
+                <div class="h-full rounded-full ${index === 0 ? "bg-brand-ochre" : "bg-brand-charcoal"} w-[${((revenue / maxRevenue) * 100).toFixed(0)}%]"></div>
+              </div>
+            </div>`;
+          })
+          .join("");
+      }
+
+      renderDashboardRanking();
+      renderDashboardInsights();
+    </script>
+  </body>
+</html>
