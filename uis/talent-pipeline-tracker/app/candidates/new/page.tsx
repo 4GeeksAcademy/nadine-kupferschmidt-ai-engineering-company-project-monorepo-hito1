@@ -11,7 +11,7 @@ export default function NewCandidatePage() {
 
 	async function handleCreate(data: CandidateFormData) {
 		const created = await createCandidate(data);
-		router.push(`/candidates/${created.id}`);
+		router.push(`/candidates/${created.id}?created=1`);
 	}
 
 	return (

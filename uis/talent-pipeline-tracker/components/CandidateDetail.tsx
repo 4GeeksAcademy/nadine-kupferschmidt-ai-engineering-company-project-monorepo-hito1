@@ -10,7 +10,7 @@ import { updateCandidate } from "@/lib/api";
 import { STAGE_LABELS, STATUS_LABELS } from "@/lib/labels";
 import type { CandidateFormData } from "@/types/candidate";
 
-export default function CandidateDetail({ id }: { id: string }) {
+export default function CandidateDetail({ id, justCreated }: { id: string; justCreated?: boolean }) {
 	const router = useRouter();
 	const { candidate, loading, error, setCandidate } = useCandidate(id);
 	const [isEditing, setIsEditing] = useState(false);
@@ -51,6 +51,11 @@ export default function CandidateDetail({ id }: { id: string }) {
 				{candidate.full_name}
 			</h1>
 			<p className="text-brand-warmgray">{candidate.position}</p>
+			{justCreated && (
+				<p className="mt-3 rounded border border-green-600 bg-white px-4 py-2 text-sm text-green-700" role="status">
+					Candidatura registrada correctamente.
+				</p>
+			)}
 			{!isEditing && (
 				<button
 					type="button"
