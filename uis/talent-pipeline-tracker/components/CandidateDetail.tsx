@@ -175,11 +175,40 @@ export default function CandidateDetail({ id }: { id: string }) {
 							})}
 						</dd>
 					</div>
+					<div>
+						<dt className="text-xs uppercase tracking-wide text-brand-warmgray">
+							Última actualización
+						</dt>
+						<dd>
+							{new Date(candidate.updated_at).toLocaleString("es-CO", {
+								day: "numeric",
+								month: "long",
+								year: "numeric",
+								hour: "2-digit",
+								minute: "2-digit",
+							})}
+						</dd>
+					</div>
+					<div>
+						<dt className="text-xs uppercase tracking-wide text-brand-warmgray">
+							Notas internas
+						</dt>
+						<dd>
+							{candidate.notes_count === 0
+								? "Sin notas"
+								: candidate.notes_count === 1
+									? "1 nota"
+									: `${candidate.notes_count} notas`}
+						</dd>
+					</div>
 				</dl>
 				</div>
 			)}
 			<CandidateStatusControls candidate={candidate} onUpdated={setCandidate} />
-			<CandidateNotes candidateId={candidate.id} />
+			<CandidateNotes
+				candidateId={candidate.id}
+				onCountChange={(count) => setCandidate({ ...candidate, notes_count: count })}
+			/>
 		</div>
 	);
 }

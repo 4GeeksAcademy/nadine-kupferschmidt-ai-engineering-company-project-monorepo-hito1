@@ -8,9 +8,13 @@ import type { Note } from "@/types/candidate";
 
 type CandidateNotesProps = {
 	candidateId: string;
+	onCountChange: (count: number) => void;
 };
 
-export default function CandidateNotes({ candidateId }: CandidateNotesProps) {
+export default function CandidateNotes({
+	candidateId,
+	onCountChange,
+}: CandidateNotesProps) {
 	const [notes, setNotes] = useState<Note[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
@@ -18,6 +22,7 @@ export default function CandidateNotes({ candidateId }: CandidateNotesProps) {
 	const [adding, setAdding] = useState(false);
 	const [deletingId, setDeletingId] = useState<string | null>(null);
 	const [actionError, setActionError] = useState<string | null>(null);
+	const [actionSuccess, setActionSuccess] = useState<string | null>(null);
 	const [noteToDelete, setNoteToDelete] = useState<string | null>(null);
 
 	useEffect(() => {
@@ -44,6 +49,8 @@ export default function CandidateNotes({ candidateId }: CandidateNotesProps) {
 
 	async function handleAdd(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
+		setActionError(null);
+		setActionSuccess(null);
 
 		if (!newNote.trim()) {
 			setActionError("Escribe el contenido de la nota antes de guardarla.");
@@ -51,13 +58,14 @@ export default function CandidateNotes({ candidateId }: CandidateNotesProps) {
 		}
 
 		setAdding(true);
-		setActionError(null);
 
 		try {
 			await addNote(candidateId, newNote.trim());
 			setNewNote("");
 			const response = await getNotes(candidateId);
 			setNotes(response);
+			onCountChange(response.length);
+			setActionSuccess("Nota agregada correctamente.");
 		} catch (caughtError) {
 			setActionError(
 				caughtError instanceof Error
@@ -76,11 +84,14 @@ export default function CandidateNotes({ candidateId }: CandidateNotesProps) {
 
 		setDeletingId(noteToDelete);
 		setActionError(null);
+		setActionSuccess(null);
 
 		try {
 			await deleteNote(candidateId, noteToDelete);
 			const response = await getNotes(candidateId);
 			setNotes(response);
+			onCountChange(response.length);
+			setActionSuccess("Nota eliminada correctamente.");
 		} catch (caughtError) {
 			setActionError(
 				caughtError instanceof Error
@@ -120,6 +131,11 @@ export default function CandidateNotes({ candidateId }: CandidateNotesProps) {
 			{actionError && (
 				<p className="mt-3 text-sm text-red-600" role="alert">
 					{actionError}
+				</p>
+			)}
+			{actionSuccess && (
+				<p className="mt-3 text-sm text-green-700" role="status">
+					{actionSuccess}
 				</p>
 			)}
 
