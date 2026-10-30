@@ -30,6 +30,22 @@ def parse_csv_text(text: str) -> List[Dict[str, Optional[str]]]:
     return list(csv.DictReader(io.StringIO(text)))
 
 
+def find_missing_columns(text: str) -> List[str]:
+    expected_columns = (
+        "incident_id",
+        "date",
+        "location_id",
+        "category",
+        "description",
+        "status",
+        "customer_id",
+        "satisfaction_score",
+        "reporter_id",
+    )
+    columns = csv.DictReader(io.StringIO(text)).fieldnames or []
+    return [column for column in expected_columns if column not in columns]
+
+
 def validate_record(record: Dict[str, Optional[str]]) -> List[str]:
     def value(field: str) -> str:
         return (record.get(field) or "").strip()

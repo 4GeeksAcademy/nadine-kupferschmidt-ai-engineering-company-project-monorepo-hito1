@@ -5,6 +5,7 @@ from .analysis import (
     STATUSES,
     build_export_rows,
     calculate_metrics,
+    find_missing_columns,
     parse_csv_text,
     validate_record,
 )
@@ -16,6 +17,7 @@ __all__ = [
     "STATUSES",
     "build_export_rows",
     "calculate_metrics",
+    "find_missing_columns",
     "parse_csv_text",
     "validate_record",
 ]
