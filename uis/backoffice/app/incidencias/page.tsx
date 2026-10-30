@@ -38,6 +38,31 @@ export default function IncidentsPage() {
   const [dragging, setDragging] = useState(false);
   const metrics = result?.metrics;
   const busy = analyzing || downloading;
+  const tutorialCard = (
+    <section aria-labelledby="como-funciona-heading" className="mb-8 rounded-md border border-brand-beige bg-white p-6">
+      <h2 id="como-funciona-heading" className="mb-4 text-sm font-semibold uppercase tracking-wide text-brand-warmgray">¿Cómo funciona?</h2>
+      <div className="space-y-4 text-sm text-brand-charcoal">
+        <div>
+          <h3 className="font-semibold text-brand-darkbrown">Para qué sirve</h3>
+          <p className="mt-1">Valida y resume incidentes de las 14 sedes —equipos, abastecimiento, quejas, calidad de alimentos y personal— antes del dashboard de Operaciones. El análisis ocurre dentro de Brasaland; los datos no se envían a herramientas externas.</p>
+        </div>
+        <div>
+          <h3 className="font-semibold text-brand-darkbrown">Qué archivo subir</h3>
+          <p className="mt-1">CSV en UTF-8, separado por comas y con encabezado. Columnas exactas:</p>
+          <p className="mt-1 break-words font-mono text-xs text-brand-warmgray">incident_id, date, location_id, category, description, status, customer_id, satisfaction_score, reporter_id</p>
+        </div>
+        <div>
+          <h3 className="font-semibold text-brand-darkbrown">Pasos</h3>
+          <ol className="mt-1 list-inside list-decimal space-y-1">
+            <li>Elegí o arrastrá el archivo.</li>
+            <li>Apretá “Analizar”.</li>
+            <li>Revisá el resumen y descargá los resultados en CSV.</li>
+          </ol>
+        </div>
+        <p><span className="font-semibold text-brand-darkbrown">Registros inválidos:</span> los datos faltantes o fuera de lo permitido se cuentan y muestran aparte, pero no se incluyen en las métricas.</p>
+      </div>
+    </section>
+  );
 
   function chooseFile(selected: File | undefined) {
     if (!selected || busy) return;
@@ -116,29 +141,7 @@ export default function IncidentsPage() {
         </div>
         <p role="status" className={`mt-2 text-sm ${result ? "text-green-700" : "text-brand-warmgray"}`}>{analyzing ? "Análisis en curso." : result ? "Análisis completado." : ""}</p>
       </section>
-      <section aria-labelledby="como-funciona-heading" className="mb-8 rounded-md border border-brand-beige bg-white p-6">
-        <h2 id="como-funciona-heading" className="mb-4 text-sm font-semibold uppercase tracking-wide text-brand-warmgray">¿Cómo funciona?</h2>
-        <div className="space-y-4 text-sm text-brand-charcoal">
-          <div>
-            <h3 className="font-semibold text-brand-darkbrown">Para qué sirve</h3>
-            <p className="mt-1">Valida y resume incidentes de las 14 sedes —equipos, abastecimiento, quejas, calidad de alimentos y personal— antes del dashboard de Operaciones. El análisis ocurre dentro de Brasaland; los datos no se envían a herramientas externas.</p>
-          </div>
-          <div>
-            <h3 className="font-semibold text-brand-darkbrown">Qué archivo subir</h3>
-            <p className="mt-1">CSV en UTF-8, separado por comas y con encabezado. Columnas exactas:</p>
-            <p className="mt-1 break-words font-mono text-xs text-brand-warmgray">incident_id, date, location_id, category, description, status, customer_id, satisfaction_score, reporter_id</p>
-          </div>
-          <div>
-            <h3 className="font-semibold text-brand-darkbrown">Pasos</h3>
-            <ol className="mt-1 list-inside list-decimal space-y-1">
-              <li>Elegí o arrastrá el archivo.</li>
-              <li>Apretá “Analizar”.</li>
-              <li>Revisá el resumen y descargá los resultados en CSV.</li>
-            </ol>
-          </div>
-          <p><span className="font-semibold text-brand-darkbrown">Registros inválidos:</span> los datos faltantes o fuera de lo permitido se cuentan y muestran aparte, pero no se incluyen en las métricas.</p>
-        </div>
-      </section>
+      {!result && tutorialCard}
       {error && <div role="alert" className="mt-5 rounded-md border border-brand-beige border-l-4 border-l-red-600 bg-white px-5 py-4 text-sm text-red-600">{error}</div>}
       {result && metrics && (
         <div className="mt-10 space-y-9">
@@ -192,6 +195,7 @@ export default function IncidentsPage() {
           </section>
         </div>
       )}
+      {result && <div className="mt-10">{tutorialCard}</div>}
     </div>
   );
 }
