@@ -1,2 +1,8 @@
 node_modules/
 dist/
+
+# Python
+__pycache__/
+
+# Resultado generado por scripts/analyze.py
+scripts/results.csv
