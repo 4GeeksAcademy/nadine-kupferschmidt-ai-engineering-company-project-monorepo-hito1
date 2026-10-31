@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-ivory: #FDF8F0;
+  --color-brand-beige: #F5EDE0;
+  --color-brand-charcoal: #2A2A2A;
+  --color-brand-darkbrown: #1A1410;
+  --color-brand-ochre: #F2A65A;
+  --color-brand-warmgray: #6B6258;
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
