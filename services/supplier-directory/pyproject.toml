@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "supplier-directory"
+version = "0.1.0"
+description = "API del directorio de proveedores de Brasaland"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi[standard]",
+    "tinydb",
+    "pydantic",
+]
+
+[project.scripts]
+seed = "seed:main"
+
+[tool.setuptools]
+py-modules = ["main", "models", "database", "seed"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["routes*"]
