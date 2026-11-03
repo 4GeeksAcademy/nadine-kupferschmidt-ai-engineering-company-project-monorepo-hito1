@@ -1,14 +1,30 @@
 @import "tailwindcss";
 
 @theme {
-	--color-brand-ivory: #FDF8F0;
-	--color-brand-beige: #F5EDE0;
-	--color-brand-charcoal: #2A2A2A;
-	--color-brand-darkbrown: #1A1410;
-	--color-brand-ochre: #F2A65A;
-	--color-brand-warmgray: #6B6258;
+	/* Paleta del backoffice v2 (prompts/brasaland-backoffice-design-guide.md). */
+	--color-bo-page: #F6F6F7;
+	--color-bo-surface: #FFFFFF;
+	--color-bo-border: #ECECEF;
+	--color-bo-divider: #EFEFF2;
+	--color-bo-text: #1F1F23;
+	--color-bo-muted: #6B6B74;
+	--color-bo-menu: #45454D;
+	--color-bo-accent: #F5B971;
+	--color-bo-on-accent: #2B1A06;
+	--color-bo-accent-soft: #FCE6CC;
+	--color-bo-on-accent-soft: #6E3C0B;
+	--color-bo-success: #1E7B43;
+	--color-bo-danger: #A61F1F;
+	--color-bo-danger-soft: #FBE6E6;
+	--color-bo-on-danger-soft: #6B3A3A;
+	--color-bo-chip: #F1F1F4;
+	--color-bo-stripe: #FAFAFB;
+	--color-bo-tabs: #F3F3F5;
+	--color-bo-switch-off: #D4D4DA;
+	--color-bo-switch-on: #5DBB87;
+	--color-bo-logo: #F2A65A;
 }
 
 @theme inline {
-	--font-sans: var(--font-geist);
+	--font-sans: var(--font-poppins);
 }
