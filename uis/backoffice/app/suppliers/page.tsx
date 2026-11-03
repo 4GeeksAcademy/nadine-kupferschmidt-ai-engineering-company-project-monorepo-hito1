@@ -65,52 +65,64 @@ export default function SuppliersPage() {
 
   return (
     <div>
-      <header className="mb-8 border-b border-brand-beige bg-white px-5 py-5">
-        <p className="mb-2 text-sm font-semibold uppercase text-brand-warmgray">
-          Compras / Proveedores
-        </p>
-        <h1 className="text-2xl font-semibold text-brand-darkbrown">
-          Directorio de proveedores
-        </h1>
-      </header>
-
-      <div className="mb-4">
+      <header className="mb-6 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="mb-1 text-xs font-medium uppercase tracking-wide text-bo-muted">
+            Compras / Proveedores
+          </p>
+          <h1 className="text-3xl font-semibold text-bo-text">
+            Directorio de proveedores
+          </h1>
+          <p className="mt-1 text-sm text-bo-muted">
+            Tarifas, categorías y estado de los proveedores de Colombia y Florida.
+          </p>
+        </div>
         <button
           type="button"
           onClick={() => setShowForm((visible) => !visible)}
           aria-expanded={showForm}
-          className="min-h-11 rounded bg-brand-ochre px-4 py-2 text-sm text-brand-darkbrown hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-darkbrown"
+          className="inline-flex min-h-11 items-center gap-2 rounded-full bg-bo-accent px-5 text-sm font-medium text-bo-on-accent hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text"
         >
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            className="h-[18px] w-[18px]"
+          >
+            <path d="M12 5v14M5 12h14" />
+          </svg>
           Registrar proveedor
         </button>
-      </div>
+      </header>
 
       {showForm && (
         <SupplierForm onCreated={() => setRefreshKey((key) => key + 1)} />
       )}
 
-      <SupplierFilters filters={filters} onChange={setFilters} />
+      <section
+        aria-label="Directorio de proveedores"
+        aria-busy={loading}
+        className="overflow-hidden rounded-[20px] border border-bo-border bg-bo-surface"
+      >
+        <SupplierFilters
+          filters={filters}
+          onChange={setFilters}
+          count={suppliers.length}
+        />
 
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-brand-warmgray">
-          Proveedores
-        </h2>
-        <p className="text-sm text-brand-warmgray" aria-live="polite">
-          {suppliers.length} {suppliers.length === 1 ? "proveedor" : "proveedores"}
-        </p>
-      </div>
-
-      <section aria-label="Directorio de proveedores" aria-busy={loading}>
         {error ? (
-          <p role="alert" className="rounded-md border border-brand-beige bg-white p-6 text-sm text-red-600">
+          <p role="alert" className="p-6 text-sm text-bo-danger">
             {error}
           </p>
         ) : loading ? (
-          <p role="status" className="rounded-md border border-brand-beige bg-white p-6 text-sm text-brand-warmgray">
+          <p role="status" className="p-6 text-sm text-bo-muted">
             Cargando proveedores…
           </p>
         ) : suppliers.length === 0 ? (
-          <p className="rounded-md border border-brand-beige bg-white p-6 text-sm text-brand-warmgray">
+          <p className="p-6 text-sm text-bo-muted">
             No hay proveedores con estos filtros.
           </p>
         ) : (

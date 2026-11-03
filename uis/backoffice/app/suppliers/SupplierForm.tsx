@@ -25,7 +25,7 @@ type FormErrors = {
 };
 
 const inputClass =
-  "rounded border border-brand-beige bg-white px-3 py-2 text-sm text-brand-charcoal";
+  "min-h-11 rounded-[10px] border border-bo-border bg-bo-surface px-3 py-2 text-sm text-bo-text";
 
 const initialForm = {
   name: "",
@@ -108,10 +108,10 @@ export default function SupplierForm({ onCreated }: SupplierFormProps) {
     <form
       noValidate
       onSubmit={submit}
-      className="mb-6 rounded-md border border-brand-beige bg-white p-6"
+      className="mb-6 rounded-[18px] border border-bo-border bg-bo-surface p-5"
     >
       <div className="grid gap-5 sm:grid-cols-2">
-        <label className="flex flex-col gap-1 text-sm text-brand-warmgray">
+        <label className="flex flex-col gap-1 text-sm text-bo-muted">
           Nombre
           <input
             type="text"
@@ -124,10 +124,10 @@ export default function SupplierForm({ onCreated }: SupplierFormProps) {
             }}
             className={inputClass}
           />
-          {errors.name && <span className="text-sm text-red-600">{errors.name}</span>}
+          {errors.name && <span className="text-sm text-bo-danger">{errors.name}</span>}
         </label>
 
-        <div className="flex flex-col gap-1 text-sm text-brand-warmgray">
+        <div className="flex flex-col gap-1 text-sm text-bo-muted">
           <label htmlFor="supplier-country">País</label>
           <select
             id="supplier-country"
@@ -146,35 +146,35 @@ export default function SupplierForm({ onCreated }: SupplierFormProps) {
               </option>
             ))}
           </select>
-          <p className="text-sm text-brand-warmgray">
+          <p className="text-sm text-bo-muted">
             Moneda: {COUNTRY_CURRENCY[form.country]}
           </p>
         </div>
 
         <fieldset className="sm:col-span-2">
-          <legend className="mb-2 text-sm text-brand-warmgray">Categorías</legend>
+          <legend className="mb-2 text-sm text-bo-muted">Categorías</legend>
           <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
             {CATEGORIES.map((category) => (
               <label
                 key={category}
-                className="flex items-center gap-2 text-sm text-brand-charcoal"
+                className="flex items-center gap-2 text-sm text-bo-text"
               >
                 <input
                   type="checkbox"
                   checked={form.categories.includes(category)}
                   onChange={() => toggleCategory(category)}
-                  className="accent-brand-ochre"
+                  className="accent-bo-on-accent-soft"
                 />
                 {CATEGORY_LABELS[category]}
               </label>
             ))}
           </div>
           {errors.categories && (
-            <p className="mt-1 text-sm text-red-600">{errors.categories}</p>
+            <p className="mt-1 text-sm text-bo-danger">{errors.categories}</p>
           )}
         </fieldset>
 
-        <label className="flex flex-col gap-1 text-sm text-brand-warmgray">
+        <label className="flex flex-col gap-1 text-sm text-bo-muted">
           Tarifa por unidad
           <input
             type="number"
@@ -192,15 +192,15 @@ export default function SupplierForm({ onCreated }: SupplierFormProps) {
             }}
             className={inputClass}
           />
-          <span className="text-xs text-brand-warmgray">
+          <span className="text-xs text-bo-muted">
             Usa punto solo para decimales y no escribas separador de miles. Ej.: 28500 o 6.80
           </span>
           {errors.rate_per_unit && (
-            <span className="text-sm text-red-600">{errors.rate_per_unit}</span>
+            <span className="text-sm text-bo-danger">{errors.rate_per_unit}</span>
           )}
         </label>
 
-        <label className="flex flex-col gap-1 text-sm text-brand-warmgray">
+        <label className="flex flex-col gap-1 text-sm text-bo-muted">
           Estado
           <select
             value={form.status}
@@ -217,7 +217,7 @@ export default function SupplierForm({ onCreated }: SupplierFormProps) {
           </select>
         </label>
 
-        <label className="flex flex-col gap-1 text-sm text-brand-warmgray">
+        <label className="flex flex-col gap-1 text-sm text-bo-muted">
           Email de contacto
           <input
             type="email"
@@ -232,7 +232,7 @@ export default function SupplierForm({ onCreated }: SupplierFormProps) {
           />
         </label>
 
-        <label className="flex flex-col gap-1 text-sm text-brand-warmgray sm:col-span-2">
+        <label className="flex flex-col gap-1 text-sm text-bo-muted sm:col-span-2">
           Notas
           <textarea
             value={form.notes}
@@ -246,19 +246,19 @@ export default function SupplierForm({ onCreated }: SupplierFormProps) {
       </div>
 
       {submitError && (
-        <p role="alert" className="mt-4 text-sm text-red-600">
+        <p role="alert" className="mt-4 text-sm text-bo-danger">
           {submitError}
         </p>
       )}
       {success && (
-        <p role="status" className="mt-4 text-sm text-green-700">
+        <p role="status" className="mt-4 text-sm text-bo-success">
           {success}
         </p>
       )}
       <button
         type="submit"
         disabled={saving}
-        className="mt-5 min-h-11 rounded bg-brand-ochre px-4 py-2 text-sm text-brand-darkbrown hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-darkbrown disabled:cursor-not-allowed disabled:opacity-50"
+        className="mt-5 min-h-11 rounded-full bg-bo-accent px-5 text-sm font-medium text-bo-on-accent hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text disabled:cursor-not-allowed disabled:opacity-50"
       >
         {saving ? "Guardando…" : "Guardar proveedor"}
       </button>

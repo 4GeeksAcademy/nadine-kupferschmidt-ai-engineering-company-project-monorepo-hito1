@@ -9,7 +9,7 @@ Moderno, limpio y profesional: fondo gris claro neutro, contenido en tarjetas bl
 ## 2. Tipografía
 
 - **Poppins** (Google Fonts, pesos 400, 500 y 600) para toda la interfaz.
-- Logo **"Brasaland"** en **Fraunces 600** (serif), color `#D9862F`.
+- Logo **"Brasaland"** con la serif del sistema (`font-serif` de Tailwind), `text-xl font-semibold tracking-wide`, color `#F2A65A`.
 
 ## 3. Colores
 
@@ -76,8 +76,8 @@ Blanca, con borde inferior. Contiene:
 
 ### Estado
 
-- Switch: verde `#1E7B43` cuando está activo y gris `#D4D4DA` cuando está suspendido.
-- Texto "Activo" o "Suspendido" al lado del switch.
+- Switch (`h-4 w-7`): verde `#5DBB87` cuando está activo y gris `#D4D4DA` cuando está suspendido.
+- Texto "Activo" (`#1E7B43`) o "Suspendido" al lado del switch, en `text-xs`.
 
 ### Íconos
 
@@ -86,6 +86,7 @@ Blanca, con borde inferior. Contiene:
 ## 5. Reglas
 
 - Solo clases de Tailwind, sin CSS propio, salvo los colores registrados en `globals.css`.
+- La página usa `scheme-light` en `<html>` para que los controles nativos (por ejemplo, las listas de los select) se vean en claro aunque el sistema esté en modo oscuro.
 - Mantener la accesibilidad:
   - Textos con contraste **4.5:1**.
   - `aria-label` en botones con solo ícono.

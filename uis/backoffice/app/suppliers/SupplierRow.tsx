@@ -7,6 +7,7 @@ import { CATEGORY_LABELS, STATUS_LABELS, type Supplier } from "./types";
 
 type SupplierRowProps = {
   supplier: Supplier;
+  striped: boolean;
   onUpdated: (supplier: Supplier) => void;
   onDeleted: (id: number) => void;
 };
@@ -14,9 +15,9 @@ type SupplierRowProps = {
 type RowAction = "rate" | "status" | "delete";
 
 const secondaryButtonClass =
-  "rounded border border-brand-beige bg-white px-3 py-1.5 text-sm text-brand-darkbrown hover:border-brand-ochre focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-darkbrown disabled:cursor-not-allowed disabled:opacity-50";
+  "min-h-11 rounded-full border border-bo-border bg-bo-surface px-4 text-sm text-bo-text hover:bg-bo-page focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text disabled:cursor-not-allowed disabled:opacity-50";
 const primaryButtonClass =
-  "rounded bg-brand-ochre px-3 py-1.5 text-sm text-brand-darkbrown hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-darkbrown disabled:cursor-not-allowed disabled:opacity-50";
+  "min-h-11 rounded-full bg-bo-accent px-4 text-sm font-medium text-bo-on-accent hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text disabled:cursor-not-allowed disabled:opacity-50";
 
 const dateFormatter = new Intl.DateTimeFormat("es-CO", {
   dateStyle: "medium",
@@ -39,6 +40,7 @@ function formatRate(supplier: Supplier): string {
 
 export default function SupplierRow({
   supplier,
+  striped,
   onUpdated,
   onDeleted,
 }: SupplierRowProps) {
@@ -121,23 +123,35 @@ export default function SupplierRow({
     }
   }
 
+  const rowBackground = striped ? "bg-bo-stripe" : "bg-bo-surface";
+
   return (
     <>
-      <tr className="hover:bg-brand-ivory">
-        <td className="px-4 py-3 font-medium text-brand-darkbrown">
-          {supplier.name}
+      <tr className={`border-t border-bo-divider align-middle ${rowBackground}`}>
+        <td className="px-4 py-3">
+          <p className="font-medium text-bo-text">{supplier.name}</p>
+          {supplier.contact_email && (
+            <p className="text-xs text-bo-muted">{supplier.contact_email}</p>
+          )}
         </td>
-        <td className="px-4 py-3 text-brand-charcoal">
+        <td className="px-4 py-3 text-bo-text">
           {supplier.country === "USA" ? "Estados Unidos" : supplier.country}
         </td>
-        <td className="px-4 py-3 text-brand-charcoal">
-          {supplier.categories
-            .map((category) => CATEGORY_LABELS[category])
-            .join(", ")}
+        <td className="px-4 py-3">
+          <ul className="flex flex-wrap gap-1.5">
+            {supplier.categories.map((category) => (
+              <li
+                key={category}
+                className="rounded-full bg-bo-chip px-2.5 py-0.5 text-xs text-bo-menu"
+              >
+                {CATEGORY_LABELS[category]}
+              </li>
+            ))}
+          </ul>
         </td>
-        <td className="whitespace-nowrap px-4 py-3 text-brand-charcoal">
+        <td className="whitespace-nowrap px-4 py-3 text-right text-bo-text">
           {editingRate ? (
-            <div className="flex min-w-48 flex-col gap-2">
+            <div className="ml-auto flex min-w-48 flex-col gap-2 text-left">
               <input
                 type="number"
                 min="0"
@@ -150,12 +164,12 @@ export default function SupplierRow({
                   setRateValue(event.target.value);
                   setRateError("");
                 }}
-                className="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm text-brand-charcoal"
+                className="min-h-11 w-full rounded-[10px] border border-bo-border bg-bo-surface px-3 text-sm tabular-nums text-bo-text"
               />
-              <p className="text-xs text-brand-warmgray whitespace-normal">
+              <p className="text-xs text-bo-muted whitespace-normal">
                 Usa punto solo para decimales y no escribas separador de miles. Ej.: 28500 o 6.80
               </p>
-              {rateError && <p className="text-sm text-red-600">{rateError}</p>}
+              {rateError && <p className="text-sm text-bo-danger">{rateError}</p>}
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
@@ -175,18 +189,18 @@ export default function SupplierRow({
                 </button>
               </div>
               {savingAction === "rate" && (
-                <span className="text-sm text-brand-warmgray">Guardando…</span>
+                <span className="text-sm text-bo-muted">Guardando…</span>
               )}
             </div>
           ) : (
-            <div className="flex items-center justify-between gap-4">
-              <span>{formatRate(supplier)}</span>
+            <div className="flex items-center justify-end gap-3">
+              <span className="tabular-nums">{formatRate(supplier)}</span>
               <button
                 type="button"
                 disabled={saving}
                 onClick={startEditingRate}
                 aria-label={`Editar tarifa de ${supplier.name}`}
-                className="text-xs text-brand-warmgray underline hover:text-brand-ochre focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-darkbrown disabled:cursor-not-allowed disabled:opacity-50"
+                className="text-xs text-bo-muted underline hover:text-bo-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Editar
               </button>
@@ -202,31 +216,31 @@ export default function SupplierRow({
               aria-label={`Cambiar estado de ${supplier.name}`}
               disabled={saving}
               onClick={toggleStatus}
-              className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-darkbrown disabled:cursor-not-allowed disabled:opacity-50 ${
-                isActive ? "bg-green-600" : "bg-gray-300"
+              className={`relative inline-flex h-4 w-7 shrink-0 items-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text disabled:cursor-not-allowed disabled:opacity-50 ${
+                isActive ? "bg-bo-switch-on" : "bg-bo-switch-off"
               }`}
             >
               <span
                 aria-hidden="true"
-                className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${
-                  isActive ? "translate-x-4" : "translate-x-0.5"
+                className={`inline-block h-3 w-3 rounded-full bg-bo-surface shadow transition-transform ${
+                  isActive ? "translate-x-3.5" : "translate-x-0.5"
                 }`}
               />
             </button>
-            <span className={`text-sm ${isActive ? "text-green-700" : "text-red-700"}`}>
+            <span className={`text-xs ${isActive ? "text-bo-success" : "text-bo-danger"}`}>
               {STATUS_LABELS[supplier.status]}
             </span>
             {savingAction === "status" && (
-              <span className="text-sm text-brand-warmgray">Guardando…</span>
+              <span className="text-sm text-bo-muted">Guardando…</span>
             )}
           </div>
         </td>
-        <td className="whitespace-nowrap px-4 py-3 text-brand-warmgray">
+        <td className="whitespace-nowrap px-4 py-3 text-bo-muted">
           {dateFormatter.format(new Date(supplier.updated_at))}
         </td>
-        <td className="w-12 px-2 py-3 text-center">
+        <td className="w-14 px-2 py-3 text-center">
           {savingAction === "delete" ? (
-            <span className="text-sm text-brand-warmgray">Guardando…</span>
+            <span className="text-sm text-bo-muted">Guardando…</span>
           ) : (
             <button
               type="button"
@@ -236,7 +250,7 @@ export default function SupplierRow({
                 setConfirmOpen(true);
               }}
               aria-label={`Eliminar ${supplier.name}`}
-              className="rounded p-1 text-brand-warmgray hover:text-red-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-darkbrown disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full text-bo-muted hover:text-bo-danger focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text disabled:cursor-not-allowed disabled:opacity-50"
             >
               <svg
                 aria-hidden="true"
@@ -267,8 +281,8 @@ export default function SupplierRow({
         </td>
       </tr>
       {error && (
-        <tr>
-          <td colSpan={7} className="px-4 pb-3 text-sm text-red-600">
+        <tr className={rowBackground}>
+          <td colSpan={7} className="px-4 pb-3 text-sm text-bo-danger">
             {error}
           </td>
         </tr>

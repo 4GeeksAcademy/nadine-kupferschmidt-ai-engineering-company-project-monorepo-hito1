@@ -60,12 +60,12 @@ export default function ConfirmDialog({
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={messageId}
-        className="w-full max-w-md rounded-md border border-brand-beige bg-white p-6 shadow-lg"
+        className="w-full max-w-md rounded-[20px] border border-bo-border bg-bo-surface p-6 shadow-lg"
       >
-        <h2 id={titleId} className="text-lg font-semibold text-brand-darkbrown">
+        <h2 id={titleId} className="text-lg font-semibold text-bo-text">
           {title}
         </h2>
-        <p id={messageId} className="mt-2 text-sm text-brand-charcoal">
+        <p id={messageId} className="mt-2 text-sm text-bo-muted">
           {message}
         </p>
         <div className="mt-6 flex flex-wrap justify-end gap-3">
@@ -74,7 +74,7 @@ export default function ConfirmDialog({
             type="button"
             onClick={onCancel}
             disabled={loading}
-            className="rounded border border-brand-beige bg-white px-4 py-2 text-sm text-brand-darkbrown hover:border-brand-ochre focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-darkbrown disabled:cursor-not-allowed disabled:opacity-50"
+            className="min-h-11 rounded-full border border-bo-border bg-bo-surface px-5 text-sm text-bo-text hover:bg-bo-page focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text disabled:cursor-not-allowed disabled:opacity-50"
           >
             Cancelar
           </button>
@@ -82,7 +82,7 @@ export default function ConfirmDialog({
             type="button"
             onClick={onConfirm}
             disabled={loading}
-            className="rounded bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 disabled:cursor-not-allowed disabled:opacity-60"
+            className="min-h-11 rounded-full bg-bo-danger px-5 text-sm font-medium text-white hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-danger disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? loadingLabel : confirmLabel}
           </button>
