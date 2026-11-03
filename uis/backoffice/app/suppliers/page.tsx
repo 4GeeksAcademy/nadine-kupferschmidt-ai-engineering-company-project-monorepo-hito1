@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getSuppliers } from "./api";
+import SupplierForm from "./SupplierForm";
 import SupplierFilters, {
   type SupplierFilterValues,
 } from "./SupplierFilters";
@@ -16,6 +17,8 @@ export default function SuppliersPage() {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showForm, setShowForm] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     let active = true;
@@ -46,7 +49,7 @@ export default function SuppliersPage() {
     return () => {
       active = false;
     };
-  }, [filters]);
+  }, [filters, refreshKey]);
 
   return (
     <div>
@@ -58,6 +61,21 @@ export default function SuppliersPage() {
           Directorio de proveedores
         </h1>
       </header>
+
+      <div className="mb-4">
+        <button
+          type="button"
+          onClick={() => setShowForm((visible) => !visible)}
+          aria-expanded={showForm}
+          className="min-h-11 rounded bg-brand-ochre px-4 py-2 text-sm text-brand-darkbrown hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-darkbrown"
+        >
+          Registrar proveedor
+        </button>
+      </div>
+
+      {showForm && (
+        <SupplierForm onCreated={() => setRefreshKey((key) => key + 1)} />
+      )}
 
       <SupplierFilters filters={filters} onChange={setFilters} />
 
