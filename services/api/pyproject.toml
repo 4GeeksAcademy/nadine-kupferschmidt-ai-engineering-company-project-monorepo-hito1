@@ -1,0 +1,10 @@
+[project]
+name = "brasaland-incidents-api"
+version = "0.1.0"
+description = "API de analisis de incidencias de Brasaland"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "python-multipart",
+]
