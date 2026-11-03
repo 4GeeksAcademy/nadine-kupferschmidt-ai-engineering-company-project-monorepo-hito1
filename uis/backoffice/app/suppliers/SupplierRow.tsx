@@ -1,13 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import ConfirmDialog from "../../components/ConfirmDialog";
 import { deleteSupplier, updateRate, updateStatus } from "./api";
-import {
-  CATEGORY_LABELS,
-  STATUS_LABELS,
-  type Status,
-  type Supplier,
-} from "./types";
+import { CATEGORY_LABELS, STATUS_LABELS, type Supplier } from "./types";
 
 type SupplierRowProps = {
   supplier: Supplier;
@@ -15,10 +11,7 @@ type SupplierRowProps = {
   onDeleted: (id: number) => void;
 };
 
-const statusClass: Record<Status, string> = {
-  active: "border-green-600 text-green-700",
-  suspended: "border-red-600 text-red-700",
-};
+type RowAction = "rate" | "status" | "delete";
 
 const secondaryButtonClass =
   "rounded border border-brand-beige bg-white px-3 py-1.5 text-sm text-brand-darkbrown hover:border-brand-ochre focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-darkbrown disabled:cursor-not-allowed disabled:opacity-50";
@@ -49,7 +42,11 @@ export default function SupplierRow({
   const [rateValue, setRateValue] = useState(String(supplier.rate_per_unit));
   const [rateError, setRateError] = useState("");
   const [error, setError] = useState("");
-  const [saving, setSaving] = useState(false);
+  // Acción en curso; deshabilita toda la fila mientras guarda.
+  const [savingAction, setSavingAction] = useState<RowAction | null>(null);
+  const saving = savingAction !== null;
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const isActive = supplier.status === "active";
 
   function startEditingRate() {
     setRateValue(String(supplier.rate_per_unit));
@@ -71,7 +68,7 @@ export default function SupplierRow({
       return;
     }
 
-    setSaving(true);
+    setSavingAction("rate");
     setError("");
     setRateError("");
     try {
@@ -83,13 +80,13 @@ export default function SupplierRow({
         cause instanceof Error ? cause.message : "No se pudo actualizar la tarifa.",
       );
     } finally {
-      setSaving(false);
+      setSavingAction(null);
     }
   }
 
   async function toggleStatus() {
-    const nextStatus = supplier.status === "active" ? "suspended" : "active";
-    setSaving(true);
+    const nextStatus = isActive ? "suspended" : "active";
+    setSavingAction("status");
     setError("");
     try {
       const updatedSupplier = await updateStatus(supplier.id, nextStatus);
@@ -99,27 +96,24 @@ export default function SupplierRow({
         cause instanceof Error ? cause.message : "No se pudo actualizar el estado.",
       );
     } finally {
-      setSaving(false);
+      setSavingAction(null);
     }
   }
 
   async function removeSupplier() {
-    const confirmed = window.confirm(
-      "¿Eliminar este proveedor? Solo debe usarse para corregir datos cargados por error.",
-    );
-    if (!confirmed) return;
-
-    setSaving(true);
+    setSavingAction("delete");
     setError("");
     try {
       await deleteSupplier(supplier.id);
       onDeleted(supplier.id);
     } catch (cause) {
+      // Cierra el diálogo para que el error se vea en la fila.
+      setConfirmOpen(false);
       setError(
         cause instanceof Error ? cause.message : "No se pudo eliminar el proveedor.",
       );
     } finally {
-      setSaving(false);
+      setSavingAction(null);
     }
   }
 
@@ -173,57 +167,96 @@ export default function SupplierRow({
                   Cancelar
                 </button>
               </div>
+              {savingAction === "rate" && (
+                <span className="text-sm text-brand-warmgray">Guardando…</span>
+              )}
             </div>
           ) : (
-            formatRate(supplier)
-          )}
-        </td>
-        <td className="px-4 py-3">
-          <span
-            className={`inline-block rounded-full border px-2 py-0 text-xs font-medium ${statusClass[supplier.status]}`}
-          >
-            {STATUS_LABELS[supplier.status]}
-          </span>
-        </td>
-        <td className="whitespace-nowrap px-4 py-3 text-brand-warmgray">
-          {dateFormatter.format(new Date(supplier.updated_at))}
-        </td>
-        <td className="px-4 py-3">
-          <div className="flex min-w-32 flex-col items-start gap-2">
-            {saving && (
-              <span className="text-sm text-brand-warmgray">Guardando…</span>
-            )}
-            {!editingRate && (
+            <div className="flex items-center justify-between gap-4">
+              <span>{formatRate(supplier)}</span>
               <button
                 type="button"
                 disabled={saving}
                 onClick={startEditingRate}
-                className={secondaryButtonClass}
+                aria-label={`Editar tarifa de ${supplier.name}`}
+                className="text-xs text-brand-warmgray underline hover:text-brand-ochre focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-darkbrown disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Editar tarifa
+                Editar
               </button>
-            )}
+            </div>
+          )}
+        </td>
+        <td className="px-4 py-3">
+          <div className="flex items-center gap-2 whitespace-nowrap">
             <button
               type="button"
+              role="switch"
+              aria-checked={isActive}
+              aria-label={`Cambiar estado de ${supplier.name}`}
               disabled={saving}
               onClick={toggleStatus}
-              className={
-                supplier.status === "active"
-                  ? secondaryButtonClass
-                  : primaryButtonClass
-              }
+              className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-darkbrown disabled:cursor-not-allowed disabled:opacity-50 ${
+                isActive ? "bg-green-600" : "bg-gray-300"
+              }`}
             >
-              {supplier.status === "active" ? "Suspender" : "Activar"}
+              <span
+                aria-hidden="true"
+                className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${
+                  isActive ? "translate-x-4" : "translate-x-0.5"
+                }`}
+              />
             </button>
+            <span className={`text-sm ${isActive ? "text-green-700" : "text-red-700"}`}>
+              {STATUS_LABELS[supplier.status]}
+            </span>
+            {savingAction === "status" && (
+              <span className="text-sm text-brand-warmgray">Guardando…</span>
+            )}
+          </div>
+        </td>
+        <td className="whitespace-nowrap px-4 py-3 text-brand-warmgray">
+          {dateFormatter.format(new Date(supplier.updated_at))}
+        </td>
+        <td className="w-12 px-2 py-3 text-center">
+          {savingAction === "delete" ? (
+            <span className="text-sm text-brand-warmgray">Guardando…</span>
+          ) : (
             <button
               type="button"
               disabled={saving}
-              onClick={removeSupplier}
-              className="text-xs text-red-600 underline hover:text-red-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 disabled:cursor-not-allowed disabled:opacity-50"
+              onClick={() => {
+                setError("");
+                setConfirmOpen(true);
+              }}
+              aria-label={`Eliminar ${supplier.name}`}
+              className="rounded p-1 text-brand-warmgray hover:text-red-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-darkbrown disabled:cursor-not-allowed disabled:opacity-50"
             >
-              Eliminar
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-4 w-4"
+              >
+                <path d="M3 6h18" />
+                <path d="M8 6V4h8v2" />
+                <path d="M19 6l-1 14H6L5 6" />
+                <path d="M10 11v6M14 11v6" />
+              </svg>
             </button>
-          </div>
+          )}
+          <ConfirmDialog
+            open={confirmOpen}
+            title={`¿Eliminar a ${supplier.name}?`}
+            message="Esta acción borra el proveedor del directorio de forma permanente y no se puede deshacer. Si el proveedor solo dejó de trabajar con Brasaland, es mejor suspenderlo."
+            confirmLabel="Eliminar proveedor"
+            loading={savingAction === "delete"}
+            onConfirm={removeSupplier}
+            onCancel={() => setConfirmOpen(false)}
+          />
         </td>
       </tr>
       {error && (

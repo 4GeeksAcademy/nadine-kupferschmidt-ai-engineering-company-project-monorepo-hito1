@@ -15,7 +15,7 @@ export default function SupplierTable({
 }: SupplierTableProps) {
   return (
     <div className="overflow-x-auto rounded-md border border-brand-beige bg-white">
-      <table className="w-full min-w-[900px] border-collapse text-left text-sm">
+      <table className="w-full min-w-[820px] border-collapse text-left text-sm">
         <thead className="bg-gray-200 text-brand-darkbrown">
           <tr>
             <th scope="col" className="px-4 py-3 font-semibold">Nombre</th>
@@ -24,7 +24,9 @@ export default function SupplierTable({
             <th scope="col" className="px-4 py-3 font-semibold">Tarifa por unidad</th>
             <th scope="col" className="px-4 py-3 font-semibold">Estado</th>
             <th scope="col" className="px-4 py-3 font-semibold">Última actualización de tarifa</th>
-            <th scope="col" className="px-4 py-3 font-semibold">Acciones</th>
+            <th scope="col" className="w-12 px-2 py-3">
+              <span className="sr-only">Eliminar</span>
+            </th>
           </tr>
         </thead>
         <tbody className="divide-y divide-brand-beige">
