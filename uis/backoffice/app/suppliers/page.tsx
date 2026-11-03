@@ -51,6 +51,18 @@ export default function SuppliersPage() {
     };
   }, [filters, refreshKey]);
 
+  function updateSupplier(updatedSupplier: Supplier) {
+    setSuppliers((current) =>
+      current.map((supplier) =>
+        supplier.id === updatedSupplier.id ? updatedSupplier : supplier,
+      ),
+    );
+  }
+
+  function removeSupplier(id: number) {
+    setSuppliers((current) => current.filter((supplier) => supplier.id !== id));
+  }
+
   return (
     <div>
       <header className="mb-8 border-b border-brand-beige bg-white px-5 py-5">
@@ -102,7 +114,11 @@ export default function SuppliersPage() {
             No hay proveedores con estos filtros.
           </p>
         ) : (
-          <SupplierTable suppliers={suppliers} />
+          <SupplierTable
+            suppliers={suppliers}
+            onUpdated={updateSupplier}
+            onDeleted={removeSupplier}
+          />
         )}
       </section>
     </div>
