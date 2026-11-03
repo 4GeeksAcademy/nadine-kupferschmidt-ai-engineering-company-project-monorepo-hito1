@@ -20,8 +20,8 @@ export default function NavLink({ href, text, icon }: NavLinkProps) {
       aria-current={isActive ? "page" : undefined}
       className={`flex min-h-11 items-center gap-2.5 rounded-[10px] px-3 text-sm no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text ${
         isActive
-          ? "bg-bo-accent-soft font-medium text-bo-on-accent-soft"
-          : "text-bo-menu hover:bg-bo-page"
+          ? "bg-bo-tabs font-medium text-bo-text"
+          : "text-bo-menu hover:bg-bo-stripe"
       }`}
     >
       {icon}

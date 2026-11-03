@@ -9,7 +9,7 @@ Moderno, limpio y profesional: fondo gris claro neutro, contenido en tarjetas bl
 ## 2. Tipografía
 
 - **Poppins** (Google Fonts, pesos 400, 500 y 600) para toda la interfaz.
-- Logo **"Brasaland"** con la serif del sistema (`font-serif` de Tailwind), `text-xl font-semibold tracking-wide`, color `#F2A65A`.
+- Logo **"Brasaland"** con la serif del sistema (`font-serif` de Tailwind), `text-xl font-semibold tracking-wide`, color `#F2A65A` (el ocre original de Brasaland).
 
 ## 3. Colores
 
@@ -23,7 +23,7 @@ Moderno, limpio y profesional: fondo gris claro neutro, contenido en tarjetas bl
 | Texto secundario                                   | `#6B6B74`                                                |
 | Texto de menú                                      | `#45454D`                                                |
 | Acento principal (botones principales)             | Fondo `#F5B971`, texto `#2B1A06`                         |
-| Acento suave (menú activo, tarjeta destacada, iniciales) | Fondo `#FCE6CC`, texto `#6E3C0B`                   |
+| Acento suave (tarjeta destacada, iniciales)        | Fondo `#FCE6CC`, texto `#6E3C0B`                   |
 | Éxito / Activo                                     | `#1E7B43`                                                |
 | Alerta suave (tarjeta de suspendidos)              | Fondo `#FBE6E6`, texto `#6B3A3A`, número `#A61F1F`       |
 | Suspendido (texto)                                 | `#A61F1F`                                                |
@@ -46,7 +46,7 @@ Blanca, con borde inferior. Contiene:
 
 - Blanco, de **220 px como máximo**.
 - Íconos SVG de trazo y textos de **14 px**.
-- Ítem activo con fondo de acento suave, `rounded-[10px]` y `aria-current="page"`.
+- Ítem activo con fondo `#F3F3F5` y texto `#1F1F23`, `rounded-[10px]` y `aria-current="page"`. Hover de los ítems inactivos: `#FAFAFB`.
 
 ### Botones
 

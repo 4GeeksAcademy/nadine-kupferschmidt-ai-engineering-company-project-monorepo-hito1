@@ -50,7 +50,7 @@ const truckIcon = (
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="es" className={`${poppins.variable} scheme-light`}>
-      <body className="min-h-screen bg-bo-page font-sans text-bo-text antialiased selection:bg-brand-ochre/30">
+      <body className="min-h-screen bg-bo-page font-sans text-bo-text antialiased selection:bg-bo-logo/30">
         <div className="min-h-screen md:flex">
           <aside className="border-b border-bo-border bg-bo-surface md:sticky md:top-0 md:flex md:h-screen md:w-[220px] md:shrink-0 md:flex-col md:border-r md:border-b-0">
             <Link href="/" aria-label="Brasaland, inicio" className="flex flex-col items-start gap-1 border-b border-bo-border px-5 py-6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text">

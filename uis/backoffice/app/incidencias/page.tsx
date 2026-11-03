@@ -123,7 +123,7 @@ export default function IncidentsPage() {
         <p className="mb-1 text-xs font-medium uppercase tracking-wide text-bo-muted">Operaciones / Incidencias</p>
         <h1 className="text-3xl font-semibold text-bo-text">Análisis de incidencias</h1>
       </header>
-      <section aria-labelledby="archivo-heading" aria-busy={analyzing}>
+      <section aria-labelledby="archivo-heading" aria-busy={analyzing} className="mb-4">
         <h2 id="archivo-heading" className="mb-4 text-sm font-semibold uppercase text-bo-muted">Archivo de incidencias</h2>
         <div
           onDragOver={(event) => { event.preventDefault(); if (!busy) setDragging(true); }}
