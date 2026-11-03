@@ -23,13 +23,17 @@ const dateFormatter = new Intl.DateTimeFormat("es-CO", {
   timeStyle: "short",
 });
 
-function formatRate(supplier: Supplier): string {
-  const decimals = supplier.currency === "COP" ? 0 : 2;
-  const amount = new Intl.NumberFormat("es-CO", {
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals,
-  }).format(supplier.rate_per_unit);
+// Cada moneda se muestra con el formato de su país.
+const rateFormatters = {
+  COP: new Intl.NumberFormat("es-CO", { maximumFractionDigits: 0 }),
+  USD: new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }),
+};
 
+function formatRate(supplier: Supplier): string {
+  const amount = rateFormatters[supplier.currency].format(supplier.rate_per_unit);
   return `${amount} ${supplier.currency}`;
 }
 
@@ -148,6 +152,9 @@ export default function SupplierRow({
                 }}
                 className="w-full rounded border border-brand-beige bg-white px-3 py-2 text-sm text-brand-charcoal"
               />
+              <p className="text-xs text-brand-warmgray whitespace-normal">
+                Usa punto solo para decimales y no escribas separador de miles. Ej.: 28500 o 6.80
+              </p>
               {rateError && <p className="text-sm text-red-600">{rateError}</p>}
               <div className="flex flex-wrap gap-2">
                 <button

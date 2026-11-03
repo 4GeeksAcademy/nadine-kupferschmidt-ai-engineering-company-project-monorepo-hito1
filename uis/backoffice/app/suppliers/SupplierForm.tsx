@@ -192,6 +192,9 @@ export default function SupplierForm({ onCreated }: SupplierFormProps) {
             }}
             className={inputClass}
           />
+          <span className="text-xs text-brand-warmgray">
+            Usa punto solo para decimales y no escribas separador de miles. Ej.: 28500 o 6.80
+          </span>
           {errors.rate_per_unit && (
             <span className="text-sm text-red-600">{errors.rate_per_unit}</span>
           )}
