@@ -9,6 +9,8 @@ dependencies = [
     "python-multipart",
     "tinydb",
     "pydantic",
+    "python-jose[cryptography]>=3.5.0",
+    "libpass[bcrypt]>=1.9.4",
 ]
 
 [build-system]
