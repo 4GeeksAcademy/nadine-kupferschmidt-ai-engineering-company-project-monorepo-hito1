@@ -11,6 +11,7 @@ dependencies = [
     "pydantic",
     "python-jose[cryptography]>=3.5.0",
     "libpass[bcrypt]>=1.9.4",
+    "python-dotenv>=1.2.4",
 ]
 
 [build-system]
