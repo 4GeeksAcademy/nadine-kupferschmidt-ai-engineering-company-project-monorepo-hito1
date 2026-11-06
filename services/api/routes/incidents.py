@@ -2,11 +2,12 @@ import csv
 import io
 import sys
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
-from fastapi import APIRouter, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi.responses import Response
 
+from auth.security import get_current_user
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "packages"))
 
@@ -24,7 +25,10 @@ last_analysis: Optional[dict[str, object]] = None
 
 
 @router.post("/analyze")
-async def analyze(file: UploadFile = File(...)) -> dict[str, object]:
+async def analyze(
+    file: UploadFile = File(...),
+    current_user: dict[str, Any] = Depends(get_current_user),
+) -> dict[str, object]:
     global last_analysis
 
     if not (file.filename or "").lower().endswith(".csv"):
@@ -69,7 +73,9 @@ async def analyze(file: UploadFile = File(...)) -> dict[str, object]:
 
 
 @router.get("/results/export")
-def export_results() -> Response:
+def export_results(
+    current_user: dict[str, Any] = Depends(get_current_user),
+) -> Response:
     if last_analysis is None:
         raise HTTPException(
             status_code=404, detail="Todav\u00eda no hay ning\u00fan an\u00e1lisis para exportar."

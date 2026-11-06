@@ -2,5 +2,6 @@
 __pycache__/
 *.pyc
 db.json
+auth.json
 .env
 *.egg-info/

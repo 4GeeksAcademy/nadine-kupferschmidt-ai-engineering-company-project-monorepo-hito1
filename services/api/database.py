@@ -6,5 +6,5 @@ from tinydb import TinyDB
 DB_PATH = Path(__file__).resolve().parent / "db.json"
 
 # Inicializa la conexión y la tabla de proveedores.
-db = TinyDB(DB_PATH)
+db = TinyDB(DB_PATH, indent=2, ensure_ascii=False)
 suppliers = db.table("suppliers")
