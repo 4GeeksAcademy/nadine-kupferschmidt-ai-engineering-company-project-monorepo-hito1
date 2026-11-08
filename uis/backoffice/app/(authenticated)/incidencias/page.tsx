@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { apiFetch } from "@/lib/api";
 import type { AnalysisResponse, ApiError, Category, IncidentStatus, SatisfactionScore } from "./types";
 
 const categories: { code: Category; description: string }[] = [
@@ -84,7 +85,7 @@ export default function IncidentsPage() {
     const formData = new FormData();
     formData.append("file", file);
     try {
-      const response = await fetch("/api/incidents/analyze", { method: "POST", body: formData });
+      const response = await apiFetch("/api/incidents/analyze", { method: "POST", body: formData });
       if (!response.ok) throw new Error(await getApiError(response));
       const data: AnalysisResponse = await response.json();
       setResult(data);
@@ -100,7 +101,7 @@ export default function IncidentsPage() {
     setDownloading(true);
     setError("");
     try {
-      const response = await fetch("/api/incidents/results/export", { cache: "no-store" });
+      const response = await apiFetch("/api/incidents/results/export", { cache: "no-store" });
       if (!response.ok) throw new Error(await getApiError(response));
       const url = URL.createObjectURL(await response.blob());
       const link = document.createElement("a");

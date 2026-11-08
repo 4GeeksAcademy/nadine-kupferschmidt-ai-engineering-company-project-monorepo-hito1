@@ -1,4 +1,5 @@
 import type { Category, Country, Status, Supplier, SupplierCreate } from "./types";
+import { apiFetch } from "@/lib/api";
 
 type SupplierFilters = {
   country?: Country;
@@ -39,7 +40,7 @@ async function throwApiError(response: Response): Promise<never> {
 }
 
 async function request<T>(url: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(url, init);
+  const response = await apiFetch(url, init);
   if (!response.ok) {
     await throwApiError(response);
   }

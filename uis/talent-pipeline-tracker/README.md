@@ -89,3 +89,25 @@ types/
 ## Nota sobre la API
 
 La API es compartida por todos los estudiantes del curso y se reinicia periódicamente a sus datos originales, por lo que los cambios de prueba pueden desaparecer con el tiempo.
+
+## Autenticación
+
+El backoffice usa la API FastAPI de Brasaland (`services/api`) para iniciar sesión. El token JWT se guarda en `localStorage` (`access_token`) y se envía como `Authorization: Bearer <token>` en cada llamada protegida.
+
+### Cómo correrlo
+1. Levantar la API: `cd services/api && uv run uvicorn main:app --reload` (puerto 8000).
+2. Levantar el backoffice: `cd uis/backoffice && npm run dev` (puerto 3000).
+
+Las llamadas a `/api/...` se reenvían a la API mediante los rewrites de `next.config.ts`.
+
+### Vistas
+| Ruta | Acceso |
+|---|---|
+| `/login`, `/register` | Públicas |
+| `/`, `/suppliers`, `/incidencias`, `/account/profile` | Requieren sesión |
+
+### Piezas principales
+- `lib/auth.ts`: guardar, leer y borrar el token.
+- `lib/api.ts`: `apiFetch` agrega el token y, ante un 401, cierra la sesión y redirige a `/login`.
+- `components/AuthGuard.tsx`: redirige a `/login` si no hay token. Se usa en `app/(authenticated)/layout.tsx`.
+- `components/UserMenu.tsx` y `components/LogoutButton.tsx`: menú de usuario y cierre de sesión.
