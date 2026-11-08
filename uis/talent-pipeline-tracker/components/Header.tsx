@@ -1,4 +1,5 @@
 import Link from "next/link";
+import LogoutButton from "@/components/LogoutButton";
 
 export default function Header() {
   return (
@@ -42,6 +43,7 @@ export default function Header() {
             </svg>
             Nueva candidatura
           </Link>
+          <LogoutButton />
         </nav>
       </div>
     </header>
