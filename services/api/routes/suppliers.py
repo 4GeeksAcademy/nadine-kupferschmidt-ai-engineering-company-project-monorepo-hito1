@@ -1,8 +1,10 @@
 from datetime import datetime, timezone
+from typing import Any
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from tinydb.table import Document
 
+from auth.security import get_current_user
 from database import suppliers
 from models import (
     Category,
@@ -22,7 +24,10 @@ def document_to_supplier(doc: Document) -> SupplierResponse:
 
 
 @router.post("", response_model=SupplierResponse, status_code=201)
-def create_supplier(supplier: SupplierCreate) -> SupplierResponse:
+def create_supplier(
+    supplier: SupplierCreate,
+    current_user: dict[str, Any] = Depends(get_current_user),
+) -> SupplierResponse:
     """Crea un proveedor con su fecha de actualización."""
     record = supplier.model_dump(mode="json")
     record["updated_at"] = datetime.now(timezone.utc).isoformat()
@@ -34,6 +39,7 @@ def create_supplier(supplier: SupplierCreate) -> SupplierResponse:
 def list_suppliers(
     country: Country | None = None,
     category: Category | None = None,
+    current_user: dict[str, Any] = Depends(get_current_user),
 ) -> list[SupplierResponse]:
     """Lista proveedores aplicando los filtros opcionales."""
     documents = suppliers.all()
@@ -49,7 +55,10 @@ def list_suppliers(
 
 
 @router.get("/{id}", response_model=SupplierResponse)
-def get_supplier(id: int) -> SupplierResponse:
+def get_supplier(
+    id: int,
+    current_user: dict[str, Any] = Depends(get_current_user),
+) -> SupplierResponse:
     """Obtiene un proveedor por su identificador."""
     doc = suppliers.get(doc_id=id)
     if doc is None:
@@ -58,7 +67,11 @@ def get_supplier(id: int) -> SupplierResponse:
 
 
 @router.patch("/{id}/rate", response_model=SupplierResponse)
-def update_supplier_rate(id: int, update: RateUpdate) -> SupplierResponse:
+def update_supplier_rate(
+    id: int,
+    update: RateUpdate,
+    current_user: dict[str, Any] = Depends(get_current_user),
+) -> SupplierResponse:
     """Actualiza la tarifa y su fecha de modificación."""
     doc = suppliers.get(doc_id=id)
     if doc is None:
@@ -75,7 +88,11 @@ def update_supplier_rate(id: int, update: RateUpdate) -> SupplierResponse:
 
 
 @router.patch("/{id}/status", response_model=SupplierResponse)
-def update_supplier_status(id: int, update: StatusUpdate) -> SupplierResponse:
+def update_supplier_status(
+    id: int,
+    update: StatusUpdate,
+    current_user: dict[str, Any] = Depends(get_current_user),
+) -> SupplierResponse:
     """Actualiza solo el estado del proveedor."""
     doc = suppliers.get(doc_id=id)
     if doc is None:
@@ -89,7 +106,10 @@ def update_supplier_status(id: int, update: StatusUpdate) -> SupplierResponse:
 
 
 @router.delete("/{id}")
-def delete_supplier(id: int) -> dict[str, str]:
+def delete_supplier(
+    id: int,
+    current_user: dict[str, Any] = Depends(get_current_user),
+) -> dict[str, str]:
     """Elimina el proveedor indicado."""
     doc = suppliers.get(doc_id=id)
     if doc is None:
