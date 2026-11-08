@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import ConfirmDialog from "../../components/ConfirmDialog";
+import ConfirmDialog from "../../../components/ConfirmDialog";
 import { deleteSupplier, updateRate, updateStatus } from "./api";
 import { CATEGORY_LABELS, STATUS_LABELS, type Supplier } from "./types";
 
