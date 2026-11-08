@@ -147,8 +147,14 @@ export default function ProfilePage() {
             type="email"
             value={email}
             readOnly
-            className={`${inputClassName} bg-bo-page`}
+            aria-describedby="email-help"
+            className={`${inputClassName
+              .replace("bg-bo-surface", "bg-bo-chip")
+              .replace("text-bo-text", "text-bo-muted")} cursor-not-allowed`}
           />
+          <span id="email-help" className="text-xs">
+            El email no se puede modificar desde el perfil.
+          </span>
         </label>
 
         <label className="flex flex-col gap-1 text-sm text-bo-muted">
