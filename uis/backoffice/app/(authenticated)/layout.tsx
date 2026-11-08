@@ -1,6 +1,7 @@
 import Link from "next/link";
 import NavLink from "../../components/NavLink";
 import AuthGuard from "../../components/AuthGuard";
+import UserMenu from "../../components/UserMenu";
 
 const iconProps = {
   "aria-hidden": true,
@@ -41,10 +42,15 @@ export default function AuthenticatedLayout({ children }: AuthenticatedLayoutPro
     <AuthGuard>
       <div className="min-h-screen md:flex">
         <aside className="border-b border-bo-border bg-bo-surface md:sticky md:top-0 md:flex md:h-screen md:w-[220px] md:shrink-0 md:flex-col md:border-r md:border-b-0">
-          <Link href="/" aria-label="Brasaland, inicio" className="flex flex-col items-start gap-1 border-b border-bo-border px-5 py-6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text">
-            <span className="font-serif text-xl font-semibold tracking-wide text-bo-logo">Brasaland</span>
-            <span className="text-sm text-bo-muted">Backoffice interno</span>
-          </Link>
+          <div className="flex items-center justify-between border-b border-bo-border pr-5 md:block md:pr-0">
+            <Link href="/" aria-label="Brasaland, inicio" className="flex flex-col items-start gap-1 px-5 py-6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text">
+              <span className="font-serif text-xl font-semibold tracking-wide text-bo-logo">Brasaland</span>
+              <span className="text-sm text-bo-muted">Backoffice interno</span>
+            </Link>
+            <div className="md:hidden">
+              <UserMenu />
+            </div>
+          </div>
           <nav aria-label="Menú principal" className="px-3 py-5">
             <p className="mb-2 px-3 text-[11px] font-semibold uppercase tracking-wider text-bo-muted">Menú</p>
             <div className="space-y-1">
@@ -54,9 +60,14 @@ export default function AuthenticatedLayout({ children }: AuthenticatedLayoutPro
           </nav>
           <p className="hidden px-5 pb-6 text-xs text-bo-muted md:mt-auto md:block">Brasaland Digital · Uso interno</p>
         </aside>
-        <main className="min-w-0 flex-1 px-5 py-8 sm:px-8 lg:px-12 lg:py-10">
-          <div className="mx-auto max-w-6xl">{children}</div>
-        </main>
+        <div className="min-w-0 flex-1">
+          <header className="hidden items-center justify-end border-b border-bo-border bg-bo-surface px-5 py-2 sm:px-8 md:flex lg:px-12">
+            <UserMenu />
+          </header>
+          <main className="px-5 py-8 sm:px-8 lg:px-12 lg:py-10">
+            <div className="mx-auto max-w-6xl">{children}</div>
+          </main>
+        </div>
       </div>
     </AuthGuard>
   );
