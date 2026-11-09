@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import PasswordInput from "@/components/PasswordInput";
 import { apiFetch } from "@/lib/api";
 
 const inputClassName =
@@ -83,8 +84,7 @@ export default function ChangePasswordPage() {
       >
         <label className="flex flex-col gap-1 text-sm text-bo-muted">
           Contraseña actual
-          <input
-            type="password"
+          <PasswordInput
             autoComplete="current-password"
             required
             value={currentPassword}
@@ -95,8 +95,7 @@ export default function ChangePasswordPage() {
 
         <label className="flex flex-col gap-1 text-sm text-bo-muted">
           Nueva contraseña
-          <input
-            type="password"
+          <PasswordInput
             autoComplete="new-password"
             required
             minLength={8}
@@ -108,8 +107,7 @@ export default function ChangePasswordPage() {
 
         <label className="flex flex-col gap-1 text-sm text-bo-muted">
           Confirmar nueva contraseña
-          <input
-            type="password"
+          <PasswordInput
             autoComplete="new-password"
             required
             minLength={8}

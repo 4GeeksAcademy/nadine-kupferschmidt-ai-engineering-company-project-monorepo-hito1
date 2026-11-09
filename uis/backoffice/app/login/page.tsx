@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState, type FormEvent } from "react";
+import PasswordInput from "@/components/PasswordInput";
 import { setToken } from "@/lib/auth";
 
 type LoginResponse = {
@@ -108,10 +109,9 @@ export default function LoginPage() {
             >
               Contraseña
             </label>
-            <input
+            <PasswordInput
               id="password"
               name="password"
-              type="password"
               autoComplete="current-password"
               required
               value={password}

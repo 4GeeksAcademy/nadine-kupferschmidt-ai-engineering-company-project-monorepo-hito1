@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState, type FormEvent } from "react";
+import PasswordInput from "@/components/PasswordInput";
 
 const inputClassName =
   "min-h-11 w-full rounded-xl border border-bo-border bg-bo-surface px-4 text-sm text-bo-text outline-none focus-visible:border-bo-text focus-visible:ring-2 focus-visible:ring-bo-accent";
@@ -100,10 +101,9 @@ function ResetPasswordForm() {
           >
             Nueva contraseña
           </label>
-          <input
+          <PasswordInput
             id="new-password"
             name="new-password"
-            type="password"
             autoComplete="new-password"
             required
             minLength={8}
@@ -120,10 +120,9 @@ function ResetPasswordForm() {
           >
             Confirmar contraseña
           </label>
-          <input
+          <PasswordInput
             id="confirm-password"
             name="confirm-password"
-            type="password"
             autoComplete="new-password"
             required
             minLength={8}
