@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime, timezone
 from typing import Any
 from uuid import uuid4
@@ -5,8 +6,16 @@ from uuid import uuid4
 from tinydb import Query
 
 from auth.database import profiles, users
+from auth.mailer import send_password_reset_email
 from auth.models import ProfileUpdate, UserCreate, UserUpdate
-from auth.security import hash_password
+from auth.security import (
+    create_reset_token,
+    decode_reset_token,
+    hash_password,
+    verify_password,
+)
+
+logger = logging.getLogger(__name__)
 
 
 def create_user(data: UserCreate) -> dict[str, Any]:
@@ -93,3 +102,55 @@ def update_profile(
     if updates:
         profiles.update(updates, Query().user_id == user_id)
     return get_profile_by_user_id(user_id)
+
+
+def _save_password(user_id: str, new_password: str) -> None:
+    """Guarda una nueva contraseña y registra el momento del cambio."""
+    users.update(
+        {
+            "hashed_password": hash_password(new_password),
+            "password_changed_at": datetime.now(timezone.utc).timestamp(),
+        },
+        Query().id == user_id,
+    )
+
+
+def request_password_reset(email: str) -> None:
+    """Envía un enlace de restablecimiento si el email pertenece a un usuario activo."""
+    user = get_user_by_email(email)
+    if user is None or user.get("is_active") is not True:
+        return
+
+    token = create_reset_token(user["id"])
+    try:
+        send_password_reset_email(user["email"], token)
+    except Exception:
+        logger.exception("No se pudo enviar el correo de restablecimiento.")
+
+
+def reset_password(token: str, new_password: str) -> bool:
+    """Restablece la contraseña con un token válido y no usado."""
+    payload = decode_reset_token(token)
+    if payload is None:
+        return False
+
+    user = get_user_by_id(payload["sub"])
+    if user is None or user.get("is_active") is not True:
+        return False
+
+    changed_at = user.get("password_changed_at")
+    if changed_at is not None and payload["iat"] < changed_at:
+        return False
+
+    _save_password(user["id"], new_password)
+    return True
+
+
+def change_password(user_id: str, current_password: str, new_password: str) -> bool:
+    """Cambia la contraseña si la actual es correcta."""
+    user = get_user_by_id(user_id)
+    if user is None or not verify_password(current_password, user["hashed_password"]):
+        return False
+
+    _save_password(user_id, new_password)
+    return True
