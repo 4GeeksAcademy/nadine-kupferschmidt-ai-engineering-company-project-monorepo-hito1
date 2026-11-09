@@ -29,6 +29,13 @@ CATEGORIES = [
 
 STATUSES = ["open", "in_progress", "resolved", "discarded"]
 
+STATUS_LABELS = {
+    "open": "Abierta",
+    "in_progress": "En curso",
+    "resolved": "Resuelta",
+    "discarded": "Descartada",
+}
+
 ORIGINS = ["customer", "branch", "internal"]
 
 ALLOWED_TRANSITIONS = {
