@@ -1,21 +1,32 @@
 # API central de Brasaland
 
-Una sola app **FastAPI** con dos módulos:
+Una sola app **FastAPI** con tres módulos:
 
 - **Análisis de incidencias**: valida y resume un CSV de incidencias.
 - **Directorio de proveedores**: CRUD de proveedores con **TinyDB** y validación con **Pydantic**.
+- **Autenticación**: usuarios, perfiles, inicio de sesión con JWT, y recuperación y cambio de contraseña con envío de correo.
 
 ## Estructura
 
 ```text
 services/api/
-├── main.py                        # App, CORS y registro de los dos routers
+├── main.py                        # App, CORS y registro de los routers
 ├── models.py                      # Modelos Pydantic de proveedores
 ├── database.py                    # Conexión a TinyDB (db.json)
 ├── seed.py                        # Carga los proveedores del briefing
+├── .env.example                   # Variables de entorno necesarias (copiar como .env)
+├── auth/
+│   ├── models.py                  # Modelos Pydantic de usuarios, perfiles y contraseñas
+│   ├── database.py                # Conexión a TinyDB propia (auth.json)
+│   ├── security.py                # Hash de contraseñas, tokens JWT y get_current_user
+│   ├── services.py                # Lógica de usuarios, perfiles y contraseñas
+│   └── mailer.py                  # Envío del correo de restablecimiento con Resend
 ├── routes/
 │   ├── incidents.py               # Endpoints de incidencias
-│   └── suppliers.py               # Endpoints de proveedores
+│   ├── suppliers.py               # Endpoints de proveedores
+│   ├── users.py                   # Endpoints de usuarios
+│   ├── profiles.py                # Endpoints de perfiles
+│   └── auth.py                    # Login, sesión y contraseñas
 └── CONTEXT-supplier-directory.md  # Briefing del directorio de proveedores
 ```
 
@@ -24,6 +35,7 @@ services/api/
 Requiere Python 3.10 o superior y [uv](https://docs.astral.sh/uv/). Desde `services/api`:
 
 ```bash
+cp .env.example .env         # crea el archivo de variables y completá los valores
 uv sync                      # instala las dependencias
 uv run seed                  # carga los 15 proveedores del briefing (no duplica si se repite)
 uv run fastapi dev main.py   # inicia la API en el puerto 8000
@@ -31,6 +43,23 @@ uv run fastapi dev main.py   # inicia la API en el puerto 8000
 
 - Documentación interactiva (Swagger): http://localhost:8000/docs
 - CORS permite peticiones desde http://localhost:3000.
+
+## Variables de entorno
+
+Se leen de `services/api/.env`, que **no se sube a Git**. Los nombres y valores de ejemplo están en `.env.example`.
+
+| Variable | Para qué sirve | Ejemplo |
+|----------|----------------|---------|
+| `SECRET_KEY` | Firma los tokens JWT. Obligatoria. | un texto largo y secreto |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | Duración de la sesión. | `30` |
+| `RESET_TOKEN_EXPIRE_MINUTES` | Duración del enlace de restablecimiento. | `30` |
+| `FRONTEND_URL` | Dirección del backoffice, usada para armar el enlace del correo. Sin `/` al final. | `http://localhost:3000` |
+| `RESEND_API_KEY` | API key de [Resend](https://resend.com) con permiso *Sending access*. Obligatoria para enviar correos. | `re_...` |
+| `EMAIL_FROM` | Remitente del correo. Opcional. | `Brasaland <onboarding@resend.dev>` |
+
+> **Nota sobre Resend:** con el remitente de prueba `onboarding@resend.dev` solo se pueden enviar correos al email de la cuenta de Resend. Para probar, registrá un usuario con ese mismo email.
+
+> **Nota sobre Codespaces:** si el backoffice corre en GitHub Codespaces, `FRONTEND_URL` tiene que ser la dirección del puerto 3000 que aparece en la pestaña *Ports* (por ejemplo `https://nombre-3000.app.github.dev`), no `localhost`.
 
 ## Endpoints
 
@@ -55,6 +84,45 @@ uv run fastapi dev main.py   # inicia la API en el puerto 8000
 El último análisis de incidencias se guarda solo en memoria y se pierde al reiniciar.
 El módulo de incidencias importa el paquete desde `packages` del repositorio.
 
+### Autenticación
+
+| Método | Ruta | Sesión | Qué hace |
+|--------|------|--------|----------|
+| `POST` | `/users` | No | Registra un usuario y su perfil inicial (responde 201). |
+| `POST` | `/auth/login` | No | Recibe un formulario (`username` = email, `password`) y devuelve un `access_token`. 401 si las credenciales son incorrectas. |
+| `GET` | `/auth/me` | Sí | Devuelve el usuario autenticado y su perfil. |
+| `POST` | `/auth/forgot-password` | No | Recibe `{ email }`. Si el usuario existe, envía el correo con el enlace. **Siempre responde 200.** |
+| `POST` | `/auth/reset-password` | No | Recibe `{ token, new_password }`. Cambia la contraseña. 400 si el token es inválido, venció o ya se usó. |
+| `POST` | `/auth/change-password` | Sí | Recibe `{ current_password, new_password }`. 400 si la contraseña actual es incorrecta. |
+
+El resto de los endpoints de usuarios y perfiles se pueden ver en `/docs`. Las rutas que piden sesión necesitan la cabecera `Authorization: Bearer <access_token>`; sin ella responden 401.
+
+## Recuperación y cambio de contraseña (AUTH-03)
+
+### Cómo funciona
+
+1. **Solicitud:** el usuario envía su email a `/auth/forgot-password`. Si existe, la API crea un token de restablecimiento y envía con Resend un correo con el enlace `FRONTEND_URL/reset-password?token=<token>`. El correo tiene versión HTML (legible en móvil) y versión en texto.
+2. **Restablecimiento:** el usuario abre el enlace, escribe una nueva contraseña, y el backoffice envía el token y la contraseña a `/auth/reset-password`.
+3. **Confirmación:** si sale bien, el backoffice lo lleva a `/login` y puede entrar con la nueva contraseña.
+
+### Decisiones de seguridad
+
+- **No revela qué emails existen:** `/auth/forgot-password` responde siempre lo mismo con 200, exista o no el email. Si el envío del correo falla, el error se registra en el log, pero la respuesta no cambia.
+- **Tokens con tipo:** cada JWT indica para qué sirve (`"type": "access"` para la sesión y `"type": "password_reset"` para el correo). El enlace del correo no sirve para iniciar sesión, y un token de sesión no sirve para restablecer la contraseña.
+- **Vencimiento:** el token del correo dura `RESET_TOKEN_EXPIRE_MINUTES` minutos (30 por defecto).
+- **Un solo uso:** cada usuario guarda `password_changed_at`, el momento de su último cambio de contraseña, y cada token guarda `iat`, el momento en que se creó. Si el token se creó antes del último cambio, se rechaza. Por eso, apenas se usa, deja de funcionar. Cualquier otro enlace pedido antes también deja de servir, y lo mismo pasa al usar `/auth/change-password`.
+- **Contraseñas cifradas:** se guardan con bcrypt; nunca en texto plano.
+- **Sin secretos en el código:** la API key de Resend y la `SECRET_KEY` se leen solo del `.env`.
+
+### Cómo probarlo en `/docs`
+
+1. Registrá un usuario con `POST /users`, usando el email de tu cuenta de Resend.
+2. `POST /auth/forgot-password` con ese email → 200 y llega el correo.
+3. Copiá el token del enlace y usalo en `POST /auth/reset-password` → 200.
+4. Repetí el mismo pedido → 400 (el token ya se usó).
+5. Con **Authorize** iniciá sesión, y probá `POST /auth/change-password` con una contraseña actual incorrecta (400) y con la correcta (200).
+6. Para probar el vencimiento, poné `RESET_TOKEN_EXPIRE_MINUTES=1`, reiniciá la API, pedí un enlace y esperá más de un minuto antes de usarlo → 400.
+
 ## Reglas de validación de proveedores
 
 - Estado: `active` o `suspended`.
@@ -65,10 +133,9 @@ El módulo de incidencias importa el paquete desde `packages` del repositorio.
 
 Los datos inválidos se rechazan con **422** y los IDs inexistentes con **404**.
 
-## Base de datos
+## Bases de datos
 
-Los proveedores se guardan en `db.json`:
+Los datos se guardan en archivos de TinyDB que **no se suben a Git** (están en `.gitignore`) y persisten al reiniciar la API:
 
-- No se sube a Git (está en `.gitignore`).
-- Se crea con `uv run seed`.
-- Los datos persisten al reiniciar la API.
+- `db.json`: proveedores. Se crea con `uv run seed`.
+- `auth/auth.json`: usuarios y perfiles. Se crea solo al registrar el primer usuario.
