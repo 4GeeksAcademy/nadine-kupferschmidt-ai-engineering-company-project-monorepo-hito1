@@ -67,16 +67,31 @@ El backoffice usa la API FastAPI de Brasaland (`services/api`) para iniciar sesi
 1. Levantar la API: `cd services/api && uv run uvicorn main:app --reload` (puerto 8000).
 2. Levantar el backoffice: `cd uis/backoffice && npm run dev` (puerto 3000).
 
-Las llamadas a `/api/...` se reenvían a la API mediante los rewrites de `next.config.ts`.
+Las llamadas a `/api/auth/...`, `/api/users/...` y `/api/profiles/...` se reenvían a la API mediante los rewrites de `next.config.ts`.
 
 ### Vistas
 | Ruta | Acceso |
 |---|---|
 | `/login`, `/register` | Públicas |
-| `/`, `/suppliers`, `/incidencias`, `/account/profile` | Requieren sesión |
+| `/forgot-password`, `/reset-password` | Públicas |
+| `/`, `/suppliers`, `/incidencias`, `/account/profile`, `/account/change-password` | Requieren sesión |
 
 ### Piezas principales
 - `lib/auth.ts`: guardar, leer y borrar el token.
 - `lib/api.ts`: `apiFetch` agrega el token y, ante un 401, cierra la sesión y redirige a `/login`.
 - `components/AuthGuard.tsx`: redirige a `/login` si no hay token. Se usa en `app/(authenticated)/layout.tsx`.
 - `components/UserMenu.tsx` y `components/LogoutButton.tsx`: menú de usuario y cierre de sesión.
+- `components/PasswordInput.tsx`: campo de contraseña con botón para mostrarla u ocultarla. Se usa en todos los formularios con contraseña.
+
+### Recuperación y cambio de contraseña (AUTH-03)
+
+| Página | Qué hace |
+|---|---|
+| `/login` | Tiene el enlace **"¿Olvidaste tu contraseña?"** hacia `/forgot-password`. Si llega con `?reset=success`, muestra que la contraseña se restableció. |
+| `/forgot-password` | Pide el email y llama a `POST /auth/forgot-password`. Siempre muestra el mismo mensaje de confirmación, exista o no el email, para no revelar qué cuentas están registradas. Después de enviar, el formulario queda desactivado para evitar envíos duplicados. |
+| `/reset-password` | Lee el `token` de la dirección (`?token=...`), pide la nueva contraseña y su confirmación, y llama a `POST /auth/reset-password`. Si sale bien, redirige a `/login?reset=success`. Si el enlace venció o ya se usó, muestra un error con un enlace para pedir uno nuevo. |
+| `/account/change-password` | Pide la contraseña actual, la nueva y la confirmación. Comprueba que la nueva y la confirmación coincidan antes de llamar a `POST /auth/change-password`, y muestra el resultado. Se llega desde el enlace **"Cambiar contraseña"** en `/account/profile`. |
+
+Las páginas públicas usan `fetch`; `/account/change-password` usa `apiFetch` porque necesita la sesión.
+
+El enlace del correo apunta a la dirección configurada en `FRONTEND_URL` del `.env` de la API (ver `services/api/README.md`).

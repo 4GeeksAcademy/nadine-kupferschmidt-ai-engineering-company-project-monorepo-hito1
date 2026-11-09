@@ -78,3 +78,29 @@ class MeResponse(BaseModel):
     email: str
     role: Role = Role.user
     profile: ProfileResponse | None = None
+
+
+class ForgotPasswordRequest(BaseModel):
+    """Email para solicitar el restablecimiento de contraseña."""
+
+    email: str
+
+
+class ResetPasswordRequest(BaseModel):
+    """Token y nueva contraseña para restablecerla."""
+
+    token: str
+    new_password: str = Field(min_length=8)
+
+
+class ChangePasswordRequest(BaseModel):
+    """Contraseña actual y nueva para un usuario autenticado."""
+
+    current_password: str
+    new_password: str = Field(min_length=8)
+
+
+class MessageResponse(BaseModel):
+    """Mensaje genérico de respuesta."""
+
+    message: str

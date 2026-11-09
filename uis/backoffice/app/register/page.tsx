@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
+import PasswordInput from "@/components/PasswordInput";
 import { setToken } from "@/lib/auth";
 
 type ApiValidationError = {
@@ -188,10 +189,9 @@ export default function RegisterPage() {
             <label htmlFor="password" className="mb-2 block text-sm font-medium text-bo-text">
               Contraseña
             </label>
-            <input
+            <PasswordInput
               id="password"
               name="password"
-              type="password"
               autoComplete="new-password"
               required
               value={password}
@@ -209,10 +209,9 @@ export default function RegisterPage() {
             <label htmlFor="confirmPassword" className="mb-2 block text-sm font-medium text-bo-text">
               Confirmar contraseña
             </label>
-            <input
+            <PasswordInput
               id="confirmPassword"
               name="confirmPassword"
-              type="password"
               autoComplete="new-password"
               required
               value={confirmPassword}

@@ -1,14 +1,26 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState, type FormEvent } from "react";
+import PasswordInput from "@/components/PasswordInput";
 import { setToken } from "@/lib/auth";
 
 type LoginResponse = {
   access_token: string;
   token_type: string;
 };
+
+function ResetSuccessMessage() {
+  const searchParams = useSearchParams();
+  if (searchParams.get("reset") !== "success") return null;
+
+  return (
+    <p role="status" className="mb-5 text-sm text-bo-success">
+      Tu contraseña se restableció. Ya podés iniciar sesión.
+    </p>
+  );
+}
 
 export default function LoginPage() {
   const router = useRouter();
@@ -66,6 +78,10 @@ export default function LoginPage() {
           </p>
         </div>
 
+        <Suspense fallback={null}>
+          <ResetSuccessMessage />
+        </Suspense>
+
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label
@@ -93,16 +109,24 @@ export default function LoginPage() {
             >
               Contraseña
             </label>
-            <input
+            <PasswordInput
               id="password"
               name="password"
-              type="password"
               autoComplete="current-password"
               required
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               className="min-h-11 w-full rounded-xl border border-bo-border bg-bo-surface px-4 text-sm text-bo-text outline-none focus-visible:border-bo-text focus-visible:ring-2 focus-visible:ring-bo-accent"
             />
+          </div>
+
+          <div className="flex justify-end">
+            <Link
+              href="/forgot-password"
+              className="text-sm font-medium text-bo-text underline underline-offset-4 hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text"
+            >
+              ¿Olvidaste tu contraseña?
+            </Link>
           </div>
 
           {error && (

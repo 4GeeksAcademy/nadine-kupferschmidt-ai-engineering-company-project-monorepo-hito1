@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 import { apiFetch } from "@/lib/api";
 
@@ -129,6 +130,12 @@ export default function ProfilePage() {
           Cuenta / Perfil
         </p>
         <h1 className="text-3xl font-semibold text-bo-text">Mi perfil</h1>
+        <Link
+          href="/account/change-password"
+          className="mt-3 inline-block text-sm font-medium text-bo-text underline underline-offset-4 hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text"
+        >
+          Cambiar contraseña
+        </Link>
       </header>
 
       {error && (
