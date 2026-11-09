@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "packages"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "packages" / "shared"))
 
 from incidents_analysis import (
     CATEGORIES,

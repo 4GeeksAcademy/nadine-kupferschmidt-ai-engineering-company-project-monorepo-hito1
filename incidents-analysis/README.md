@@ -8,7 +8,7 @@ Herramienta interna solicitada por el CTO para que el equipo de Operaciones vali
 
 - [Briefing del proyecto](./brasaland-BRIEFING.md): contexto, formato CSV, reglas de validación y resultados esperados.
 - [Script de análisis](../scripts/analyze.py): interfaz de línea de comandos para procesar un CSV.
-- [Paquete compartido `incidents_analysis`](../packages/incidents_analysis/): lógica de lectura, validación y cálculo de métricas.
+- [Paquete compartido `incidents_analysis`](../packages/shared/incidents_analysis/): lógica de lectura, validación y cálculo de métricas.
 - [API](../services/api/): servicio para analizar y exportar resultados.
 - [Backoffice](../uis/backoffice/): interfaz web interna para cargar CSV y consultar el análisis.
 
@@ -28,7 +28,7 @@ Para levantar la API, desde `services/api` ejecuta `uv sync` y luego `uv run uvi
 
 ## Lógica compartida
 
-El script y la API usan el mismo paquete `packages/incidents_analysis` para interpretar el CSV, validar los registros y calcular las métricas. Así se mantiene una sola implementación de las reglas, sin duplicar código.
+El script y la API usan el mismo paquete `packages/shared/incidents_analysis` para interpretar el CSV, validar los registros y calcular las métricas. Así se mantiene una sola implementación de las reglas, sin duplicar código.
 
 ## Resultados del CSV de prueba
 
