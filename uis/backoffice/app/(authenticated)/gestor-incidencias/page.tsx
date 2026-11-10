@@ -288,9 +288,11 @@ export default function GestorIncidenciasPage() {
             Limpiar filtros
           </button>
 
-          <p className="ml-auto self-center text-sm text-bo-muted" aria-live="polite">
-            {incidents.length} {incidents.length === 1 ? "incidencia" : "incidencias"}
-          </p>
+          {!loading && !loadError && (
+            <p className="ml-auto self-center text-sm text-bo-muted" aria-live="polite">
+              {incidents.length} {incidents.length === 1 ? "incidencia" : "incidencias"}
+            </p>
+          )}
         </div>
 
         {actionError && (

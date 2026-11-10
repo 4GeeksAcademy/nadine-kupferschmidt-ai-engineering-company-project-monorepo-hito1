@@ -206,8 +206,8 @@ export default function NuevaIncidenciaPage() {
           </div>
 
           <div
-            className={`flex flex-col gap-1 rounded-[10px] border-2 p-3 sm:col-span-2 ${
-              isBranchOrigin ? "border-bo-accent bg-bo-accent-soft" : "border-transparent"
+            className={`flex flex-col gap-1 rounded-[10px] sm:col-span-2 ${
+              isBranchOrigin ? "-m-3.5 border-2 border-bo-accent bg-bo-accent-soft p-3" : ""
             }`}
           >
             <label htmlFor="incident-branch" className="text-sm text-bo-muted">
