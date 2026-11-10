@@ -1,6 +1,6 @@
 # Auditoría de manejo de errores
 
-Auditoría estática de `uis/`, `services/`, `scripts/` y `packages/`. No se modificó código.
+El objetivo es que ningún error rompa la aplicación ni deje al usuario sin saber qué pasó. Esta auditoría estática de `uis/`, `services/`, `scripts/` y `packages/` se hizo primero con un agente de IA, sin cambiar código. Después se revisaron los hallazgos y se corrigieron por capa en la rama `feature/error-handling-audit`. Al final está el estado de las correcciones.
 
 ## Resumen por capa
 
@@ -79,3 +79,95 @@ Ninguno.
 | Backend  | [packages/shared/incidents_analysis/analysis.py](packages/shared/incidents_analysis/analysis.py#L29-L30)                                                                              | 1    | `parse_csv_text` no captura `csv.Error`.                                                                        | Capturar en quien lo llama.                         |
 | Backend  | [packages/shared/incident_manager/csv_mapping.py](packages/shared/incident_manager/csv_mapping.py#L40)                                                                                | 3    | `transform_csv_row` devuelve `None` sin motivo; el mensaje final es genérico.                                   | Devolver el motivo del fallo.                       |
 | Scripts  | [scripts/analyze.py](scripts/analyze.py#L121)                                                                                                                                         | 1    | `input()` sin manejo de `EOFError` ni de interrupción.                                                          | Capturar `EOFError` y `KeyboardInterrupt`.          |
+
+## Patrones aplicados
+
+### Frontend
+
+- Tres estados explícitos: cargando, éxito y error.
+- `try/catch` acotado a cada `fetch` y a cada `response.json()`.
+- `finally` para limpiar el estado de carga.
+- Mensajes en español, sin códigos ni JSON crudo.
+- Toda pantalla de error ofrece "Intentar de nuevo" y "Volver al inicio" o enlace a iniciar sesión.
+- Mensaje de sesión expirada compartido (`SESSION_EXPIRED_MESSAGE`).
+- `?.` y `??` en datos que pueden faltar.
+
+### Backend
+
+- `try/except` acotado con excepciones concretas.
+- `HTTPException` con el código correcto y mensaje corto en español.
+- Detalle técnico solo en el log del servidor (`logger.exception`).
+- Manejador global que devuelve un 500 genérico.
+- Nunca `str(exc)`, tracebacks, rutas ni claves al cliente.
+
+### Scripts
+
+- Errores en stderr.
+- `sys.exit(1)` en fallos críticos.
+- Validación del archivo (existe, no está vacío, columnas esperadas) antes de procesar.
+- Filas inválidas informadas con número de fila y motivo.
+- Sin rutas completas en la salida.
+
+## Estado de las correcciones
+
+Estado de la rama `feature/error-handling-audit` frente a `main` (`git diff main...HEAD`, 32 archivos).
+
+### Corregidos
+
+| Archivo                                                                                                     | Severidad | Qué se hizo                                                                                                                                   |
+| ----------------------------------------------------------------------------------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| [scripts/analyze.py](scripts/analyze.py)                                                                    | ALTO      | Errores de argumentos y de lectura salen con código 1 y van a stderr.                                                                         |
+| [scripts/seed_incidents.py](scripts/seed_incidents.py)                                                      | ALTO      | Sale con código 1 si hay filas inválidas; el detalle va a stderr con el número de fila.                                                       |
+| [account/profile/page.tsx](<uis/backoffice/app/(authenticated)/account/profile/page.tsx>)                   | ALTO      | Estados de carga y error con reintento; el formulario solo aparece con datos cargados.                                                        |
+| [lib/api.ts](uis/backoffice/lib/api.ts)                                                                     | MEDIO     | `apiFetch` captura fallos de red y lanza un mensaje en español.                                                                               |
+| [lib/api.ts](uis/talent-pipeline-tracker/lib/api.ts)                                                        | MEDIO     | Las llamadas `fetch` capturan errores de red y de respuesta no válida con mensajes controlados.                                               |
+| [CandidateList.tsx](uis/talent-pipeline-tracker/components/CandidateList.tsx)                               | MEDIO     | Botón de reintento y enlace a inicio al fallar la carga.                                                                                      |
+| [CandidateDetail.tsx](uis/talent-pipeline-tracker/components/CandidateDetail.tsx)                           | MEDIO     | Botón de reintento y enlace a inicio al fallar la carga.                                                                                      |
+| [CandidateNotes.tsx](uis/talent-pipeline-tracker/components/CandidateNotes.tsx)                             | MEDIO     | Botón de reintento al fallar la carga de notas.                                                                                               |
+| [AuthGuard.tsx](uis/talent-pipeline-tracker/components/AuthGuard.tsx)                                       | MEDIO     | Reintento y enlace a login cuando no se puede verificar la sesión.                                                                            |
+| [register/page.tsx](uis/backoffice/app/register/page.tsx)                                                   | MEDIO     | Si el login falla tras crear la cuenta, indica que la cuenta existe y enlaza a login.                                                         |
+| [forgot-password/page.tsx](uis/backoffice/app/forgot-password/page.tsx)                                     | MEDIO     | Comprueba `response.ok` y muestra error si la petición falla.                                                                                 |
+| [incidencias/page.tsx](<uis/backoffice/app/(authenticated)/incidencias/page.tsx>)                           | MEDIO     | Valida la respuesta antes de parsearla; ya no muestra el texto crudo de `SyntaxError`.                                                        |
+| [suppliers/api.ts](<uis/backoffice/app/(authenticated)/suppliers/api.ts>)                                   | MEDIO     | Captura fallos de red en el wrapper y devuelve un mensaje en español.                                                                         |
+| [suppliers/page.tsx](<uis/backoffice/app/(authenticated)/suppliers/page.tsx>)                               | MEDIO     | Botón de reintento al fallar la carga de proveedores.                                                                                         |
+| [gestor-incidencias/nueva/page.tsx](<uis/backoffice/app/(authenticated)/gestor-incidencias/nueva/page.tsx>) | MEDIO     | Muestra el error de `status` junto al campo.                                                                                                  |
+| [gestor-incidencias/nueva/page.tsx](<uis/backoffice/app/(authenticated)/gestor-incidencias/nueva/page.tsx>) | MEDIO     | Al fallar el envío conserva los datos y el botón vuelve a estar activo (`finally`), así que sirve como reintento. Probado con la API apagada. |
+| [services/api/database.py](services/api/database.py)                                                        | MEDIO     | La apertura de la base registra la ruta y la causa, y la API falla al arrancar con mensaje claro.                                             |
+| [services/api/auth/database.py](services/api/auth/database.py)                                              | MEDIO     | Igual que la base principal.                                                                                                                  |
+| [services/api/seed.py](services/api/seed.py)                                                                | MEDIO     | Valida cada proveedor por separado; los inválidos se omiten e informan por campo.                                                             |
+| [scripts/seed_incidents.py](scripts/seed_incidents.py)                                                      | MEDIO     | Captura `UnicodeDecodeError` y sale con código 1.                                                                                             |
+| [lib/api.ts](uis/talent-pipeline-tracker/lib/api.ts)                                                        | BAJO      | `response.json()` se lee con `readJson`, que devuelve un error controlado.                                                                    |
+| [lib/api.ts](uis/talent-pipeline-tracker/lib/api.ts)                                                        | BAJO      | Si falta `NEXT_PUBLIC_API_URL`, lanza un error claro en lugar de fallar en silencio.                                                          |
+| [CandidateNotes.tsx](uis/talent-pipeline-tracker/components/CandidateNotes.tsx)                             | BAJO      | Mensajes separados para guardado y recarga de la lista.                                                                                       |
+| [UserMenu.tsx](uis/backoffice/components/UserMenu.tsx)                                                      | BAJO      | Muestra "Mi cuenta" en lugar de "…" si falla la carga del usuario.                                                                            |
+| [gestor-incidencias/page.tsx](<uis/backoffice/app/(authenticated)/gestor-incidencias/page.tsx>)             | BAJO      | Muestra sesión expirada en 401 y un mensaje de carga en los demás casos.                                                                      |
+| [suppliers/api.ts](<uis/backoffice/app/(authenticated)/suppliers/api.ts>)                                   | BAJO      | Los errores de validación de la API ya no se muestran en inglés.                                                                              |
+| [suppliers/api.ts](<uis/backoffice/app/(authenticated)/suppliers/api.ts>)                                   | BAJO      | `response.json()` tras una respuesta correcta se captura y devuelve un error controlado.                                                      |
+| [SupplierRow.tsx](<uis/backoffice/app/(authenticated)/suppliers/SupplierRow.tsx>)                           | BAJO      | Moneda y fecha se validan antes de formatear.                                                                                                 |
+| [SupplierForm.tsx](<uis/backoffice/app/(authenticated)/suppliers/SupplierForm.tsx>)                         | BAJO      | Revisado sin cambios: usa `err.message` con respaldo en español, tiene `finally` y el botón se deshabilita mientras guarda.                   |
+| [analysis.py](packages/shared/incidents_analysis/analysis.py)                                               | BAJO      | Sin cambios en el paquete; los scripts capturan `csv.Error`.                                                                                  |
+| [services/api/main.py](services/api/main.py)                                                                | BAJO      | Registra la excepción no controlada con `logger.exception`.                                                                                   |
+| [services/api/routes/auth.py](services/api/routes/auth.py)                                                  | BAJO      | Lee `hashed_password` con `get` y comprueba su presencia.                                                                                     |
+| [services/api/routes/incident_manager.py](services/api/routes/incident_manager.py)                          | BAJO      | La conversión de fechas tolera campos ausentes o inválidos.                                                                                   |
+| [services/api/routes/incidents.py](services/api/routes/incidents.py)                                        | BAJO      | La lectura del archivo subido está dentro del `try`.                                                                                          |
+| [services/api/routes/suppliers.py](services/api/routes/suppliers.py)                                        | BAJO      | Un documento incompleto se registra y devuelve un 500 limpio.                                                                                 |
+| [services/api/auth/security.py](services/api/auth/security.py)                                              | BAJO      | Los tiempos de expiración se validan al arrancar con mensaje claro.                                                                           |
+| [scripts/analyze.py](scripts/analyze.py)                                                                    | BAJO      | Captura `EOFError` y `KeyboardInterrupt` en la pregunta de exportación.                                                                       |
+
+### Fuera de alcance (decisión consciente)
+
+- **Inserciones no atómicas** en [services/api/auth/services.py](services/api/auth/services.py) (crear y borrar usuario) y en [scripts/seed_incidents.py](scripts/seed_incidents.py): requieren rediseñar cómo se guardan los datos, y la consigna pide no refactorizar.
+- **Catch vacíos** (login de ambas apps, `AuthGuard` del talent tracker, `gestor-incidencias` y `getApiError` en `incidencias`): se priorizó mostrar un mensaje al usuario en lugar de agregar `console.error`.
+- **Backoffice con la API apagada**: muestra "Algo falló en el servidor" en lugar del mensaje de conexión, porque Next.js hace de proxy y responde 500. El mensaje es correcto para el usuario; cambiarlo implicaría tocar la configuración del proxy.
+- **Proveedor dañado** en [services/api/routes/suppliers.py](services/api/routes/suppliers.py): devuelve un 500 limpio en lugar de omitirse, para no ocultar datos en silencio.
+
+### Pendientes
+
+- [services/api/auth/services.py](services/api/auth/services.py#L127-L128): el `except Exception` del envío de correo sigue amplio; falta confirmar qué excepciones lanza el proveedor.
+- [csv_mapping.py](packages/shared/incident_manager/csv_mapping.py#L40): `transform_csv_row` sigue devolviendo `None` sin motivo; cambiar la firma afecta a sus llamadores.
+
+### Cómo se probó
+
+- Backoffice con la API apagada: listados, resumen, registrar incidencia y reintento al volver la API.
+- Talent Tracker en modo sin conexión del navegador.
+- Scripts con archivo inexistente, vacío y sin columnas: código de salida 1.
