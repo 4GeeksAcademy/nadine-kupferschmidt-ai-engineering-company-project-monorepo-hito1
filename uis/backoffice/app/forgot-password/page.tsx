@@ -21,14 +21,23 @@ export default function ForgotPasswordPage() {
     setIsSubmitting(true);
 
     try {
-      await fetch("/api/auth/forgot-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
+      let response: Response;
+      try {
+        response = await fetch("/api/auth/forgot-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        });
+      } catch {
+        setError("No pudimos conectarnos. Intenta de nuevo.");
+        return;
+      }
+
+      if (!response.ok) {
+        setError("No pudimos enviar el enlace. Intenta de nuevo.");
+        return;
+      }
       setIsSent(true);
-    } catch {
-      setError("No pudimos conectarnos. Intentá de nuevo.");
     } finally {
       setIsSubmitting(false);
     }

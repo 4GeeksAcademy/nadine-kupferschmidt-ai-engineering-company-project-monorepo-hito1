@@ -23,6 +23,17 @@ type FieldErrors = Partial<
 const inputClassName =
   "min-h-11 w-full rounded-xl border border-bo-border bg-bo-surface px-4 text-sm text-bo-text outline-none focus-visible:border-bo-text focus-visible:ring-2 focus-visible:ring-bo-accent";
 
+const CONNECTION_ERROR =
+  "No pudimos conectar con el servidor. Revisá tu conexión e intentá de nuevo.";
+const AUTO_LOGIN_ERROR =
+  "Tu cuenta se creó, pero no pudimos iniciar sesión automáticamente.";
+
+function registerErrorMessage(status: number, detail: unknown): string {
+  if (status >= 500) return "Algo falló en el servidor. Intentá de nuevo en unos minutos.";
+  if (status === 400 && typeof detail === "string") return detail;
+  return "No pudimos crear la cuenta. Intentá de nuevo.";
+}
+
 export default function RegisterPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -34,6 +45,7 @@ export default function RegisterPage() {
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [generalError, setGeneralError] = useState("");
+  const [showLoginLink, setShowLoginLink] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   function setApiValidationErrors(detail: unknown) {
@@ -79,6 +91,7 @@ export default function RegisterPage() {
     setFieldErrors({});
     setConfirmPasswordError("");
     setGeneralError("");
+    setShowLoginLink(false);
 
     const validationErrors: FieldErrors = {};
     if (password.length < 8) {
@@ -94,49 +107,59 @@ export default function RegisterPage() {
 
     setIsSubmitting(true);
     try {
-      const registerResponse = await fetch("/api/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          password,
-          ...(name.trim() ? { name: name.trim() } : {}),
-          ...(phone.trim() ? { phone: phone.trim() } : {}),
-          ...(address.trim() ? { address: address.trim() } : {}),
-        }),
-      });
-
-      if (registerResponse.status === 409) {
-        setFieldErrors({ email: ["Ya existe una cuenta con ese email."] });
+      let registerResponse: Response;
+      try {
+        registerResponse = await fetch("/api/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            password,
+            ...(name.trim() ? { name: name.trim() } : {}),
+            ...(phone.trim() ? { phone: phone.trim() } : {}),
+            ...(address.trim() ? { address: address.trim() } : {}),
+          }),
+        });
+      } catch {
+        setGeneralError(CONNECTION_ERROR);
         return;
       }
+
+      if (registerResponse.status === 409) {
+        setGeneralError("Ya existe una cuenta con ese email.");
+        setShowLoginLink(true);
+        return;
+      }
+
+      const payload = (await registerResponse.json().catch(() => null)) as {
+        detail?: unknown;
+      } | null;
       if (registerResponse.status === 422) {
-        const payload = (await registerResponse.json()) as { detail?: unknown };
-        setApiValidationErrors(payload.detail);
+        setApiValidationErrors(payload?.detail);
         return;
       }
       if (!registerResponse.ok) {
-        throw new Error("No se pudo crear la cuenta.");
+        setGeneralError(registerErrorMessage(registerResponse.status, payload?.detail));
+        return;
       }
 
-      const loginResponse = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({ username: email, password }),
-      });
-      if (!loginResponse.ok) {
-        throw new Error("La cuenta se creó, pero no se pudo iniciar sesión.");
-      }
+      try {
+        const loginResponse = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams({ username: email, password }),
+        });
+        const loginData = (await loginResponse.json().catch(() => null)) as LoginResponse | null;
+        if (!loginResponse.ok || !loginData?.access_token) {
+          throw new Error("No se pudo iniciar sesión.");
+        }
 
-      const loginData = (await loginResponse.json()) as LoginResponse;
-      if (!loginData.access_token) {
-        throw new Error("La cuenta se creó, pero no se pudo iniciar sesión.");
+        setToken(loginData.access_token);
+        router.replace("/");
+      } catch {
+        setGeneralError(AUTO_LOGIN_ERROR);
+        setShowLoginLink(true);
       }
-
-      setToken(loginData.access_token);
-      router.replace("/");
-    } catch {
-      setGeneralError("Ocurrió un error al crear la cuenta. Intentá de nuevo.");
     } finally {
       setIsSubmitting(false);
     }
@@ -281,6 +304,14 @@ export default function RegisterPage() {
           {generalError && (
             <p role="alert" className="text-sm text-bo-danger">
               {generalError}
+              {showLoginLink && (
+                <>
+                  {" "}
+                  <Link href="/login" className="font-medium underline underline-offset-4">
+                    Iniciar sesión
+                  </Link>
+                </>
+              )}
             </p>
           )}
 
