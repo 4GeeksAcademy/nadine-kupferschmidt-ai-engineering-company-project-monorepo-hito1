@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { apiFetch } from "@/lib/api";
 import {
   BRANCH_OPTIONS,
@@ -31,6 +32,8 @@ const EMPTY_MESSAGE = "Todavía no hay incidencias registradas.";
 const cardClass = "rounded-[18px] border border-bo-border bg-bo-surface p-5";
 const primaryButtonClass =
   "min-h-11 rounded-full bg-bo-accent px-5 text-sm font-medium text-bo-on-accent hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text";
+const linkButtonClass =
+  "inline-flex min-h-11 items-center whitespace-nowrap text-xs text-bo-muted underline hover:text-bo-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text disabled:cursor-not-allowed disabled:opacity-50";
 
 function toRows<T extends string>(
   options: readonly { value: T; label: string }[],
@@ -179,13 +182,18 @@ export default function ResumenIncidenciasPage() {
           <p role="alert" className="text-sm text-bo-danger">
             {LOAD_ERROR}
           </p>
-          <button
-            type="button"
-            onClick={() => setReloadKey((key) => key + 1)}
-            className={primaryButtonClass}
-          >
-            Reintentar
-          </button>
+          <div className="flex flex-wrap items-center gap-4">
+            <button
+              type="button"
+              onClick={() => setReloadKey((key) => key + 1)}
+              className={primaryButtonClass}
+            >
+              Intentar de nuevo
+            </button>
+            <Link href="/" className={linkButtonClass}>
+              Volver al inicio
+            </Link>
+          </div>
         </section>
       ) : (
         <div className="space-y-6" aria-busy={loading}>

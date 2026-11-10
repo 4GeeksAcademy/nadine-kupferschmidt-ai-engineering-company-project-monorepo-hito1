@@ -16,7 +16,7 @@ export type SupplierFilterValues = {
 type SupplierFiltersProps = {
   filters: SupplierFilterValues;
   onChange: (filters: SupplierFilterValues) => void;
-  count: number;
+  count?: number;
 };
 
 const countryTabs: { value: Country | ""; label: string }[] = [
@@ -87,9 +87,11 @@ export default function SupplierFilters({
         Limpiar filtros
       </button>
 
-      <p className="ml-auto self-center text-sm text-bo-muted" aria-live="polite">
-        {count} {count === 1 ? "proveedor" : "proveedores"}
-      </p>
+      {count !== undefined && (
+        <p className="ml-auto self-center text-sm text-bo-muted" aria-live="polite">
+          {count} {count === 1 ? "proveedor" : "proveedores"}
+        </p>
+      )}
     </div>
   );
 }

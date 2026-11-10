@@ -36,6 +36,7 @@ export default function SuppliersPage() {
         if (active) setSuppliers(results);
       } catch (cause) {
         if (active) {
+          setSuppliers([]);
           setError(
             cause instanceof Error
               ? cause.message
@@ -112,7 +113,7 @@ export default function SuppliersPage() {
         <SupplierFilters
           filters={filters}
           onChange={setFilters}
-          count={suppliers.length}
+          count={error ? undefined : suppliers.length}
         />
 
         {error ? (
