@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 
+from pydantic import ValidationError
 from tinydb import Query
 
 from database import suppliers
@@ -158,6 +159,7 @@ def main() -> None:
     query = Query()
     inserted = 0
     skipped = 0
+    invalid = 0
 
     for supplier_data in SUPPLIERS_SEED:
         # Comprueba duplicados por nombre y país antes de insertar.
@@ -170,7 +172,13 @@ def main() -> None:
             continue
 
         # Valida los datos antes de guardarlos.
-        supplier = SupplierCreate.model_validate(supplier_data)
+        try:
+            supplier = SupplierCreate.model_validate(supplier_data)
+        except ValidationError as error:
+            fields = ", ".join(".".join(str(part) for part in item["loc"]) for item in error.errors())
+            print(f"Proveedor inválido omitido ({supplier_data.get('name', '(sin nombre)')}): {fields}.")
+            invalid += 1
+            continue
 
         # Guarda enums como texto y añade la fecha UTC.
         record = supplier.model_dump(mode="json")

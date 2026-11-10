@@ -15,12 +15,21 @@ from auth.database import users
 
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
+
+def _int_from_env(name: str, default: int) -> int:
+    value = os.getenv(name, str(default))
+    try:
+        return int(value)
+    except ValueError:
+        raise RuntimeError(f"{name} debe ser un número entero en services/api/.env.") from None
+
+
 SECRET_KEY = os.getenv("SECRET_KEY")
 if not SECRET_KEY:
     raise RuntimeError("SECRET_KEY debe estar definida en services/api/.env.")
 
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
-RESET_TOKEN_EXPIRE_MINUTES = int(os.getenv("RESET_TOKEN_EXPIRE_MINUTES", "30"))
+ACCESS_TOKEN_EXPIRE_MINUTES = _int_from_env("ACCESS_TOKEN_EXPIRE_MINUTES", 30)
+RESET_TOKEN_EXPIRE_MINUTES = _int_from_env("RESET_TOKEN_EXPIRE_MINUTES", 30)
 ALGORITHM = "HS256"
 
 ACCESS_TOKEN_TYPE = "access"

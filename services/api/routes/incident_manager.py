@@ -39,6 +39,14 @@ def _to_incident(doc) -> dict:
     return {"id": doc.doc_id, **doc}
 
 
+def _created_at_key(item: dict) -> datetime:
+    try:
+        parsed = datetime.fromisoformat(item["created_at"])
+    except (KeyError, TypeError, ValueError):
+        return datetime.min.replace(tzinfo=timezone.utc)
+    return parsed if parsed.tzinfo else parsed.replace(tzinfo=timezone.utc)
+
+
 def _find(incident_id: str) -> dict | None:
     try:
         doc_id = int(incident_id)
@@ -99,10 +107,10 @@ def list_incidents(
     items = [
         _to_incident(doc)
         for doc in incidents.all()
-        if all(value is None or doc[field] == value for field, value in filters.items())
+        if all(value is None or doc.get(field) == value for field, value in filters.items())
     ]
     items.sort(
-        key=lambda item: (datetime.fromisoformat(item["created_at"]), item["id"]),
+        key=lambda item: (_created_at_key(item), item["id"]),
         reverse=True,
     )
     return items

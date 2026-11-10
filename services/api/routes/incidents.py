@@ -1,5 +1,6 @@
 import csv
 import io
+import logging
 import sys
 from pathlib import Path
 from typing import Any, Optional
@@ -21,6 +22,7 @@ from incidents_analysis import (
 
 
 router = APIRouter(prefix="/api/incidents", tags=["incidents"])
+logger = logging.getLogger(__name__)
 last_analysis: Optional[dict[str, object]] = None
 
 
@@ -34,15 +36,17 @@ async def analyze(
     if not (file.filename or "").lower().endswith(".csv"):
         raise HTTPException(status_code=400, detail="El archivo debe terminar en .csv.")
 
-    content = await file.read()
-    if not content:
-        raise HTTPException(status_code=400, detail="El archivo est\u00e1 vac\u00edo.")
-
     try:
+        content = await file.read()
         text = content.decode("utf-8-sig")
+    except OSError:
+        logger.exception("No se pudo leer el archivo CSV subido.")
+        raise HTTPException(
+            status_code=500, detail="No se pudo leer el archivo. Inténtalo de nuevo."
+        ) from None
     except UnicodeDecodeError:
         raise HTTPException(
-            status_code=400, detail="El archivo debe ser texto con codificaci\u00f3n UTF-8."
+            status_code=400, detail="El archivo debe ser texto con codificación UTF-8."
         ) from None
 
     if not text.strip():

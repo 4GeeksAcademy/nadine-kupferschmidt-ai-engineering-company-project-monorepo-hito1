@@ -1,7 +1,9 @@
+import logging
 from datetime import datetime, timezone
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
+from pydantic import ValidationError
 from tinydb.table import Document
 
 from auth.security import get_current_user
@@ -16,11 +18,16 @@ from models import (
 )
 
 router = APIRouter(prefix="/suppliers", tags=["suppliers"])
+logger = logging.getLogger(__name__)
 
 
 def document_to_supplier(doc: Document) -> SupplierResponse:
     """Convierte un documento de TinyDB al modelo de respuesta."""
-    return SupplierResponse(id=doc.doc_id, **dict(doc))
+    try:
+        return SupplierResponse(id=doc.doc_id, **dict(doc))
+    except ValidationError:
+        logger.exception("Documento de proveedor incompleto: id=%s", doc.doc_id)
+        raise HTTPException(status_code=500, detail="No se pudo leer el proveedor.") from None
 
 
 @router.post("", response_model=SupplierResponse, status_code=201)
@@ -45,10 +52,10 @@ def list_suppliers(
     documents = suppliers.all()
 
     if country is not None:
-        documents = [doc for doc in documents if doc["country"] == country.value]
+        documents = [doc for doc in documents if doc.get("country") == country.value]
     if category is not None:
         documents = [
-            doc for doc in documents if category.value in doc["categories"]
+            doc for doc in documents if category.value in doc.get("categories", [])
         ]
 
     return [document_to_supplier(doc) for doc in documents]
