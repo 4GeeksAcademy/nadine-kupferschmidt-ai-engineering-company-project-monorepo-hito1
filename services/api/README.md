@@ -84,6 +84,68 @@ Se leen de `services/api/.env`, que **no se sube a Git**. Los nombres y valores 
 El último análisis de incidencias se guarda solo en memoria y se pierde al reiniciar.
 El módulo de incidencias importa el paquete desde `packages` del repositorio.
 
+### Gestor de Incidencias
+
+Endpoints para gestionar el ciclo de vida de incidencias (crear, listar, filtrar, cambiar estado, ver resumen).
+
+| Método | Ruta | Sesión | Qué hace |
+|--------|------|--------|----------|
+| `POST` | `/api/incidents` | Sí | Crea una incidencia. Cuerpo: `{ title, description, status, origin, branch, category, priority }`. Devuelve 201 con la incidencia creada. |
+| `GET` | `/api/incidents` | Sí | Lista incidencias con filtros opcionales: `?status=`, `?origin=`, `?branch=`, `?category=`. Devuelve lista de incidencias. |
+| `GET` | `/api/incidents/{id}` | Sí | Obtiene una incidencia por ID. Devuelve 404 si no existe. |
+| `PATCH` | `/api/incidents/{id}/status` | Sí | Cambia el estado de una incidencia. Cuerpo: `{ status }`. Valida la transición según las reglas del dominio. |
+| `GET` | `/api/incidents/summary` | Sí | Devuelve un resumen estadístico de incidencias agrupadas por estado, origen, rama y categoría. |
+
+#### Cargar datos históricos (seed)
+
+El script `scripts/seed_incidents.py` carga la tabla `incidents` de forma idempotente desde el CSV histórico `scripts/incidents-brasaland.csv`.
+
+**Qué hace:**
+1. Lee registros del CSV.
+2. Valida cada fila usando la lógica del analizador (`packages/shared/incidents_analysis`).
+3. Transforma cada fila según el modelo del briefing (estado, categoría, título, fecha y sede) con `origin` configurado como `"customer"`.
+4. Guarda las incidencias válidas en la tabla `incidents` llamando al endpoint `POST /api/incidents`.
+5. Registra cada `incident_id` en la tabla `seed_imports` para garantizar idempotencia — ejecutar de nuevo no duplica registros.
+
+**Comando:**
+
+Desde la raíz del repositorio:
+```bash
+uv run --project services/api python scripts/seed_incidents.py
+```
+
+**Resultado esperado:**
+
+```
+Importing incidents from incidents-brasaland.csv
+Processing 100 records...
+✓ 96 imported
+✗ 4 invalid (skipped)
+
+Status distribution:
+  open:     32
+  resolved: 50
+  discarded: 14
+```
+
+**Formato de errores:**
+
+Todos los endpoints de incidencias devuelven errores con este formato:
+
+```json
+{
+  "field": "status",
+  "message": "Invalid status transition from 'open' to 'invalid_state'",
+  "errors": [
+    { "rule": "status_in_allowed_values", "detail": "status must be one of: open, in_progress, resolved, closed" }
+  ]
+}
+```
+
+- **400**: validación fallida (campo inválido, transición no permitida, etc.).
+- **404**: incidencia no encontrada.
+- **500**: error interno del servidor.
+
 ### Autenticación
 
 | Método | Ruta | Sesión | Qué hace |

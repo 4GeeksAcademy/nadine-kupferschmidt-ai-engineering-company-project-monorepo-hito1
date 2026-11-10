@@ -1,16 +1,39 @@
 # Brasaland Backoffice
 
 Aplicación interna con Next.js, App Router, TypeScript y Tailwind, sin librerías
-adicionales. El menú lateral enlaza a dos páginas:
+adicionales. El menú lateral enlaza a tres módulos:
 
 - `/incidencias` (Operaciones): permite cargar o arrastrar un CSV, analizarlo,
   consultar registros inválidos, categorías, estados y satisfacción, y descargar
   los resultados como CSV.
+- **Gestor de Incidencias** (Operaciones): registro de nuevas incidencias, visualización en panel con filtros (estado, origen, rama, categoría), cambio de estado de incidencias y resumen estadístico.
 - `/suppliers` (Compras, **Directorio de proveedores**): listado de proveedores,
   filtros por país y categoría, registro de proveedores, edición de tarifa,
   activar/suspender y eliminar con confirmación.
 
 El diseño sigue la guía [`prompts/brasaland-backoffice-design-guide.md`](../../prompts/brasaland-backoffice-design-guide.md).
+
+## Gestor de Incidencias
+
+El módulo de Gestor de Incidencias permite registrar, consultar y gestionar el ciclo de vida de las incidencias de la empresa.
+
+### Rutas
+
+| Ruta | Descripción |
+|------|-------------|
+| `/gestor-incidencias` | Panel principal con listado de incidencias, filtros y vista de detalles. |
+| `/gestor-incidencias/nueva` | Formulario para registrar una nueva incidencia (título, descripción, estado, origen, rama, categoría, prioridad). |
+| `/gestor-incidencias/resumen` | Resumen estadístico con gráficos: incidencias por estado, origen, rama y categoría. |
+
+### Funcionalidades
+
+- **Registrar**: crear una incidencia con todos los campos del dominio.
+- **Listar y filtrar**: ver todas las incidencias con búsqueda por estado, origen, rama o categoría.
+- **Ver detalles**: abrir una incidencia individual para consultar todos sus datos.
+- **Cambiar estado**: actualizar el estado de una incidencia (transiciones validadas según las reglas del dominio).
+- **Resumen**: visualizar estadísticas agregadas de incidencias.
+
+Todas las operaciones requieren sesión autenticada.
 
 ## Ejecutar
 
