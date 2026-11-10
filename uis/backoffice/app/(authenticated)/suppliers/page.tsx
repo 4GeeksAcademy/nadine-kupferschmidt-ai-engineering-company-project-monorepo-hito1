@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { SESSION_EXPIRED_MESSAGE } from "@/lib/api";
 import { getSuppliers } from "./api";
 import SupplierForm from "./SupplierForm";
 import SupplierFilters, {
@@ -114,9 +116,35 @@ export default function SuppliersPage() {
         />
 
         {error ? (
-          <p role="alert" className="p-6 text-sm text-bo-danger">
-            {error}
-          </p>
+          <div className="flex flex-col items-start gap-4 p-6">
+            <p role="alert" className="text-sm text-bo-danger">
+              {error}
+            </p>
+            <div className="flex flex-wrap items-center gap-4">
+              {error === SESSION_EXPIRED_MESSAGE ? (
+                <Link
+                  href="/login"
+                  className="min-h-11 inline-flex items-center rounded-full bg-bo-accent px-5 text-sm font-medium text-bo-on-accent hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text"
+                >
+                  Iniciar sesión
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setRefreshKey((key) => key + 1)}
+                  className="min-h-11 rounded-full bg-bo-accent px-5 text-sm font-medium text-bo-on-accent hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text"
+                >
+                  Intentar de nuevo
+                </button>
+              )}
+              <Link
+                href="/"
+                className="min-h-11 inline-flex items-center text-sm text-bo-muted underline hover:text-bo-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text"
+              >
+                Volver al inicio
+              </Link>
+            </div>
+          </div>
         ) : loading ? (
           <p role="status" className="p-6 text-sm text-bo-muted">
             Cargando proveedores…
