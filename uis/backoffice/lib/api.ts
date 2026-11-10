@@ -11,11 +11,20 @@ export async function apiFetch(
     headers.set("Authorization", `Bearer ${token}`);
   }
 
-  const response = await fetch(path, { ...init, headers });
+  let response: Response;
+  try {
+    response = await fetch(path, { ...init, headers });
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new Error("No pudimos conectar con el servidor. Revisa tu conexión e intenta de nuevo.");
+    }
+    throw error;
+  }
+
   if (response.status === 401) {
     clearToken();
     window.location.assign("/login");
-    throw new Error("La sesión venció. Iniciá sesión nuevamente.");
+    throw new Error("Tu sesión expiró. Inicia sesión de nuevo.");
   }
 
   return response;

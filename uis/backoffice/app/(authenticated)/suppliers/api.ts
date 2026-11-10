@@ -12,31 +12,27 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 // Convierte los errores de FastAPI en mensajes legibles.
 async function throwApiError(response: Response): Promise<never> {
-  let payload: unknown;
+  let detail: unknown;
   try {
-    payload = await response.json();
+    const payload: unknown = await response.json();
+    detail = isRecord(payload) ? payload.detail : undefined;
   } catch (error) {
     if (!(error instanceof SyntaxError)) {
       throw error;
     }
-    throw new Error(`No se pudo completar la solicitud (HTTP ${response.status}).`);
   }
 
-  const detail = isRecord(payload) ? payload.detail : undefined;
-  if (typeof detail === "string") {
-    throw new Error(detail);
-  }
-  if (Array.isArray(detail)) {
-    const messages = detail
-      .map((item) => (isRecord(item) ? item.msg : undefined))
-      .filter((message): message is string => typeof message === "string");
-    if (messages.length > 0) {
-      const sentence = messages.join(". ");
-      throw new Error(/[.!?]$/.test(sentence) ? sentence : `${sentence}.`);
-    }
-  }
+  throw new Error(messageForStatus(response.status, detail));
+}
 
-  throw new Error(`No se pudo completar la solicitud (HTTP ${response.status}).`);
+function messageForStatus(status: number, detail: unknown): string {
+  if (status === 401) return "Tu sesión expiró. Inicia sesión de nuevo.";
+  if (status === 404) return "No encontramos lo que buscas.";
+  if (status >= 500) return "Algo falló en el servidor. Intenta de nuevo en unos minutos.";
+  if (status === 400 || status === 422) {
+    return typeof detail === "string" ? detail : "Revisa los datos del formulario.";
+  }
+  return typeof detail === "string" ? detail : "No se pudo completar la solicitud. Intenta de nuevo.";
 }
 
 async function request<T>(url: string, init?: RequestInit): Promise<T> {
@@ -44,7 +40,14 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
   if (!response.ok) {
     await throwApiError(response);
   }
-  return response.json() as Promise<T>;
+  try {
+    return (await response.json()) as T;
+  } catch (error) {
+    if (error instanceof SyntaxError) {
+      throw new Error("El servidor devolvió una respuesta inesperada. Intenta de nuevo.");
+    }
+    throw error;
+  }
 }
 
 function jsonRequest(method: "POST" | "PATCH", body: unknown): RequestInit {
