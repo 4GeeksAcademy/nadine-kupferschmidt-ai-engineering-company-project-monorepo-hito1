@@ -141,7 +141,7 @@ def main() -> None:
             print(f"Error: no se pudo exportar el archivo {output_path.name}.", file=sys.stderr)
             sys.exit(1)
         else:
-            print(f"Resultados exportados a {output_path}")
+            print(f"Resultados exportados a {output_path.name}")
 
 
 if __name__ == "__main__":
