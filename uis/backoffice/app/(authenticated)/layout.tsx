@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import NavLink from "../../components/NavLink";
 import AuthGuard from "../../components/AuthGuard";
 import UserMenu from "../../components/UserMenu";
@@ -24,6 +27,34 @@ const alertIcon = (
   </svg>
 );
 
+const plusIcon = (
+  <svg {...iconProps}>
+    <circle cx="12" cy="12" r="10" />
+    <path d="M12 8v8" />
+    <path d="M8 12h8" />
+  </svg>
+);
+
+const listIcon = (
+  <svg {...iconProps}>
+    <path d="M8 6h13" />
+    <path d="M8 12h13" />
+    <path d="M8 18h13" />
+    <path d="M3 6h.01" />
+    <path d="M3 12h.01" />
+    <path d="M3 18h.01" />
+  </svg>
+);
+
+const barChartIcon = (
+  <svg {...iconProps}>
+    <path d="M3 3v18h18" />
+    <path d="M7 16v-5" />
+    <path d="M12 16V8" />
+    <path d="M17 16v-3" />
+  </svg>
+);
+
 const truckIcon = (
   <svg {...iconProps}>
     <path d="M1 3h15v13H1z" />
@@ -32,6 +63,31 @@ const truckIcon = (
     <circle cx="18.5" cy="18.5" r="2.5" />
   </svg>
 );
+
+type MenuLinkProps = {
+  href: string;
+  text: string;
+  icon: React.ReactNode;
+  small?: boolean;
+};
+
+function MenuLink({ href, text, icon, small = false }: MenuLinkProps) {
+  const pathname = usePathname();
+  const isActive = pathname === href;
+
+  return (
+    <Link
+      href={href}
+      aria-current={isActive ? "page" : undefined}
+      className={`flex min-h-11 items-center gap-2.5 whitespace-nowrap rounded-[10px] px-3 text-sm no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text ${
+        small ? "[&>svg]:h-4 [&>svg]:w-4" : ""
+      } ${isActive ? "bg-bo-tabs font-medium text-bo-text" : "text-bo-menu hover:bg-bo-stripe"}`}
+    >
+      {icon}
+      {text}
+    </Link>
+  );
+}
 
 type AuthenticatedLayoutProps = {
   children: React.ReactNode;
@@ -54,7 +110,12 @@ export default function AuthenticatedLayout({ children }: AuthenticatedLayoutPro
           <nav aria-label="Menú principal" className="px-3 py-5">
             <p className="mb-2 px-3 text-[11px] font-semibold uppercase tracking-wider text-bo-muted">Menú</p>
             <div className="space-y-1">
-              <NavLink href="/incidencias" text="Incidencias" icon={alertIcon} />
+              <NavLink href="/incidencias" text="Analizador CSV" icon={alertIcon} />
+              <MenuLink href="/gestor-incidencias" text="Incidencias" icon={listIcon} />
+              <div className="ml-7 space-y-1">
+                <MenuLink href="/gestor-incidencias/nueva" text="Registrar" icon={plusIcon} small />
+                <MenuLink href="/gestor-incidencias/resumen" text="Resumen" icon={barChartIcon} small />
+              </div>
               <NavLink href="/suppliers" text="Proveedores" icon={truckIcon} />
             </div>
           </nav>

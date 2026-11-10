@@ -81,3 +81,34 @@ class StatusUpdate(BaseModel):
     """Nuevo estado para activar o suspender un proveedor."""
 
     status: Status
+
+
+class IncidentCreate(BaseModel):
+    """Datos de entrada para crear una incidencia; la validación la hace validate_incident."""
+
+    title: str | None = None
+    description: str | None = None
+    category: str | None = None
+    origin: str | None = None
+    branch: str | None = None
+    status: str | None = None
+
+
+class IncidentStatusUpdate(BaseModel):
+    """Nuevo estado para una incidencia; la validación la hace can_transition."""
+
+    status: str | None = None
+
+
+class Incident(BaseModel):
+    """Incidencia devuelta por la API."""
+
+    id: int
+    title: str
+    description: str
+    category: str
+    status: str
+    origin: str
+    branch: str
+    created_at: str
+    updated_at: str
