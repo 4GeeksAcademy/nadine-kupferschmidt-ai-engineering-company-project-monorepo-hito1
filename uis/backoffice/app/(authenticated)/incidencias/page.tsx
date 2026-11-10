@@ -20,12 +20,13 @@ const scores: SatisfactionScore[] = ["1", "2", "3", "4", "5"];
 const buttonClass = "inline-flex min-h-11 items-center justify-center rounded-full bg-bo-accent px-5 text-sm font-medium text-bo-on-accent hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text disabled:cursor-not-allowed disabled:opacity-50";
 
 async function getApiError(response: Response): Promise<string> {
+  let body: Partial<ApiError> | null;
   try {
-    const body: ApiError = await response.json();
-    if (typeof body.detail === "string") return body.detail;
+    body = await response.json();
   } catch {
     return "La API no está disponible o ha devuelto una respuesta no válida.";
   }
+  if (typeof body?.detail === "string") return body.detail;
   return "No se pudo completar la solicitud. Inténtalo de nuevo más tarde.";
 }
 
@@ -87,7 +88,12 @@ export default function IncidentsPage() {
     try {
       const response = await apiFetch("/api/incidents/analyze", { method: "POST", body: formData });
       if (!response.ok) throw new Error(await getApiError(response));
-      const data: AnalysisResponse = await response.json();
+      let data: AnalysisResponse;
+      try {
+        data = await response.json();
+      } catch {
+        throw new Error("La respuesta de la API no es válida.");
+      }
       setResult(data);
     } catch (cause) {
       setError(cause instanceof TypeError ? "No se pudo conectar con la API. Comprueba que esté disponible." : cause instanceof Error ? cause.message : "No se pudo analizar el archivo.");

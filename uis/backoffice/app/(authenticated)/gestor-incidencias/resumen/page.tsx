@@ -40,7 +40,7 @@ function toRows<T extends string>(
   const rows = options.map((option) => ({
     key: option.value,
     label: option.label,
-    count: counts[option.value] ?? 0,
+    count: counts?.[option.value] ?? 0,
   }));
   return sortByCount ? rows.sort((a, b) => b.count - a.count) : rows;
 }
@@ -195,23 +195,23 @@ export default function ResumenIncidenciasPage() {
             <KpiCard label="Total" value={total} loading={loading} />
             <KpiCard
               label="Abiertas"
-              value={summary?.by_status.open ?? 0}
+              value={summary?.by_status?.open ?? 0}
               loading={loading}
               highlighted
             />
             <KpiCard
               label="En curso"
-              value={summary?.by_status.in_progress ?? 0}
+              value={summary?.by_status?.in_progress ?? 0}
               loading={loading}
             />
             <KpiCard
               label="Resueltas"
-              value={summary?.by_status.resolved ?? 0}
+              value={summary?.by_status?.resolved ?? 0}
               loading={loading}
             />
             <KpiCard
               label="Descartadas"
-              value={summary?.by_status.discarded ?? 0}
+              value={summary?.by_status?.discarded ?? 0}
               loading={loading}
             />
           </div>
