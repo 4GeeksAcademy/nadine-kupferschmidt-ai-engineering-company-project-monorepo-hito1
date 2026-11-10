@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, SESSION_EXPIRED_MESSAGE } from "@/lib/api";
 
 type Profile = {
   id: string;
@@ -28,13 +28,12 @@ type ProfileForm = {
 const inputClassName =
   "min-h-11 w-full rounded-[10px] border border-bo-border bg-bo-surface px-3 py-2 text-sm text-bo-text outline-none focus-visible:border-bo-text focus-visible:ring-2 focus-visible:ring-bo-accent";
 
-const SESSION_EXPIRED = "Tu sesión expiró. Inicia sesión de nuevo.";
 const LOAD_ERROR = "No pudimos cargar tu perfil.";
 const SAVE_ERROR = "No pudimos guardar tus cambios. Intenta de nuevo.";
 
 // Traduce un error HTTP a un mensaje legible; nunca expone el código ni el JSON crudo.
 async function messageForResponse(response: Response, fallback: string): Promise<string> {
-  if (response.status === 401) return SESSION_EXPIRED;
+  if (response.status === 401) return SESSION_EXPIRED_MESSAGE;
   if (response.status === 400 || response.status === 422) {
     const payload = (await response.json().catch(() => null)) as { detail?: unknown } | null;
     return typeof payload?.detail === "string" ? payload.detail : "Revisa los datos del formulario.";
@@ -169,7 +168,7 @@ export default function ProfilePage() {
       {error && (
         <p role="alert" className="mb-5 text-sm text-bo-danger">
           {error}
-          {error === SESSION_EXPIRED && (
+          {error === SESSION_EXPIRED_MESSAGE && (
             <>
               {" "}
               <Link href="/login" className="underline underline-offset-4">
@@ -187,7 +186,7 @@ export default function ProfilePage() {
         >
           <p>{loadError}</p>
           <div className="flex flex-wrap items-center gap-4">
-            {loadError === SESSION_EXPIRED ? (
+            {loadError === SESSION_EXPIRED_MESSAGE ? (
               <Link
                 href="/login"
                 className="inline-flex min-h-11 items-center justify-center rounded-full bg-bo-accent px-5 text-sm font-medium text-bo-on-accent hover:opacity-90"

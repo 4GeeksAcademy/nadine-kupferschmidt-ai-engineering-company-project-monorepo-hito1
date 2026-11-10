@@ -1,5 +1,5 @@
 import type { Category, Country, Status, Supplier, SupplierCreate } from "./types";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, SESSION_EXPIRED_MESSAGE } from "@/lib/api";
 
 type SupplierFilters = {
   country?: Country;
@@ -26,7 +26,7 @@ async function throwApiError(response: Response): Promise<never> {
 }
 
 function messageForStatus(status: number, detail: unknown): string {
-  if (status === 401) return "Tu sesión expiró. Inicia sesión de nuevo.";
+  if (status === 401) return SESSION_EXPIRED_MESSAGE;
   if (status === 404) return "No encontramos lo que buscas.";
   if (status >= 500) return "Algo falló en el servidor. Intenta de nuevo en unos minutos.";
   if (status === 400 || status === 422) {

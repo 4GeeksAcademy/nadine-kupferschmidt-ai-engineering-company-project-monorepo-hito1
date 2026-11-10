@@ -1,5 +1,7 @@
 import { clearToken, getToken } from "@/lib/auth";
 
+export const SESSION_EXPIRED_MESSAGE = "Tu sesión expiró. Inicia sesión de nuevo.";
+
 // Agrega el token a las solicitudes protegidas.
 export async function apiFetch(
   path: string,
@@ -24,7 +26,7 @@ export async function apiFetch(
   if (response.status === 401) {
     clearToken();
     window.location.assign("/login");
-    throw new Error("Tu sesión expiró. Inicia sesión de nuevo.");
+    throw new Error(SESSION_EXPIRED_MESSAGE);
   }
 
   return response;
