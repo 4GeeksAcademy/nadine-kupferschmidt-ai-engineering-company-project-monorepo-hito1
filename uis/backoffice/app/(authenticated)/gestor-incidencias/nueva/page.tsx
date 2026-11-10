@@ -41,7 +41,7 @@ const initialForm: FormState = {
 const GENERAL_ERROR = "No pudimos registrar la incidencia. Inténtalo de nuevo en unos minutos.";
 
 const fieldClass = (hasError: boolean) =>
-  `min-h-12 w-full rounded-[10px] border-2 bg-bo-surface px-4 py-3 text-base text-bo-text ${
+  `min-h-11 w-full rounded-[10px] border bg-bo-surface px-3 text-sm text-bo-text ${
     hasError ? "border-bo-danger" : "border-bo-border"
   }`;
 
@@ -126,10 +126,13 @@ export default function NuevaIncidenciaPage() {
   const isBranchOrigin = form.origin === "branch";
 
   return (
-    <section className="space-y-6">
-      <header>
-        <h1 className="text-2xl font-semibold text-bo-text">Registrar incidencia</h1>
-        <p className="mt-1 text-base text-bo-muted">
+    <div>
+      <header className="mb-6">
+        <p className="mb-1 text-xs font-medium uppercase tracking-wide text-bo-muted">
+          Operaciones / Incidencias
+        </p>
+        <h1 className="text-3xl font-semibold text-bo-text">Registrar incidencia</h1>
+        <p className="mt-1 text-sm text-bo-muted">
           Describe lo ocurrido para que el equipo pueda darle seguimiento.
         </p>
       </header>
@@ -137,11 +140,11 @@ export default function NuevaIncidenciaPage() {
       <form
         noValidate
         onSubmit={handleSubmit}
-        className="rounded-[18px] border border-bo-border bg-bo-surface p-5 sm:p-8"
+        className="rounded-[18px] border border-bo-border bg-bo-surface p-5"
       >
-        <div className="grid gap-6 sm:grid-cols-2">
-          <div className="flex flex-col gap-2 sm:col-span-2">
-            <label htmlFor="incident-title" className="text-base font-medium text-bo-text">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="flex flex-col gap-1 sm:col-span-2">
+            <label htmlFor="incident-title" className="text-sm text-bo-muted">
               Título
             </label>
             <input
@@ -153,11 +156,11 @@ export default function NuevaIncidenciaPage() {
               onChange={(event) => updateField("title", event.target.value)}
               className={fieldClass(Boolean(errors.title))}
             />
-            {errors.title && <p className="text-base text-bo-danger">{errors.title}</p>}
+            {errors.title && <p className="text-sm text-bo-danger">{errors.title}</p>}
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label htmlFor="incident-category" className="text-base font-medium text-bo-text">
+          <div className="flex flex-col gap-1">
+            <label htmlFor="incident-category" className="text-sm text-bo-muted">
               Categoría
             </label>
             <select
@@ -177,11 +180,11 @@ export default function NuevaIncidenciaPage() {
                 </option>
               ))}
             </select>
-            {errors.category && <p className="text-base text-bo-danger">{errors.category}</p>}
+            {errors.category && <p className="text-sm text-bo-danger">{errors.category}</p>}
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label htmlFor="incident-origin" className="text-base font-medium text-bo-text">
+          <div className="flex flex-col gap-1">
+            <label htmlFor="incident-origin" className="text-sm text-bo-muted">
               Origen
             </label>
             <select
@@ -199,15 +202,15 @@ export default function NuevaIncidenciaPage() {
                 </option>
               ))}
             </select>
-            {errors.origin && <p className="text-base text-bo-danger">{errors.origin}</p>}
+            {errors.origin && <p className="text-sm text-bo-danger">{errors.origin}</p>}
           </div>
 
           <div
-            className={`flex flex-col gap-2 rounded-[18px] border-2 p-4 sm:col-span-2 ${
+            className={`flex flex-col gap-1 rounded-[10px] border-2 p-3 sm:col-span-2 ${
               isBranchOrigin ? "border-bo-accent bg-bo-accent-soft" : "border-transparent"
             }`}
           >
-            <label htmlFor="incident-branch" className="text-base font-medium text-bo-text">
+            <label htmlFor="incident-branch" className="text-sm text-bo-muted">
               Sede
             </label>
             <select
@@ -226,15 +229,15 @@ export default function NuevaIncidenciaPage() {
               ))}
             </select>
             {isBranchOrigin && (
-              <p className="text-base text-bo-on-accent-soft">
+              <p className="text-sm text-bo-on-accent-soft">
                 Estás reportando desde un local específico. Verifica que la sede sea correcta.
               </p>
             )}
-            {errors.branch && <p className="text-base text-bo-danger">{errors.branch}</p>}
+            {errors.branch && <p className="text-sm text-bo-danger">{errors.branch}</p>}
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label htmlFor="incident-status" className="text-base font-medium text-bo-text">
+          <div className="flex flex-col gap-1">
+            <label htmlFor="incident-status" className="text-sm text-bo-muted">
               Estado
             </label>
             <select
@@ -251,52 +254,52 @@ export default function NuevaIncidenciaPage() {
             </select>
           </div>
 
-          <div className="flex flex-col gap-2 sm:col-span-2">
-            <label htmlFor="incident-description" className="text-base font-medium text-bo-text">
+          <div className="flex flex-col gap-1 sm:col-span-2">
+            <label htmlFor="incident-description" className="text-sm text-bo-muted">
               Descripción
             </label>
             <textarea
               id="incident-description"
-              rows={5}
+              rows={4}
               value={form.description}
               aria-required="true"
               aria-invalid={Boolean(errors.description)}
               onChange={(event) => updateField("description", event.target.value)}
-              className={fieldClass(Boolean(errors.description))}
+              className={`${fieldClass(Boolean(errors.description))} py-2`}
             />
             {errors.description && (
-              <p className="text-base text-bo-danger">{errors.description}</p>
+              <p className="text-sm text-bo-danger">{errors.description}</p>
             )}
           </div>
         </div>
 
         {generalError && (
-          <p role="alert" className="mt-6 text-base text-bo-danger">
+          <p role="alert" className="mt-4 text-sm text-bo-danger">
             {generalError}
           </p>
         )}
         {success && (
-          <p role="status" className="mt-6 text-base text-bo-success">
+          <p role="status" className="mt-4 text-sm text-bo-success">
             {success}
           </p>
         )}
 
-        <div className="mt-8 flex justify-end">
+        <div className="mt-6 flex justify-end">
           <button
             type="submit"
             disabled={saving}
-            className="flex min-h-12 w-full items-center justify-center gap-3 rounded-full bg-bo-accent px-8 text-base font-medium text-bo-on-accent disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-bo-accent px-5 text-sm font-medium text-bo-on-accent hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text disabled:cursor-not-allowed disabled:opacity-50"
           >
             {saving && (
               <span
                 aria-hidden="true"
-                className="h-5 w-5 animate-spin rounded-full border-2 border-bo-on-accent border-t-transparent"
+                className="h-4 w-4 animate-spin rounded-full border-2 border-bo-on-accent border-t-transparent"
               />
             )}
             {saving ? "Enviando..." : "Registrar incidencia"}
           </button>
         </div>
       </form>
-    </section>
+    </div>
   );
 }

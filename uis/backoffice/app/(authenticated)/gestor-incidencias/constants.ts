@@ -41,6 +41,13 @@ export const STATUS_OPTIONS: readonly { value: IncidentStatus; label: string }[]
   { value: "discarded", label: "Descartada" },
 ];
 
+export const ALLOWED_TRANSITIONS: Record<IncidentStatus, readonly IncidentStatus[]> = {
+  open: ["in_progress", "discarded"],
+  in_progress: ["resolved", "discarded"],
+  resolved: [],
+  discarded: [],
+};
+
 export const ORIGIN_OPTIONS: readonly { value: IncidentOrigin; label: string }[] = [
   { value: "customer", label: "Cliente" },
   { value: "branch", label: "Local" },

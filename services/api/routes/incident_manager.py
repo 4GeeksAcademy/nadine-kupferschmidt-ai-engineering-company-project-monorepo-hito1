@@ -101,7 +101,10 @@ def list_incidents(
         for doc in incidents.all()
         if all(value is None or doc[field] == value for field, value in filters.items())
     ]
-    items.sort(key=lambda item: datetime.fromisoformat(item["created_at"]), reverse=True)
+    items.sort(
+        key=lambda item: (datetime.fromisoformat(item["created_at"]), item["id"]),
+        reverse=True,
+    )
     return items
 
 
