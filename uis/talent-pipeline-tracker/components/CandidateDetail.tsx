@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCandidate } from "@/hooks/useCandidate";
 import CandidateForm from "@/components/CandidateForm";
@@ -12,7 +13,7 @@ import type { CandidateFormData } from "@/types/candidate";
 
 export default function CandidateDetail({ id, justCreated }: { id: string; justCreated?: boolean }) {
 	const router = useRouter();
-	const { candidate, loading, error, setCandidate } = useCandidate(id);
+	const { candidate, loading, error, setCandidate, reload } = useCandidate(id);
 	const [isEditing, setIsEditing] = useState(false);
 	const [editSuccess, setEditSuccess] = useState<string | null>(null);
 
@@ -21,7 +22,23 @@ export default function CandidateDetail({ id, justCreated }: { id: string; justC
 	}
 
 	if (error) {
-		return <p className="text-red-600">Error: {error}</p>;
+		return (
+			<div>
+				<p className="text-red-600">Error: {error}</p>
+				<div className="mt-4 flex flex-wrap items-center gap-4">
+					<button
+						type="button"
+						onClick={reload}
+						className="rounded border border-brand-beige bg-white px-4 py-2 text-sm text-brand-darkbrown hover:border-brand-ochre"
+					>
+						Intentar de nuevo
+					</button>
+					<Link href="/" className="text-sm text-brand-warmgray hover:text-brand-ochre">
+						Volver al inicio
+					</Link>
+				</div>
+			</div>
+		);
 	}
 
 	if (!candidate) {
