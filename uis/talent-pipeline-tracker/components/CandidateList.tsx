@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import CandidateTable from "@/components/CandidateTable";
 import { useCandidates } from "@/hooks/useCandidates";
@@ -26,7 +27,7 @@ export default function CandidateList() {
 
 	const search = searchParam || undefined;
 
-	const { candidates, loading, error, total } = useCandidates({ status, stage, search });
+	const { candidates, loading, error, total, reload } = useCandidates({ status, stage, search });
 	const [showAll, setShowAll] = useState(false);
 
 	if (loading) {
@@ -34,7 +35,23 @@ export default function CandidateList() {
 	}
 
 	if (error) {
-		return <p className="text-red-600">Error: {error}</p>;
+		return (
+			<div>
+				<p className="text-red-600">Error: {error}</p>
+				<div className="mt-4 flex flex-wrap items-center gap-4">
+					<button
+						type="button"
+						onClick={reload}
+						className="rounded border border-brand-beige bg-white px-4 py-2 text-sm text-brand-darkbrown hover:border-brand-ochre"
+					>
+						Intentar de nuevo
+					</button>
+					<Link href="/" className="text-sm text-brand-warmgray hover:text-brand-ochre">
+						Volver al inicio
+					</Link>
+				</div>
+			</div>
+		);
 	}
 
 	const visibleCandidates = showAll ? candidates : candidates.slice(0, 15);

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { apiFetch } from "@/lib/api";
 import {
   BRANCH_OPTIONS,
@@ -31,6 +32,8 @@ const EMPTY_MESSAGE = "Todavía no hay incidencias registradas.";
 const cardClass = "rounded-[18px] border border-bo-border bg-bo-surface p-5";
 const primaryButtonClass =
   "min-h-11 rounded-full bg-bo-accent px-5 text-sm font-medium text-bo-on-accent hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text";
+const linkButtonClass =
+  "inline-flex min-h-11 items-center whitespace-nowrap text-xs text-bo-muted underline hover:text-bo-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text disabled:cursor-not-allowed disabled:opacity-50";
 
 function toRows<T extends string>(
   options: readonly { value: T; label: string }[],
@@ -40,7 +43,7 @@ function toRows<T extends string>(
   const rows = options.map((option) => ({
     key: option.value,
     label: option.label,
-    count: counts[option.value] ?? 0,
+    count: counts?.[option.value] ?? 0,
   }));
   return sortByCount ? rows.sort((a, b) => b.count - a.count) : rows;
 }
@@ -179,13 +182,18 @@ export default function ResumenIncidenciasPage() {
           <p role="alert" className="text-sm text-bo-danger">
             {LOAD_ERROR}
           </p>
-          <button
-            type="button"
-            onClick={() => setReloadKey((key) => key + 1)}
-            className={primaryButtonClass}
-          >
-            Reintentar
-          </button>
+          <div className="flex flex-wrap items-center gap-4">
+            <button
+              type="button"
+              onClick={() => setReloadKey((key) => key + 1)}
+              className={primaryButtonClass}
+            >
+              Intentar de nuevo
+            </button>
+            <Link href="/" className={linkButtonClass}>
+              Volver al inicio
+            </Link>
+          </div>
         </section>
       ) : (
         <div className="space-y-6" aria-busy={loading}>
@@ -195,23 +203,23 @@ export default function ResumenIncidenciasPage() {
             <KpiCard label="Total" value={total} loading={loading} />
             <KpiCard
               label="Abiertas"
-              value={summary?.by_status.open ?? 0}
+              value={summary?.by_status?.open ?? 0}
               loading={loading}
               highlighted
             />
             <KpiCard
               label="En curso"
-              value={summary?.by_status.in_progress ?? 0}
+              value={summary?.by_status?.in_progress ?? 0}
               loading={loading}
             />
             <KpiCard
               label="Resueltas"
-              value={summary?.by_status.resolved ?? 0}
+              value={summary?.by_status?.resolved ?? 0}
               loading={loading}
             />
             <KpiCard
               label="Descartadas"
-              value={summary?.by_status.discarded ?? 0}
+              value={summary?.by_status?.discarded ?? 0}
               loading={loading}
             />
           </div>

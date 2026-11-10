@@ -34,8 +34,15 @@ const rateFormatters = {
 };
 
 function formatRate(supplier: Supplier): string {
-  const amount = rateFormatters[supplier.currency].format(supplier.rate_per_unit);
-  return `${amount} ${supplier.currency}`;
+  const formatter = rateFormatters[supplier.currency];
+  if (!formatter || !Number.isFinite(supplier.rate_per_unit)) return "—";
+  return `${formatter.format(supplier.rate_per_unit)} ${supplier.currency}`;
+}
+
+function formatUpdatedAt(value: string | null | undefined): string {
+  const date = value ? new Date(value) : null;
+  if (!date || Number.isNaN(date.getTime())) return "—";
+  return dateFormatter.format(date);
 }
 
 export default function SupplierRow({
@@ -135,16 +142,16 @@ export default function SupplierRow({
           )}
         </td>
         <td className="px-4 py-3 text-bo-text">
-          {supplier.country === "USA" ? "Estados Unidos" : supplier.country}
+          {supplier.country === "USA" ? "Estados Unidos" : supplier.country ?? "—"}
         </td>
         <td className="px-4 py-3">
           <ul className="flex flex-wrap gap-1.5">
-            {supplier.categories.map((category) => (
+            {(supplier.categories ?? []).map((category) => (
               <li
                 key={category}
                 className="rounded-full bg-bo-chip px-2.5 py-0.5 text-xs text-bo-menu"
               >
-                {CATEGORY_LABELS[category]}
+                {CATEGORY_LABELS[category] ?? "—"}
               </li>
             ))}
           </ul>
@@ -228,7 +235,7 @@ export default function SupplierRow({
               />
             </button>
             <span className={`text-xs ${isActive ? "text-bo-success" : "text-bo-danger"}`}>
-              {STATUS_LABELS[supplier.status]}
+              {STATUS_LABELS[supplier.status] ?? "—"}
             </span>
             {savingAction === "status" && (
               <span className="text-sm text-bo-muted">Guardando…</span>
@@ -236,7 +243,7 @@ export default function SupplierRow({
           </div>
         </td>
         <td className="whitespace-nowrap px-4 py-3 text-bo-muted">
-          {dateFormatter.format(new Date(supplier.updated_at))}
+          {formatUpdatedAt(supplier.updated_at)}
         </td>
         <td className="w-14 px-2 py-3 text-center">
           {savingAction === "delete" ? (

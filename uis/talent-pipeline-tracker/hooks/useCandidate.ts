@@ -8,6 +8,7 @@ export function useCandidate(id: string) {
 	const [candidate, setCandidate] = useState<Candidate | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const [reloadKey, setReloadKey] = useState(0);
 
 	useEffect(() => {
 		const loadCandidate = async () => {
@@ -21,7 +22,7 @@ export function useCandidate(id: string) {
 				setError(
 					caughtError instanceof Error
 						? caughtError.message
-						: String(caughtError),
+						: "No se pudo cargar la candidatura.",
 				);
 			} finally {
 				setLoading(false);
@@ -29,7 +30,13 @@ export function useCandidate(id: string) {
 		};
 
 		void loadCandidate();
-	}, [id]);
+	}, [id, reloadKey]);
 
-	return { candidate, setCandidate, loading, error };
+	return {
+		candidate,
+		setCandidate,
+		loading,
+		error,
+		reload: () => setReloadKey((key) => key + 1),
+	};
 }

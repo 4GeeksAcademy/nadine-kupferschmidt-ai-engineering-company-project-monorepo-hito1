@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { apiFetch } from "@/lib/api";
+import { SESSION_EXPIRED_MESSAGE, apiFetch } from "@/lib/api";
 import {
   BRANCH_OPTIONS,
   CATEGORY_OPTIONS,
@@ -116,8 +116,8 @@ export default function NuevaIncidenciaPage() {
       setForm(initialForm);
       setErrors({});
       setSuccess(`Incidencia #${created.id} registrada correctamente.`);
-    } catch {
-      setGeneralError(GENERAL_ERROR);
+    } catch (cause) {
+      setGeneralError(cause instanceof Error && cause.message === SESSION_EXPIRED_MESSAGE ? SESSION_EXPIRED_MESSAGE : GENERAL_ERROR);
     } finally {
       setSaving(false);
     }
@@ -243,8 +243,9 @@ export default function NuevaIncidenciaPage() {
             <select
               id="incident-status"
               value={form.status}
+              aria-invalid={Boolean(errors.status)}
               onChange={(event) => updateField("status", event.target.value as IncidentStatus)}
-              className={fieldClass(false)}
+              className={fieldClass(Boolean(errors.status))}
             >
               {STATUS_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -252,6 +253,7 @@ export default function NuevaIncidenciaPage() {
                 </option>
               ))}
             </select>
+            {errors.status && <p className="text-sm text-bo-danger">{errors.status}</p>}
           </div>
 
           <div className="flex flex-col gap-1 sm:col-span-2">

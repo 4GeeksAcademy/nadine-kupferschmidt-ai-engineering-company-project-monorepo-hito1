@@ -24,6 +24,7 @@ export default function CandidateNotes({
 	const [actionError, setActionError] = useState<string | null>(null);
 	const [actionSuccess, setActionSuccess] = useState<string | null>(null);
 	const [noteToDelete, setNoteToDelete] = useState<string | null>(null);
+	const [reloadKey, setReloadKey] = useState(0);
 
 	useEffect(() => {
 		const loadNotes = async () => {
@@ -37,7 +38,7 @@ export default function CandidateNotes({
 				setError(
 					caughtError instanceof Error
 						? caughtError.message
-						: String(caughtError),
+						: "No se pudieron obtener las notas.",
 				);
 			} finally {
 				setLoading(false);
@@ -45,7 +46,7 @@ export default function CandidateNotes({
 		};
 
 		void loadNotes();
-	}, [candidateId]);
+	}, [candidateId, reloadKey]);
 
 	async function handleAdd(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
@@ -62,16 +63,23 @@ export default function CandidateNotes({
 		try {
 			await addNote(candidateId, newNote.trim());
 			setNewNote("");
-			const response = await getNotes(candidateId);
-			setNotes(response);
-			onCountChange(response.length);
-			setActionSuccess("Nota agregada correctamente.");
 		} catch (caughtError) {
 			setActionError(
 				caughtError instanceof Error
 					? caughtError.message
-					: String(caughtError),
+					: "No se pudo agregar la nota.",
 			);
+			setAdding(false);
+			return;
+		}
+
+		try {
+			const response = await getNotes(candidateId);
+			setNotes(response);
+			onCountChange(response.length);
+			setActionSuccess("Nota agregada correctamente.");
+		} catch {
+			setActionError("La nota se guardó, pero no pudimos actualizar la lista.");
 		} finally {
 			setAdding(false);
 		}
@@ -88,16 +96,24 @@ export default function CandidateNotes({
 
 		try {
 			await deleteNote(candidateId, noteToDelete);
-			const response = await getNotes(candidateId);
-			setNotes(response);
-			onCountChange(response.length);
-			setActionSuccess("Nota eliminada correctamente.");
 		} catch (caughtError) {
 			setActionError(
 				caughtError instanceof Error
 					? caughtError.message
-					: String(caughtError),
+					: "No se pudo eliminar la nota.",
 			);
+			setDeletingId(null);
+			setNoteToDelete(null);
+			return;
+		}
+
+		try {
+			const response = await getNotes(candidateId);
+			setNotes(response);
+			onCountChange(response.length);
+			setActionSuccess("Nota eliminada correctamente.");
+		} catch {
+			setActionError("La nota se eliminó, pero no pudimos actualizar la lista.");
 		} finally {
 			setDeletingId(null);
 			setNoteToDelete(null);
@@ -143,7 +159,16 @@ export default function CandidateNotes({
 				{loading ? (
 					<p>Cargando notas…</p>
 				) : error ? (
-					<p className="text-red-600">{error}</p>
+					<div>
+						<p className="text-red-600">{error}</p>
+						<button
+							type="button"
+							onClick={() => setReloadKey((key) => key + 1)}
+							className="mt-2 rounded border border-brand-beige bg-white px-4 py-2 text-sm text-brand-darkbrown hover:border-brand-ochre"
+						>
+							Intentar de nuevo
+						</button>
+					</div>
 				) : notes.length === 0 ? (
 					<p>Todavía no hay notas internas.</p>
 				) : (

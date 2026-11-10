@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { apiFetch } from "@/lib/api";
+import { SESSION_EXPIRED_MESSAGE, apiFetch } from "@/lib/api";
 import {
   ALLOWED_TRANSITIONS,
   BRANCH_OPTIONS,
@@ -60,7 +60,7 @@ export default function GestorIncidenciasPage() {
   const [filters, setFilters] = useState<Filters>(emptyFilters);
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState(false);
+  const [loadError, setLoadError] = useState("");
   const [reloadKey, setReloadKey] = useState(0);
   const [pendingIds, setPendingIds] = useState<number[]>([]);
   const [actionError, setActionError] = useState("");
@@ -73,7 +73,7 @@ export default function GestorIncidenciasPage() {
 
     async function load() {
       setLoading(true);
-      setLoadError(false);
+      setLoadError("");
       try {
         const params = new URLSearchParams();
         if (filters.status) params.set("status", filters.status);
@@ -85,8 +85,10 @@ export default function GestorIncidenciasPage() {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = (await response.json()) as Incident[];
         if (!ignore) setIncidents(data);
-      } catch {
-        if (!ignore) setLoadError(true);
+      } catch (cause) {
+        if (!ignore) {
+          setLoadError(cause instanceof Error && cause.message === SESSION_EXPIRED_MESSAGE ? SESSION_EXPIRED_MESSAGE : LOAD_ERROR);
+        }
       } finally {
         if (!ignore) setLoading(false);
       }
@@ -314,15 +316,29 @@ export default function GestorIncidenciasPage() {
         {!loading && loadError && (
           <div className="flex flex-col items-start gap-4 p-6">
             <p role="alert" className="text-sm text-bo-danger">
-              {LOAD_ERROR}
+              {loadError}
             </p>
-            <button
-              type="button"
-              onClick={() => setReloadKey((key) => key + 1)}
-              className="min-h-11 rounded-full bg-bo-accent px-5 text-sm font-medium text-bo-on-accent hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text"
-            >
-              Reintentar
-            </button>
+            <div className="flex flex-wrap items-center gap-4">
+              {loadError === SESSION_EXPIRED_MESSAGE ? (
+                <Link
+                  href="/login"
+                  className="min-h-11 inline-flex items-center rounded-full bg-bo-accent px-5 text-sm font-medium text-bo-on-accent hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text"
+                >
+                  Iniciar sesión
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setReloadKey((key) => key + 1)}
+                  className="min-h-11 rounded-full bg-bo-accent px-5 text-sm font-medium text-bo-on-accent hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text"
+                >
+                  Intentar de nuevo
+                </button>
+              )}
+              <Link href="/" className={linkButtonClass}>
+                Volver al inicio
+              </Link>
+            </div>
           </div>
         )}
 

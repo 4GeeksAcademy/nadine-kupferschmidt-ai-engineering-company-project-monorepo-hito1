@@ -23,7 +23,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()) -> TokenResponse:
     user = services.get_user_by_email(form_data.username)
     if (
         user is None
-        or not verify_password(form_data.password, user["hashed_password"])
+        or not verify_password(form_data.password, user.get("hashed_password", ""))
         or user.get("is_active") is not True
     ):
         raise HTTPException(

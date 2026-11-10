@@ -21,7 +21,7 @@ def read_arguments(argv: List[str]) -> Tuple[Optional[Path], Optional[str]]:
 
     csv_path = Path(argv[1])
     if not csv_path.is_file():
-        return None, f"El archivo CSV no existe o no es un archivo: {csv_path}"
+        return None, f"El archivo CSV no existe o no es un archivo: {csv_path.name}"
 
     return csv_path, None
 
@@ -105,27 +105,43 @@ def export_to_csv(metrics: Dict[str, object], output_path: Path) -> None:
 def main() -> None:
     csv_path, argument_error = read_arguments(sys.argv)
     if argument_error:
-        print(f"Error: {argument_error}")
-        return
+        print(f"Error: {argument_error}", file=sys.stderr)
+        sys.exit(1)
 
     try:
         with csv_path.open("r", encoding="utf-8", newline="") as csv_file:
-            records = parse_csv_text(csv_file.read())
-    except (OSError, UnicodeError, csv.Error) as error:
-        print(f"Error al leer el archivo CSV: {error}")
-        return
+            text = csv_file.read()
+    except UnicodeDecodeError:
+        print(f"Error: el archivo {csv_path.name} no está en UTF-8.", file=sys.stderr)
+        sys.exit(1)
+    except OSError:
+        print(f"Error: no se pudo leer el archivo {csv_path.name}.", file=sys.stderr)
+        sys.exit(1)
+
+    try:
+        records = parse_csv_text(text)
+    except csv.Error:
+        print(f"Error: el archivo {csv_path.name} no tiene un formato CSV válido.", file=sys.stderr)
+        sys.exit(1)
 
     metrics = calculate_metrics(records)
     print_summary(metrics, csv_path.name)
 
-    if input("¿Deseas exportar los resultados a CSV? [s / n]: ").strip().lower() == "s":
+    try:
+        answer = input("¿Deseas exportar los resultados a CSV? [s / n]: ")
+    except (EOFError, KeyboardInterrupt):
+        print("\nOperación cancelada.", file=sys.stderr)
+        sys.exit(1)
+
+    if answer.strip().lower() == "s":
         output_path = Path(__file__).resolve().with_name("results.csv")
         try:
             export_to_csv(metrics, output_path)
-        except OSError as error:
-            print(f"Error al exportar los resultados a CSV: {error}")
+        except OSError:
+            print(f"Error: no se pudo exportar el archivo {output_path.name}.", file=sys.stderr)
+            sys.exit(1)
         else:
-            print(f"Resultados exportados a {output_path}")
+            print(f"Resultados exportados a {output_path.name}")
 
 
 if __name__ == "__main__":

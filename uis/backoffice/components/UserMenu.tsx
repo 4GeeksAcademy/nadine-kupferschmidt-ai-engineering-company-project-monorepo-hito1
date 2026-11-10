@@ -15,9 +15,11 @@ export default function UserMenu() {
     apiFetch("/api/auth/me")
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        if (active && data?.email) setEmail(data.email);
+        if (active) setEmail(data?.email || "Mi cuenta");
       })
-      .catch(() => {});
+      .catch(() => {
+        if (active) setEmail("Mi cuenta");
+      });
     return () => {
       active = false;
     };
