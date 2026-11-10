@@ -24,6 +24,14 @@ const alertIcon = (
   </svg>
 );
 
+const plusIcon = (
+  <svg {...iconProps}>
+    <circle cx="12" cy="12" r="10" />
+    <path d="M12 8v8" />
+    <path d="M8 12h8" />
+  </svg>
+);
+
 const truckIcon = (
   <svg {...iconProps}>
     <path d="M1 3h15v13H1z" />
@@ -54,7 +62,8 @@ export default function AuthenticatedLayout({ children }: AuthenticatedLayoutPro
           <nav aria-label="Menú principal" className="px-3 py-5">
             <p className="mb-2 px-3 text-[11px] font-semibold uppercase tracking-wider text-bo-muted">Menú</p>
             <div className="space-y-1">
-              <NavLink href="/incidencias" text="Incidencias" icon={alertIcon} />
+              <NavLink href="/incidencias" text="Analizador CSV" icon={alertIcon} />
+              <NavLink href="/gestor-incidencias/nueva" text="Registrar incidencia" icon={plusIcon} />
               <NavLink href="/suppliers" text="Proveedores" icon={truckIcon} />
             </div>
           </nav>
