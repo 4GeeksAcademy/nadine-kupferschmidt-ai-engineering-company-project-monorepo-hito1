@@ -18,6 +18,19 @@ from auth.security import (
 logger = logging.getLogger(__name__)
 
 
+def is_valid_email(email: str) -> bool:
+    """Revisa que el email tenga un formato básico: texto@dominio.ext, sin espacios."""
+    if " " in email or email.count("@") != 1:
+        return False
+    local_part, domain = email.split("@")
+    return (
+        bool(local_part)
+        and "." in domain
+        and not domain.startswith(".")
+        and not domain.endswith(".")
+    )
+
+
 def create_user(data: UserCreate) -> dict[str, Any]:
     """Crea un usuario y su perfil inicial."""
     if get_user_by_email(data.email) is not None:

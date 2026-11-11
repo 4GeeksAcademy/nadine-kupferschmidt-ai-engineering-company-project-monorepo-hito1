@@ -1,12 +1,13 @@
 import logging
+import os
 from pathlib import Path
 
 from tinydb import TinyDB
 
 logger = logging.getLogger(__name__)
 
-# Guarda la base de autenticación junto a este archivo.
-AUTH_DB_PATH = Path(__file__).resolve().parent / "auth.json"
+# Permite usar otro archivo (por ejemplo, en los tests) con la variable AUTH_DB_PATH.
+AUTH_DB_PATH = Path(os.getenv("AUTH_DB_PATH", Path(__file__).resolve().parent / "auth.json"))
 
 # Inicializa la conexión y las tablas de autenticación.
 try:
