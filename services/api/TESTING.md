@@ -9,8 +9,10 @@ Los comandos se ejecutan desde `services/api`:
 ```bash
 uv sync
 uv run pytest
-uv run pytest --cov=auth --cov=routes --cov-report=term-missing
+uv run pytest --cov=auth --cov=routes.auth --cov=routes.users --cov=routes.profiles --cov-report=term-missing
 ```
+
+La cobertura se mide solo sobre los módulos de autenticación (la carpeta auth/ y las rutas auth, users y profiles), no sobre proveedores ni incidencias.
 
 Las pruebas usan una base de datos temporal y no tocan `auth.json`.
 
@@ -41,20 +43,25 @@ Las pruebas usan una base de datos temporal y no tocan `auth.json`.
 | Límite | Token al que le falta 1 minuto para vencer   | Todavía sirve                                |
 | Límite | Usar un código de reset como token de sesión | Se rechaza                                   |
 | Fallo  | Token vencido, mal formado o sin token       | 401                                          |
+| Fallo  | Token de una cuenta borrada                  | 401 aunque el token no haya vencido          |
+| Fallo  | Token de un usuario desactivado              | 401                                          |
 
 ### Contraseñas (forgot, reset, change) → test_password.py
 
-| Endpoint | Tipo   | Caso                             | Qué comprobamos                              |
-| -------- | ------ | -------------------------------- | -------------------------------------------- |
-| forgot   | Feliz  | Email registrado y activo        | Se "manda" el correo                         |
-| forgot   | Límite | Email no registrado              | Mismo mensaje y no se manda nada             |
-| forgot   | Fallo  | Usuario desactivado              | No se manda nada                             |
-| reset    | Feliz  | Código válido                    | Funciona la nueva contraseña, ya no la vieja |
-| reset    | Límite | El mismo código usado dos veces  | La segunda vez se rechaza                    |
-| reset    | Fallo  | Código vencido o inventado       | 400 y la contraseña no cambia                |
-| change   | Feliz  | Contraseña actual correcta       | Cambia y se puede entrar con la nueva        |
-| change   | Límite | Nueva contraseña de 7 caracteres | Se rechaza y la vieja sigue sirviendo        |
-| change   | Fallo  | Contraseña actual incorrecta     | 400 y no cambia nada                         |
+| Endpoint | Tipo   | Caso                                           | Qué comprobamos                                              |
+| -------- | ------ | ---------------------------------------------- | ------------------------------------------------------------ |
+| forgot   | Feliz  | Email registrado y activo                      | Se "manda" el correo                                         |
+| forgot   | Límite | Email no registrado                            | Mismo mensaje y no se manda nada                             |
+| forgot   | Fallo  | Usuario desactivado                            | No se manda nada                                             |
+| reset    | Feliz  | Código válido                                  | Funciona la nueva contraseña, ya no la vieja                 |
+| reset    | Límite | El mismo código usado dos veces                | La segunda vez se rechaza                                    |
+| reset    | Fallo  | Código vencido o inventado                     | 400 y la contraseña no cambia                                |
+| change   | Feliz  | Contraseña actual correcta                     | Cambia y se puede entrar con la nueva                        |
+| change   | Límite | Nueva contraseña de 7 caracteres               | Se rechaza y la vieja sigue sirviendo                        |
+| change   | Fallo  | Contraseña actual incorrecta                   | 400 y no cambia nada                                         |
+| forgot   | Límite | Falla el envío del correo                      | Responde 200 con el mismo mensaje que un email no registrado |
+| reset    | Límite | Usuario desactivado después de pedir el código | 400 y la contraseña no cambia                                |
+| reset    | Fallo  | Token de sesión usado como código de reset     | 400 y la contraseña no cambia                                |
 
 ### Perfil (GET y PUT /profiles/me) → test_profiles.py
 
@@ -78,6 +85,7 @@ Las pruebas usan una base de datos temporal y no tocan `auth.json`.
 | PUT      | Feliz  | Cambia su propio email               | El email se actualiza               |
 | PUT      | Límite | Usuario normal intenta hacerse admin | 403 y sigue siendo user             |
 | PUT      | Límite | Email que ya usa otra persona        | 409                                 |
+| PUT      | Fallo  | Email inválido ("hola")              | 422 y el email no cambia            |
 | PUT      | Fallo  | A intenta editar a B                 | 403 y B no cambia                   |
 | DELETE   | Feliz  | Borra su propia cuenta               | Se borran el usuario y su perfil    |
 | DELETE   | Límite | Un admin borra a otra persona        | Se permite                          |
@@ -103,8 +111,46 @@ Las pruebas usan una base de datos temporal y no tocan `auth.json`.
 
 ## Flujo de trabajo con IA
 
-Pendiente.
+Después de medir la cobertura (91% con 41 tests), le pasé a Copilot las líneas sin cubrir y el código de auth/ y routes/, y le pedí que sugiriera casos límite y modos de fallo, sin escribir código, indicando si cada uno era importante para la seguridad o solo subía el porcentaje.
+
+| Sugerencia de la IA                           | Decisión   | Motivo                                                                                             |
+| --------------------------------------------- | ---------- | -------------------------------------------------------------------------------------------------- |
+| Token de un usuario borrado o desactivado     | Agregada   | Seguridad: una cuenta eliminada o desactivada no debe conservar acceso hasta que venza el token    |
+| Token de sesión usado como código de reset    | Agregada   | Seguridad: completa el test inverso que ya existía (código de reset usado como sesión)             |
+| Falla el envío del correo de restablecimiento | Agregada   | Seguridad: no se nos había ocurrido; una respuesta distinta revelaría qué emails están registrados |
+| Reset de un usuario desactivado               | Agregada   | Lógica de negocio: un código pedido antes de desactivar la cuenta no debe servir                   |
+| Admin edita o borra un ID inexistente         | Descartada | El 404 ya está probado en GET /users/{id}; solo confirmaba el mismo comportamiento                 |
+| Usuario sin perfil en /profiles/me            | Descartada | Solo ocurre si la base está dañada; solo subía el porcentaje                                       |
+
+La IA también se usó para generar el código de los tests a partir del plan; cada test se revisó antes de confirmarlo (por ejemplo, se corrigió un test de perfil que miraba la base pero no comprobaba qué devolvía el endpoint).
 
 ## Resultados de cobertura
 
-Pendiente: se completa al final.
+Resultado con 46 tests, todos pasando:
+
+```text
+Name                 Stmts   Miss  Cover   Missing
+--------------------------------------------------
+auth/__init__.py         0      0   100%
+auth/database.py        14      3    79%   16-18
+auth/mailer.py          19      8    58%   20-49
+auth/models.py          53      0   100%
+auth/security.py        66      7    89%   23-24, 29, 50-51, 97, 119
+auth/services.py        85      3    96%   79, 95, 112
+routes/auth.py          30      0   100%
+routes/profiles.py      18      2    89%   19, 34
+routes/users.py         52      4    92%   61, 92, 111, 122
+--------------------------------------------------
+TOTAL                  337     27    92%
+```
+
+Líneas sin cubrir a propósito:
+
+- auth/mailer.py: el envío real de correos; en los tests se reemplaza con monkeypatch.
+- auth/database.py 16-18 y auth/security.py 23-24, 29: errores de arranque por archivo dañado o configuración faltante, no son lógica de negocio.
+- auth/services.py 79 y 95, routes/users.py 92 y 122: código al que no se puede llegar, porque las rutas ya comprueban antes que el usuario existe.
+- Resto (hash dañado, token sin "sub" o sin "iat", usuario sin perfil): solo se alcanzan con datos dañados o tokens firmados a mano; se priorizó la calidad de los casos sobre el porcentaje.
+
+## Observaciones
+
+- GET /users y GET /users/{user_id} permiten que cualquier usuario autenticado vea la lista de todos los usuarios, no solo un administrador. No se cambió porque no estaba en el alcance del ticket, pero se recomienda revisarlo. Los tests actuales comprueban que la contraseña cifrada nunca se incluye en esas respuestas.

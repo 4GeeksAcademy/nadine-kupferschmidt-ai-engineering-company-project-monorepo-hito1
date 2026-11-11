@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta, timezone
 
 from jose import jwt
+from tinydb import Query
 
+from auth.database import users
 from auth.security import ALGORITHM, SECRET_KEY, create_reset_token
 
 
@@ -68,5 +70,25 @@ def test_me_rejects_malformed_token(client):
 def test_me_rejects_request_without_token(client):
     """Modo de fallo: sin token no hay acceso."""
     response = client.get("/auth/me")
+
+    assert response.status_code == 401
+
+
+def test_me_rejects_token_of_deleted_user(client, seeded_user, auth_headers):
+    """Modo de fallo: un token de una cuenta borrada deja de servir."""
+    deleted = client.delete(f"/users/{seeded_user['id']}", headers=auth_headers)
+    assert deleted.status_code == 204
+
+    # El token todavía no venció, pero si la cuenta ya no existe la sesión deja de servir.
+    response = client.get("/auth/me", headers=auth_headers)
+
+    assert response.status_code == 401
+
+
+def test_me_rejects_token_of_deactivated_user(client, seeded_user, auth_headers):
+    """Modo de fallo: un token de una cuenta desactivada deja de servir."""
+    users.update({"is_active": False}, Query().id == seeded_user["id"])
+
+    response = client.get("/auth/me", headers=auth_headers)
 
     assert response.status_code == 401

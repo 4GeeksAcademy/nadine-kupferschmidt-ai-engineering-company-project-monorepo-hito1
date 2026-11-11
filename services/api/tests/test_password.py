@@ -6,7 +6,7 @@ from tinydb import Query
 
 from auth import services
 from auth.database import users
-from auth.security import ALGORITHM, SECRET_KEY, create_reset_token
+from auth.security import ALGORITHM, SECRET_KEY, create_access_token, create_reset_token
 
 
 def login_status(client, email, password):
@@ -154,3 +154,49 @@ def test_change_password_rejects_wrong_current_password(client, seeded_user, aut
 
     assert response.status_code == 400
     assert login_status(client, seeded_user["email"], seeded_user["password"]) == 200
+
+
+def test_reset_password_rejects_session_token(client, seeded_user):
+    """Modo de fallo: un token de sesión no sirve como código de restablecimiento."""
+    session_token = create_access_token(seeded_user["id"])
+
+    response = client.post(
+        "/auth/reset-password",
+        json={"token": session_token, "new_password": "nueva-clave-123"},
+    )
+
+    # Un token de sesión no debe servir como código de restablecimiento.
+    assert response.status_code == 400
+    assert login_status(client, seeded_user["email"], seeded_user["password"]) == 200
+
+
+def test_forgot_password_mail_failure_keeps_same_message(client, seeded_user, monkeypatch):
+    """Caso límite: si el correo falla, la respuesta sigue igual para emails existentes o no."""
+    def broken(email, token):
+        raise Exception("Servidor de correo caído")
+
+    monkeypatch.setattr(services, "send_password_reset_email", broken)
+
+    known = client.post("/auth/forgot-password", json={"email": seeded_user["email"]})
+    unknown = client.post("/auth/forgot-password", json={"email": "nadie@brasaland.com"})
+
+    assert known.status_code == 200
+    assert unknown.status_code == 200
+    # Si el correo falla, la respuesta no debe revelar qué emails existen.
+    assert known.json()["message"] == unknown.json()["message"]
+
+
+def test_reset_password_rejects_inactive_user(client, seeded_user):
+    """Caso límite: un usuario desactivado no puede usar un código pedido antes."""
+    token = create_reset_token(seeded_user["id"])
+    hash_before = users.get(Query().id == seeded_user["id"])["hashed_password"]
+    users.update({"is_active": False}, Query().id == seeded_user["id"])
+
+    response = client.post(
+        "/auth/reset-password",
+        json={"token": token, "new_password": "nueva-clave-123"},
+    )
+
+    # Un usuario desactivado no puede usar un código pedido antes de ser desactivado.
+    assert response.status_code == 400
+    assert users.get(Query().id == seeded_user["id"])["hashed_password"] == hash_before
