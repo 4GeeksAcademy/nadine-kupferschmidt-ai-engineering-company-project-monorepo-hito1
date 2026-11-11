@@ -151,6 +151,54 @@ Líneas sin cubrir a propósito:
 - auth/services.py 79 y 95, routes/users.py 92 y 122: código al que no se puede llegar, porque las rutas ya comprueban antes que el usuario existe.
 - Resto (hash dañado, token sin "sub" o sin "iat", usuario sin perfil): solo se alcanzan con datos dañados o tokens firmados a mano; se priorizó la calidad de los casos sobre el porcentaje.
 
+## Tests del frontend (Jest)
+
+Además de la API, se probaron con Jest las funciones de ayuda de autenticación del backoffice (uis/backoffice/lib/auth.ts): getToken, setToken y clearToken, que guardan, leen y borran el token de sesión en el localStorage del navegador.
+
+### Cómo ejecutarlos
+
+Los comandos se ejecutan desde `uis/backoffice`:
+
+```bash
+npm install
+npx jest --coverage
+```
+
+También se pueden usar `npm test` y `npm run test:coverage`.
+
+### Casos cubiertos
+
+| Archivo             | Entorno           | Tipo   | Caso                                                    |
+| ------------------- | ----------------- | ------ | ------------------------------------------------------- |
+| auth.test.ts        | Navegador (jsdom) | Feliz  | setToken guarda el token y getToken lo devuelve         |
+| auth.test.ts        | Navegador (jsdom) | Límite | setToken reemplaza un token anterior                    |
+| auth.test.ts        | Navegador (jsdom) | Fallo  | getToken devuelve null si no hay sesión guardada        |
+| auth.test.ts        | Navegador (jsdom) | Feliz  | clearToken borra el token                               |
+| auth.test.ts        | Navegador (jsdom) | Fallo  | clearToken no falla si no había token                   |
+| auth.server.test.ts | Servidor (node)   | Fallo  | getToken devuelve null cuando no existe window          |
+| auth.server.test.ts | Servidor (node)   | Fallo  | setToken y clearToken no fallan cuando no existe window |
+
+Next.js puede ejecutar el código en el servidor, donde no existe `window` ni `localStorage`; el archivo auth.server.test.ts simula ese entorno para comprobar que las funciones no rompen la app.
+
+### Resultado
+
+7 tests en 2 suites, todos pasando.
+
+```text
+----------|---------|----------|---------|---------|-------------------
+File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+----------|---------|----------|---------|---------|-------------------
+All files |     100 |      100 |     100 |     100 |
+ auth.ts  |     100 |      100 |     100 |     100 |
+----------|---------|----------|---------|---------|-------------------
+```
+
+### Configuración
+
+- Se instalaron como devDependencies jest, @types/jest, ts-jest y jest-environment-jsdom (este último simula el navegador con localStorage).
+- jest.config.js ajusta el tsconfig solo para los tests (module commonjs), porque la configuración de TypeScript de Next.js no es compatible con Jest; la app no cambia.
+
 ## Observaciones
 
 - GET /users y GET /users/{user_id} permiten que cualquier usuario autenticado vea la lista de todos los usuarios, no solo un administrador. No se cambió porque no estaba en el alcance del ticket, pero se recomienda revisarlo. Los tests actuales comprueban que la contraseña cifrada nunca se incluye en esas respuestas.
+- uis/talent-pipeline-tracker/lib/auth.ts es una copia idéntica de uis/backoffice/lib/auth.ts. Se probó solo la del backoffice; se recomienda mover estas funciones a packages/ para compartirlas entre las dos apps y probarlas una sola vez.
