@@ -12,6 +12,11 @@ users_router = APIRouter(prefix="/users", tags=["users"])
 @users_router.post("", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 def create_user_route(data: UserCreate) -> UserResponse:
     """Registra un usuario y su perfil inicial."""
+    if not services.is_valid_email(data.email):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail="El email no tiene un formato válido.",
+        )
     try:
         return services.create_user(data)
     except ValueError as error:
@@ -68,6 +73,11 @@ def update_user_route(
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Solo un administrador puede cambiar roles.",
+        )
+    if data.email is not None and not services.is_valid_email(data.email):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail="El email no tiene un formato válido.",
         )
 
     try:
