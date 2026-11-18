@@ -1,9 +1,12 @@
 import logging
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+from inventory.database import create_db_and_tables
 from routes.auth import auth_router
 from routes.incident_manager import router as incident_manager_router
 from routes.incidents import router as incidents_router
@@ -14,7 +17,15 @@ from routes.users import users_router
 
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="API central de Brasaland")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    # Crea las tablas de inventario en Supabase al arrancar (solo para desarrollo; en producción se usarían migraciones)
+    create_db_and_tables()
+    yield
+
+
+app = FastAPI(title="API central de Brasaland", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
