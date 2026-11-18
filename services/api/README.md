@@ -1,10 +1,11 @@
 # API central de Brasaland
 
-Una sola app **FastAPI** con tres módulos:
+Una sola app **FastAPI** con cuatro módulos:
 
 - **Análisis de incidencias**: valida y resume un CSV de incidencias.
 - **Directorio de proveedores**: CRUD de proveedores con **TinyDB** y validación con **Pydantic**.
 - **Autenticación**: usuarios, perfiles, inicio de sesión con JWT, y recuperación y cambio de contraseña con envío de correo.
+- **Inventario de ingredientes**: ingredientes, entradas y salidas con **SQLModel** sobre **Supabase** (PostgreSQL). El stock se calcula a partir de las órdenes y nunca se edita directamente.
 
 ## Estructura
 
@@ -21,11 +22,17 @@ services/api/
 │   ├── security.py                # Hash de contraseñas, tokens JWT y get_current_user
 │   ├── services.py                # Lógica de usuarios, perfiles y contraseñas
 │   └── mailer.py                  # Envío del correo de restablecimiento con Resend
+├── inventory/
+│   ├── database.py                # Engine de Supabase, get_db y create_db_and_tables
+│   ├── models.py                  # Tablas SQLModel de ingredientes, entradas y salidas
+│   ├── schemas.py                 # Schemas Pydantic de creación y lectura
+│   └── seed.py                    # Carga ingredientes, entradas y salidas de ejemplo
 ├── routes/
 │   ├── incidents.py               # Endpoints de incidencias
 │   ├── suppliers.py               # Endpoints de proveedores
 │   ├── users.py                   # Endpoints de usuarios
 │   ├── profiles.py                # Endpoints de perfiles
+│   ├── inventory.py               # Endpoints de inventario (productos, entradas, salidas y órdenes)
 │   └── auth.py                    # Login, sesión y contraseñas
 └── CONTEXT-supplier-directory.md  # Briefing del directorio de proveedores
 ```
@@ -38,6 +45,7 @@ Requiere Python 3.10 o superior y [uv](https://docs.astral.sh/uv/). Desde `servi
 cp .env.example .env         # crea el archivo de variables y completá los valores
 uv sync                      # instala las dependencias
 uv run seed                  # carga los 15 proveedores del briefing (no duplica si se repite)
+uv run python -m inventory.seed  # carga ingredientes, entradas y salidas de ejemplo en Supabase (requiere un usuario registrado; no carga nada si ya hay datos)
 uv run fastapi dev main.py   # inicia la API en el puerto 8000
 ```
 
@@ -56,6 +64,7 @@ Se leen de `services/api/.env`, que **no se sube a Git**. Los nombres y valores 
 | `FRONTEND_URL` | Dirección del backoffice, usada para armar el enlace del correo. Sin `/` al final. | `http://localhost:3000` |
 | `RESEND_API_KEY` | API key de [Resend](https://resend.com) con permiso *Sending access*. Obligatoria para enviar correos. | `re_...` |
 | `EMAIL_FROM` | Remitente del correo. Opcional. | `Brasaland <onboarding@resend.dev>` |
+| `DATABASE_URL` | Cadena de conexión a Supabase PostgreSQL con el **Transaction pooler** (puerto 6543), en formato URI. Obligatoria: sin ella la API no arranca. Si la contraseña tiene caracteres especiales, codificala en URL. | `postgresql://postgres.<ref>:<password>@<region>.pooler.supabase.com:6543/postgres` |
 
 > **Nota sobre Resend:** con el remitente de prueba `onboarding@resend.dev` solo se pueden enviar correos al email de la cuenta de Resend. Para probar, registrá un usuario con ese mismo email.
 
@@ -159,6 +168,25 @@ Todos los endpoints de incidencias devuelven errores con este formato:
 
 El resto de los endpoints de usuarios y perfiles se pueden ver en `/docs`. Las rutas que piden sesión necesitan la cabecera `Authorization: Bearer <access_token>`; sin ella responden 401.
 
+### Inventario
+
+| Método | Ruta | Sesión | Qué hace |
+|--------|------|--------|----------|
+| `GET` | `/inventory/products` | No | Lista todos los ingredientes con su `current_stock`. |
+| `POST` | `/inventory/products` | Sí | Crea un ingrediente con stock 0 (responde 201). 409 si el SKU ya existe. |
+| `GET` | `/inventory/products/{ingredient_id}` | No | Devuelve un ingrediente con su `current_stock`. 404 si no existe. |
+| `POST` | `/inventory/orders/inbound` | Sí | Registra una entrada de un proveedor (responde 201). 404 si el ingrediente no existe. |
+| `POST` | `/inventory/orders/outbound` | Sí | Registra un consumo o merma (responde 201). 400 si supera el stock disponible. 404 si el ingrediente no existe. |
+| `GET` | `/inventory/orders` | No | Lista entradas y salidas, de la más reciente a la más antigua. |
+
+**Reglas de negocio:**
+
+- `current_stock` = suma de entradas − suma de salidas. No es una columna de la tabla: se calcula en cada consulta.
+- Una salida mayor al stock disponible se rechaza con 400 antes de guardarse, con el mensaje `Insufficient stock for ingredient '{name}'. Available: {available}, requested: {requested}.`
+- Cada entrada y salida guarda el `user_uuid` del usuario autenticado (el `id` de TinyDB), sin clave foránea ni tabla de usuarios en Supabase.
+- `location_id` va del 1 al 14 y no es clave foránea.
+- Un SKU duplicado al crear un ingrediente responde 409.
+
 ## Recuperación y cambio de contraseña (AUTH-03)
 
 ### Cómo funciona
@@ -197,7 +225,15 @@ Los datos inválidos se rechazan con **422** y los IDs inexistentes con **404**.
 
 ## Bases de datos
 
-Los datos se guardan en archivos de TinyDB que **no se suben a Git** (están en `.gitignore`) y persisten al reiniciar la API:
+Los proveedores y los usuarios se guardan en archivos de TinyDB que **no se suben a Git** (están en `.gitignore`) y persisten al reiniciar la API:
 
 - `db.json`: proveedores. Se crea con `uv run seed`.
 - `auth/auth.json`: usuarios y perfiles. Se crea solo al registrar el primer usuario.
+
+El inventario usa **Supabase** (PostgreSQL) con SQLModel, mediante `DATABASE_URL`:
+
+- `ingredient`, `ingrediententry` e `ingredientexit`: ingredientes, entradas y salidas. Las tablas se crean al iniciar la API con `create_all` (no hay migraciones).
+- Cada petición recibe su propia sesión con `get_db`, que se cierra al terminar.
+
+Los usuarios siguen en TinyDB; las órdenes guardan su `user_uuid` sin clave foránea.
+

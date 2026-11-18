@@ -1,5 +1,10 @@
 import type { NextConfig } from "next";
 
+// URL base de la API de inventario, sin barra final
+const inventoryApiUrl = (
+  process.env.NEXT_PUBLIC_INVENTORY_API_URL ?? "http://localhost:8000"
+).replace(/\/$/, "");
+
 const nextConfig: NextConfig = {
   async rewrites() {
     return [
@@ -34,6 +39,10 @@ const nextConfig: NextConfig = {
       {
         source: "/api/auth/:path*",
         destination: "http://localhost:8000/auth/:path*",
+      },
+      {
+        source: "/api/inventory/:path*",
+        destination: `${inventoryApiUrl}/inventory/:path*`,
       },
       {
         source: "/api/:path*",

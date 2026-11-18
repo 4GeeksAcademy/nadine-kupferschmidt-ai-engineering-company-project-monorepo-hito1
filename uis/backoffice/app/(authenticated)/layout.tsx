@@ -64,6 +64,30 @@ const truckIcon = (
   </svg>
 );
 
+const boxIcon = (
+  <svg {...iconProps}>
+    <path d="M21 8 12 3 3 8v8l9 5 9-5V8z" />
+    <path d="M3 8l9 5 9-5" />
+    <path d="M12 13v8" />
+  </svg>
+);
+
+const arrowDownIcon = (
+  <svg {...iconProps}>
+    <path d="M12 4v14" />
+    <path d="m6 12 6 6 6-6" />
+    <path d="M4 21h16" />
+  </svg>
+);
+
+const arrowUpIcon = (
+  <svg {...iconProps}>
+    <path d="M12 20V6" />
+    <path d="m6 12 6-6 6 6" />
+    <path d="M4 21h16" />
+  </svg>
+);
+
 type MenuLinkProps = {
   href: string;
   text: string;
@@ -117,6 +141,12 @@ export default function AuthenticatedLayout({ children }: AuthenticatedLayoutPro
                 <MenuLink href="/gestor-incidencias/resumen" text="Resumen" icon={barChartIcon} small />
               </div>
               <NavLink href="/suppliers" text="Proveedores" icon={truckIcon} />
+              <MenuLink href="/inventory/products" text="Inventario" icon={boxIcon} />
+              <div className="ml-7 space-y-1">
+                <MenuLink href="/inventory/orders/inbound" text="Registrar entrada" icon={arrowDownIcon} small />
+                <MenuLink href="/inventory/orders/outbound" text="Registrar salida" icon={arrowUpIcon} small />
+                <MenuLink href="/inventory/orders" text="Historial" icon={listIcon} small />
+              </div>
             </div>
           </nav>
           <p className="hidden px-5 pb-6 text-xs text-bo-muted md:mt-auto md:block">Brasaland Digital · Uso interno</p>
