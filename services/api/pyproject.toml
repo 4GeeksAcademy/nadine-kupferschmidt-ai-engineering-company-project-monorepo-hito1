@@ -13,6 +13,8 @@ dependencies = [
     "libpass[bcrypt]>=1.9.4",
     "python-dotenv>=1.2.4",
     "resend>=2.52.0",
+    "sqlmodel>=0.0.49",
+    "psycopg2-binary>=2.9.13",
 ]
 
 [build-system]
