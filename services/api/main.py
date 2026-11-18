@@ -10,6 +10,7 @@ from inventory.database import create_db_and_tables
 from routes.auth import auth_router
 from routes.incident_manager import router as incident_manager_router
 from routes.incidents import router as incidents_router
+from routes.inventory import inventory_router
 from routes.profiles import profiles_router
 from routes.suppliers import router as suppliers_router
 from routes.users import users_router
@@ -34,6 +35,7 @@ app.add_middleware(
 )
 app.include_router(incidents_router)
 app.include_router(incident_manager_router)
+app.include_router(inventory_router)
 app.include_router(suppliers_router)
 app.include_router(users_router)
 app.include_router(profiles_router)
