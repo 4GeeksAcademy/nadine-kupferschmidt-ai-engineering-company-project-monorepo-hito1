@@ -23,7 +23,10 @@ export class InventoryApiError extends Error {
 
 // Convierte el cuerpo de error de FastAPI en un mensaje legible.
 async function readErrorMessage(response: Response): Promise<string> {
-  const fallback = `Error ${response.status} al comunicarse con la API de inventario.`;
+  const fallback =
+    response.status >= 500
+      ? "No pudimos comunicarnos con el sistema de inventario. Intentá de nuevo en unos minutos."
+      : `Error ${response.status} al comunicarse con la API de inventario.`;
 
   let body: unknown;
   try {
