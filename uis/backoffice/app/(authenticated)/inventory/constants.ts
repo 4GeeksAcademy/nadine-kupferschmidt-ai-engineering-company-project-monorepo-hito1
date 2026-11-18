@@ -34,6 +34,20 @@ export const ORDER_TYPE_LABELS: Record<OrderType, string> = {
   outbound: "Salida",
 };
 
+// Nombre de cada unidad en singular y plural.
+export const UNIT_LABELS: Record<IngredientUnit, { singular: string; plural: string }> = {
+  kg: { singular: "kg", plural: "kg" },
+  litro: { singular: "litro", plural: "litros" },
+  unidad: { singular: "unidad", plural: "unidades" },
+};
+
+// Formatea una cantidad con su unidad en español; usa singular solo si la cantidad es exactamente 1.
+export function formatQuantity(quantity: number, unit: IngredientUnit): string {
+  const formatted = quantity.toLocaleString("es", { maximumFractionDigits: 2 });
+  const label = quantity === 1 ? UNIT_LABELS[unit].singular : UNIT_LABELS[unit].plural;
+  return `${formatted} ${label}`;
+}
+
 // El briefing define los locales solo como números del 1 al 14; los nombres de las sedes se gestionan por separado.
 export const LOCATION_IDS: number[] = Array.from({ length: 14 }, (_, index) => index + 1);
 
