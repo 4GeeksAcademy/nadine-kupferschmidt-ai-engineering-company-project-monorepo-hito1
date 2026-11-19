@@ -171,3 +171,22 @@ Estado de la rama `feature/error-handling-audit` frente a `main` (`git diff main
 - Backoffice con la API apagada: listados, resumen, registrar incidencia y reintento al volver la API.
 - Talent Tracker en modo sin conexión del navegador.
 - Scripts con archivo inexistente, vacío y sin columnas: código de salida 1.
+
+## Correcciones tras la revisión del profesor
+
+### Criterio 5: optional chaining en el frontend
+
+- `onDrop` de [incidencias/page.tsx](<uis/backoffice/app/(authenticated)/incidencias/page.tsx>) comprueba `event.dataTransfer?.files?.length` antes de usar los archivos. Si no hay archivo, muestra "No se detectó ningún archivo. Intenta de nuevo.", y si hay más de uno, mantiene "Selecciona un solo archivo CSV.".
+- Las métricas del resultado del análisis usan `?.` y `?? 0` (o `?? []` en `invalid_rules`), así que una métrica ausente muestra 0 en lugar de romper la página.
+
+### Criterio 8: códigos de salida en el seed de proveedores
+
+- [services/api/seed.py](services/api/seed.py) devuelve 0 si todo sale bien, 1 si hay proveedores omitidos por datos inválidos o un error de archivo o base de datos, y 2 si hay un error inesperado.
+- Funciona igual con `uv run seed` y con `python seed.py`, porque `main()` devuelve el código y el bloque `__main__` hace `sys.exit(main())`.
+- Los mensajes van a stderr, en español, sin tracebacks, rutas ni texto crudo de excepciones. Para eso, el script silencia los logs de `database.py`, que no se modificó.
+
+### Cómo se probó
+
+- Análisis de un CSV desde el backoffice; el resultado se muestra sin errores.
+- `uv run seed` con la base normal: código 0.
+- `uv run seed` con `db.json` bloqueado (`chmod 000`): solo muestra "Error: no se pudo abrir la base de datos de proveedores." y sale con código 1. Después se restauró el permiso original.

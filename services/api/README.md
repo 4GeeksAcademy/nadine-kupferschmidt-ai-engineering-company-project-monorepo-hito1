@@ -49,6 +49,8 @@ uv run python -m inventory.seed  # carga ingredientes, entradas y salidas de eje
 uv run fastapi dev main.py   # inicia la API en el puerto 8000
 ```
 
+`uv run seed` termina con código 0 (éxito), 1 (proveedores inválidos omitidos o error de archivo o base de datos) o 2 (error inesperado).
+
 - Documentación interactiva (Swagger): http://localhost:8000/docs
 - CORS permite peticiones desde http://localhost:3000.
 
