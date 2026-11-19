@@ -135,7 +135,19 @@ export default function IncidentsPage() {
         <div
           onDragOver={(event) => { event.preventDefault(); if (!busy) setDragging(true); }}
           onDragLeave={() => setDragging(false)}
-          onDrop={(event) => { event.preventDefault(); setDragging(false); if (event.dataTransfer.files.length > 1) { if (!busy) setError("Selecciona un solo archivo CSV."); return; } chooseFile(event.dataTransfer.files[0]); }}
+          onDrop={(event) => {
+            event.preventDefault();
+            setDragging(false);
+            if (!event.dataTransfer?.files?.length) {
+              if (!busy) setError("No se detectó ningún archivo. Intenta de nuevo.");
+              return;
+            }
+            if (event.dataTransfer.files.length > 1) {
+              if (!busy) setError("Selecciona un solo archivo CSV.");
+              return;
+            }
+            chooseFile(event.dataTransfer.files[0]);
+          }}
           className={`flex min-h-40 flex-col items-center justify-center gap-4 rounded-[18px] border-2 border-dashed p-6 text-center ${dragging ? "border-bo-border bg-bo-page" : "border-bo-border bg-bo-surface"}`}
         >
           <p className="text-sm text-bo-muted">Arrastra un archivo CSV aquí</p>
@@ -167,7 +179,7 @@ export default function IncidentsPage() {
             <section aria-labelledby="invalidos-heading" className="rounded-[18px] border border-bo-border border-l-4 border-l-bo-accent bg-bo-surface px-5 py-5">
               <h2 id="invalidos-heading" className="font-semibold text-bo-text">{metrics.invalid} {metrics.invalid === 1 ? "registro requiere revisión" : "registros requieren revisión"}</h2>
               <ul className="mt-3 space-y-2 text-sm text-bo-text">
-                {result.invalid_rules.filter(({ code }) => metrics.invalid_counts[code] > 0).map(({ code, label }) => <li key={code} className="flex justify-between gap-5"><span>{label}</span><strong className="tabular-nums">{metrics.invalid_counts[code]}</strong></li>)}
+                {(result.invalid_rules ?? []).filter(({ code }) => (metrics.invalid_counts?.[code] ?? 0) > 0).map(({ code, label }) => <li key={code} className="flex justify-between gap-5"><span>{label}</span><strong className="tabular-nums">{metrics.invalid_counts?.[code] ?? 0}</strong></li>)}
               </ul>
             </section>
           )}
@@ -177,7 +189,7 @@ export default function IncidentsPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <thead className="bg-bo-page text-xs text-bo-muted"><tr><th scope="col" className="px-3 py-3 font-medium">Código</th><th scope="col" className="px-3 py-3 font-medium">Descripción</th><th scope="col" className="px-3 py-3 text-right font-medium">Cantidad</th><th scope="col" className="px-3 py-3 text-right font-medium">Porcentaje</th></tr></thead>
-                <tbody>{categories.map(({ code, description }) => <tr key={code} className="border-t border-bo-divider bg-bo-surface even:bg-bo-stripe"><th scope="row" className="px-3 py-4 text-xs font-medium">{code}</th><td className="min-w-52 px-3 py-4">{description}</td><td className="px-3 py-4 text-right tabular-nums">{metrics.category_counts[code]}</td><td className="px-3 py-4 text-right tabular-nums">{metrics.category_percentages[code].toFixed(1)} %</td></tr>)}</tbody>
+                <tbody>{categories.map(({ code, description }) => <tr key={code} className="border-t border-bo-divider bg-bo-surface even:bg-bo-stripe"><th scope="row" className="px-3 py-4 text-xs font-medium">{code}</th><td className="min-w-52 px-3 py-4">{description}</td><td className="px-3 py-4 text-right tabular-nums">{metrics.category_counts?.[code] ?? 0}</td><td className="px-3 py-4 text-right tabular-nums">{(metrics.category_percentages?.[code] ?? 0).toFixed(1)} %</td></tr>)}</tbody>
               </table>
             </div>
           </section>
@@ -187,18 +199,18 @@ export default function IncidentsPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <thead className="bg-bo-page text-xs text-bo-muted"><tr><th scope="col" className="px-3 py-3 font-medium">Código</th><th scope="col" className="px-3 py-3 font-medium">Estado</th><th scope="col" className="px-3 py-3 text-right font-medium">Cantidad</th><th scope="col" className="px-3 py-3 text-right font-medium">Porcentaje</th></tr></thead>
-                <tbody>{statuses.map(({ code, label, color }) => <tr key={code} className="border-t border-bo-divider bg-bo-surface even:bg-bo-stripe"><th scope="row" className="px-3 py-4 text-xs font-medium">{code}</th><td className="px-3 py-4"><span className={`inline-block rounded-full border px-2 py-0 text-xs font-medium ${color}`}>{label}</span></td><td className="px-3 py-4 text-right tabular-nums">{metrics.status_counts[code]}</td><td className="px-3 py-4 text-right tabular-nums">{metrics.status_percentages[code].toFixed(1)} %</td></tr>)}</tbody>
+                <tbody>{statuses.map(({ code, label, color }) => <tr key={code} className="border-t border-bo-divider bg-bo-surface even:bg-bo-stripe"><th scope="row" className="px-3 py-4 text-xs font-medium">{code}</th><td className="px-3 py-4"><span className={`inline-block rounded-full border px-2 py-0 text-xs font-medium ${color}`}>{label}</span></td><td className="px-3 py-4 text-right tabular-nums">{metrics.status_counts?.[code] ?? 0}</td><td className="px-3 py-4 text-right tabular-nums">{(metrics.status_percentages?.[code] ?? 0).toFixed(1)} %</td></tr>)}</tbody>
               </table>
             </div>
           </section>
           <section aria-labelledby="satisfaccion-heading" className="rounded-[18px] border border-bo-border bg-bo-surface px-5 py-6">
             <h2 id="satisfaccion-heading" className="text-sm font-semibold uppercase text-bo-muted">Índice de satisfacción</h2>
             <div className="mt-5 flex flex-wrap items-end gap-x-10 gap-y-3">
-              <p className="text-3xl font-semibold text-bo-text tabular-nums">{metrics.average_score.toFixed(2)} <span className="text-base font-normal text-bo-muted">/ 5</span></p>
+              <p className="text-3xl font-semibold text-bo-text tabular-nums">{(metrics.average_score ?? 0).toFixed(2)} <span className="text-base font-normal text-bo-muted">/ 5</span></p>
               <p className="text-sm text-bo-muted">{metrics.scored_cases} de {metrics.closed_cases} casos cerrados (CLOSED) con puntaje</p>
             </div>
             {metrics.scored_cases === 0 && <p className="mt-3 text-sm text-bo-muted">Sin puntajes de satisfacción registrados.</p>}
-            <dl className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-5">{scores.map((score) => <div key={score} className="border-t-2 border-bo-accent py-3"><dt className="text-sm text-bo-muted">Puntaje {score}</dt><dd className="mt-2 text-xl font-semibold tabular-nums">{metrics.score_counts[score]}</dd></div>)}</dl>
+            <dl className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-5">{scores.map((score) => <div key={score} className="border-t-2 border-bo-accent py-3"><dt className="text-sm text-bo-muted">Puntaje {score}</dt><dd className="mt-2 text-xl font-semibold tabular-nums">{metrics.score_counts?.[score] ?? 0}</dd></div>)}</dl>
           </section>
         </div>
       )}

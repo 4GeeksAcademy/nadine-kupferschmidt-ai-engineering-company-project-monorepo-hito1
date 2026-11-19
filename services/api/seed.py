@@ -1,9 +1,11 @@
+import logging
+import sys
 from datetime import datetime, timezone
 
 from pydantic import ValidationError
 from tinydb import Query
+from tinydb.table import Table
 
-from database import suppliers
 from models import SupplierCreate
 
 SUPPLIERS_SEED = [
@@ -154,8 +156,27 @@ SUPPLIERS_SEED = [
     }
 ]
 
-def main() -> None:
-    """Carga los proveedores iniciales que aún no existen."""
+def main() -> int:
+    """Carga los proveedores iniciales. Devuelve el código de salida (0, 1 o 2)."""
+    # Oculta los logs de error de database.py (con traceback) para mostrar solo los mensajes en español.
+    logging.basicConfig(level=logging.CRITICAL)
+    try:
+        # Se importa aquí para que los errores al abrir la base se capturen en main().
+        from database import suppliers
+        return load_suppliers(suppliers)
+    except OSError:
+        print("Error: no se pudo leer o escribir un archivo de datos.", file=sys.stderr)
+        return 1
+    except RuntimeError:
+        print("Error: no se pudo abrir la base de datos de proveedores.", file=sys.stderr)
+        return 1
+    except Exception:
+        print("Error inesperado al cargar los proveedores.", file=sys.stderr)
+        return 2
+
+
+def load_suppliers(suppliers: Table) -> int:
+    """Carga los proveedores que aún no existen. Devuelve 1 si alguno se omitió por datos inválidos."""
     query = Query()
     inserted = 0
     skipped = 0
@@ -176,7 +197,7 @@ def main() -> None:
             supplier = SupplierCreate.model_validate(supplier_data)
         except ValidationError as error:
             fields = ", ".join(".".join(str(part) for part in item["loc"]) for item in error.errors())
-            print(f"Proveedor inválido omitido ({supplier_data.get('name', '(sin nombre)')}): {fields}.")
+            print(f"Proveedor inválido omitido ({supplier_data.get('name', '(sin nombre)')}): {fields}.", file=sys.stderr)
             invalid += 1
             continue
 
@@ -187,7 +208,11 @@ def main() -> None:
         inserted += 1
 
     print(f"Proveedores insertados: {inserted}; omitidos porque ya existían: {skipped}.")
+    if invalid:
+        print(f"Se omitieron {invalid} proveedor(es) por datos inválidos.", file=sys.stderr)
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
