@@ -1,0 +1,17 @@
+# Dependencias instaladas en el host (se reinstalan dentro del contenedor con npm ci)
+**/node_modules
+
+# Caché y salida de compilación de Next.js
+**/.next
+
+# Archivos de entorno (secretos y configuración local, incluido .env.example)
+**/.env*
+
+# Logs
+**/*.log
+
+# Reportes de cobertura de tests
+**/coverage
+
+# Caché de TypeScript
+**/*.tsbuildinfo
