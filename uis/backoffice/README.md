@@ -72,6 +72,16 @@ El módulo de inventario permite registrar entradas y salidas de ingredientes y 
 - **Errores.** Un 400 por stock insuficiente se muestra debajo de la cantidad con el texto exacto de la API. Ese texto está en inglés porque así lo exige el briefing del backend. Los errores 422 y 5xx se convierten en mensajes en español.
 - **Suspense.** Los formularios usan `useSearchParams` (para `?ingredient={id}`) dentro de `<Suspense>`, porque el proyecto tiene `cacheComponents` activado.
 
+## Con Docker
+
+Todo el monorepo se levanta desde la raíz con un solo comando:
+
+```bash
+docker compose up --build
+```
+
+Con Docker, esta app queda en http://localhost:3001. La guía completa, incluido el primer uso, está en [DOCKER.md](../../docs/DOCKER.md).
+
 ## Ejecutar
 
 Requiere Node.js compatible con Next.js 16 (20.9 o superior) y npm.
@@ -85,7 +95,7 @@ cp .env.example .env.local
 npm run dev
 ```
 
-La variable `NEXT_PUBLIC_INVENTORY_API_URL` indica la URL base de la API de inventario, sin barra final. Si no está definida, se usa `http://localhost:8000`. Como `next.config.ts` la lee al cargar la configuración, reinicia `npm run dev` después de cambiarla.
+La variable `API_URL` indica la URL base de la API, sin barra final. Si no está definida, se usa `http://localhost:8000`. Con Docker vale `http://services:8000` y viene del `.env` de la raíz del repo. Como `next.config.ts` la lee al cargar la configuración, reinicia `npm run dev` después de cambiarla.
 
 Abre http://localhost:3000 y elige una página en el menú.
 Si el puerto está ocupado, Next.js indicará otro puerto en la terminal.
@@ -97,9 +107,9 @@ El navegador usa solo rutas relativas que empiezan con `/api`. Los rewrites de
 
 | Ruta en el navegador | Destino |
 |----------------------|---------|
-| `/api/suppliers` y `/api/suppliers/:path*` | `http://localhost:8000/suppliers` y `http://localhost:8000/suppliers/:path*` |
-| `/api/inventory/:path*` | `{NEXT_PUBLIC_INVENTORY_API_URL}/inventory/:path*` (por defecto, `http://localhost:8000/inventory/:path*`) |
-| `/api/:path*` (por ejemplo, incidencias) | `http://localhost:8000/api/:path*` |
+| `/api/suppliers` y `/api/suppliers/:path*` | `{API_URL}/suppliers` y `{API_URL}/suppliers/:path*` |
+| `/api/inventory/:path*` | `{API_URL}/inventory/:path*` (por defecto, `http://localhost:8000/inventory/:path*`) |
+| `/api/:path*` (por ejemplo, incidencias) | `{API_URL}/api/:path*` |
 
 Los rewrites de proveedores e inventario van antes de `/api/:path*` porque Next.js usa el primero que coincide.
 No hace falta configurar CORS en el navegador. Reinicia Next.js si cambias esta configuración.

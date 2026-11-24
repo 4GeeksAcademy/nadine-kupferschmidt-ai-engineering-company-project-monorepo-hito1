@@ -23,6 +23,16 @@ Reemplaza la hoja de cálculo compartida que usaba el equipo: permite ver todas 
 
 No se usan librerías externas de gestión de estado: el estado se maneja con hooks de React a nivel de componente.
 
+## Con Docker
+
+Todo el monorepo se levanta desde la raíz con un solo comando:
+
+```bash
+docker compose up --build
+```
+
+Con Docker, esta app queda en http://localhost:3000. La guía completa, incluido el primer uso, está en [DOCKER.md](../../docs/DOCKER.md).
+
 ## Cómo correr el proyecto
 
 1. Entra a la carpeta del proyecto:

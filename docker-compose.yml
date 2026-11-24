@@ -1,0 +1,45 @@
+# Servicios del entorno de desarrollo: API FastAPI y las dos apps Next.js
+services:
+  # API FastAPI: se construye desde services/ y se expone en el puerto 8000
+  services:
+    build: ./services
+    ports:
+      - "8000:8000"
+    # Bind mount del código de la API para que --reload detecte los cambios
+    # Bind mount de packages/shared, que necesitan routes/incidents.py y routes/incident_manager.py
+    volumes:
+      - ./services/api:/monorepo/services/api
+      - ./packages/shared:/monorepo/packages/shared
+    # Variables de entorno cargadas desde el archivo .env de la raíz
+    env_file: .env
+    networks:
+      - monorepo-dev
+
+  # Interfaces Next.js (talent-pipeline-tracker en 3000 y backoffice en 3001)
+  uis:
+    build: ./uis
+    command: sh ./start.sh
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    volumes:
+      # Bind mount del código de las apps para la recarga en caliente
+      - ./uis:/uis
+      # Volúmenes anónimos para que el bind mount no pise las dependencias instaladas en la imagen
+      - /uis/talent-pipeline-tracker/node_modules
+      - /uis/backoffice/node_modules
+      # Volúmenes anónimos para que la caché de Next.js no se comparta con el host
+      - /uis/talent-pipeline-tracker/.next
+      - /uis/backoffice/.next
+    # Variables de entorno cargadas desde el archivo .env de la raíz
+    env_file: .env
+    # Arranca después de la API
+    depends_on:
+      - services
+    networks:
+      - monorepo-dev
+
+# Red compartida por ambos servicios
+networks:
+  monorepo-dev:
+    name: monorepo-dev

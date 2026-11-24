@@ -37,6 +37,16 @@ services/api/
 └── CONTEXT-supplier-directory.md  # Briefing del directorio de proveedores
 ```
 
+## Con Docker
+
+Todo el monorepo se levanta desde la raíz con un solo comando:
+
+```bash
+docker compose up --build
+```
+
+Con Docker, la API queda en http://localhost:8000 (documentación interactiva en http://localhost:8000/docs). La guía completa, incluido el primer uso, está en [DOCKER.md](../../docs/DOCKER.md).
+
 ## Cómo ejecutar
 
 Requiere Python 3.10 o superior y [uv](https://docs.astral.sh/uv/). Desde `services/api`:

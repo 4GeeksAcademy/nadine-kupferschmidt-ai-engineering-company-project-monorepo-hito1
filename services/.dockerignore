@@ -1,0 +1,22 @@
+# Cachés y bytecode de Python
+**/__pycache__
+**/*.pyc
+
+# Archivos de entorno (secretos y configuración local, incluido .env.example)
+**/.env*
+
+# Tests (no se necesitan dentro del contenedor)
+**/tests
+
+# Logs
+**/*.log
+
+# Entornos virtuales locales
+**/.venv
+
+# Cachés y reportes de herramientas de test
+**/.pytest_cache
+**/.coverage
+
+# Metadatos generados por la instalación en modo desarrollo
+**/*.egg-info

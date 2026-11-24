@@ -6,3 +6,7 @@ __pycache__/
 
 # Resultado generado por scripts/analyze.py
 scripts/results.csv
+
+# Variables de entorno (nunca subir)
+.env
+.env.local
