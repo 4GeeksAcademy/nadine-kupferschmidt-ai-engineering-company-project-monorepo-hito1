@@ -1,4 +1,4 @@
-# Servicios del entorno de desarrollo: API FastAPI y las dos apps Next.js
+# Servicios del entorno de desarrollo: API FastAPI y las tres apps (website, backoffice, talent-pipeline-tracker)
 services:
   # API FastAPI: se construye desde services/ y se expone en el puerto 8000
   services:
@@ -15,22 +15,24 @@ services:
     networks:
       - monorepo-dev
 
-  # Interfaces Next.js (talent-pipeline-tracker en 3000 y backoffice en 3001)
+  # Interfaces: website (3000), backoffice (3001) y talent-pipeline-tracker (3002)
   uis:
     build: ./uis
     command: sh ./start.sh
     ports:
       - "3000:3000"
       - "3001:3001"
+      - "3002:3002"
     volumes:
       # Bind mount del código de las apps para la recarga en caliente
       - ./uis:/uis
       # Volúmenes anónimos para que el bind mount no pise las dependencias instaladas en la imagen
-      - /uis/talent-pipeline-tracker/node_modules
+      - /uis/website/node_modules
       - /uis/backoffice/node_modules
+      - /uis/talent-pipeline-tracker/node_modules
       # Volúmenes anónimos para que la caché de Next.js no se comparta con el host
-      - /uis/talent-pipeline-tracker/.next
       - /uis/backoffice/.next
+      - /uis/talent-pipeline-tracker/.next
     # Variables de entorno cargadas desde el archivo .env de la raíz
     env_file: .env
     # Arranca después de la API
