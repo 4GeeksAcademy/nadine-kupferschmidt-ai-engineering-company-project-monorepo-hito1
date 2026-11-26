@@ -10,13 +10,14 @@ Docker levanta dos servicios definidos en [docker-compose.yml](../docker-compose
 
 | Servicio (nombre en compose) | Qué contiene | Puerto |
 |---|---|---|
-| `uis` | Las dos apps Next.js: `talent-pipeline-tracker` y `backoffice` | `3000` (tracker) y `3001` (backoffice) |
+| `uis` | El sitio público `website` (HTML estático), y las apps Next.js `backoffice` y `talent-pipeline-tracker` | `3000` (website), `3001` (backoffice) y `3002` (tracker) |
 | `services` | La API FastAPI, con código en `services/api` | `8000` |
 
 Cuando los abras en el navegador:
 
-- Talent Pipeline Tracker: http://localhost:3000
+- Website: http://localhost:3000
 - Backoffice: http://localhost:3001
+- Talent Pipeline Tracker: http://localhost:3002
 - API: http://localhost:8000
 
 ---
@@ -67,7 +68,7 @@ API_URL=http://localhost:8000
 
 Motivo: dentro del contenedor de `uis`, `localhost` apunta al propio contenedor, no al de la API.
 
-El navegador es distinto: corre en tu máquina, fuera de Docker. Por eso, para abrir las páginas y para lo que el navegador llama directamente, usa `localhost` con los puertos publicados (`3000`, `3001`, `8000`).
+El navegador es distinto: corre en tu máquina, fuera de Docker. Por eso, para abrir las páginas y para lo que el navegador llama directamente, usa `localhost` con los puertos publicados (`3000`, `3001`, `3002`, `8000`).
 
 ---
 
@@ -111,12 +112,14 @@ docker compose up --build
 
 Hay que tocar cuatro lugares:
 
-1. [uis/start.sh](../uis/start.sh): agrega una línea que arranque la app en un puerto libre, con `-H 0.0.0.0`, igual que las otras dos.
+1. [uis/start.sh](../uis/start.sh): agrega una línea que arranque la app en un puerto libre. Usa `-H 0.0.0.0` para Next.js o `-a 0.0.0.0` para http-server.
 2. [uis/Dockerfile](../uis/Dockerfile): copia el `package.json` y `package-lock.json` de la app, ejecuta `npm ci` y agrega su puerto a `EXPOSE`.
 3. [docker-compose.yml](../docker-compose.yml), en `uis`:
    - agrega el puerto en `ports`;
-   - agrega un volumen anónimo para `node_modules` y otro para `.next` de la app, igual que las existentes.
+   - agrega un volumen anónimo para `node_modules`. Si la app es Next.js, agrega también uno para `.next`.
 4. Reconstruye con `docker compose up --build`.
+
+**Nota:** el `website` es HTML estático servido con http-server (no Next.js), así que no tiene volumen anónimo para `.next`.
 
 ---
 

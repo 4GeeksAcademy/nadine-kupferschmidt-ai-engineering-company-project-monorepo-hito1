@@ -31,7 +31,7 @@ Todo el monorepo se levanta desde la raíz con un solo comando:
 docker compose up --build
 ```
 
-Con Docker, esta app queda en http://localhost:3000. La guía completa, incluido el primer uso, está en [DOCKER.md](../../docs/DOCKER.md).
+Con Docker, esta app queda en http://localhost:3002. La guía completa, incluido el primer uso, está en [DOCKER.md](../../docs/DOCKER.md).
 
 ## Cómo correr el proyecto
 
@@ -59,7 +59,7 @@ Con Docker, esta app queda en http://localhost:3000. La guía completa, incluido
    npm run dev
 ```
 
-5. Abre [http://localhost:3000](http://localhost:3000).
+5. Abre [http://localhost:3002](http://localhost:3002).
 
 ## Variables de entorno
 
@@ -106,7 +106,7 @@ El backoffice usa la API FastAPI de Brasaland (`services/api`) para iniciar sesi
 
 ### Cómo correrlo
 1. Levantar la API: `cd services/api && uv run uvicorn main:app --reload` (puerto 8000).
-2. Levantar el backoffice: `cd uis/backoffice && npm run dev` (puerto 3000).
+2. Levantar el backoffice: `cd uis/backoffice && npm run dev` (puerto 3001).
 
 Las llamadas a `/api/...` se reenvían a la API mediante los rewrites de `next.config.ts`.
 
