@@ -8,7 +8,7 @@ description: Usa esta skill cuando se agrega o cambia una dependencia (npm o Pyt
 ## 1. Contexto
 
 - [docker-compose.yml](../../../docker-compose.yml) levanta dos servicios:
-  - `uis`: las apps Next.js `talent-pipeline-tracker` (puerto 3000) y `backoffice` (puerto 3001). Arranca con [uis/start.sh](../../../uis/start.sh).
+  - `uis`: el sitio público `website` (puerto 3000, HTML estático), y las apps Next.js `backoffice` (puerto 3001) y `talent-pipeline-tracker` (puerto 3002). Arranca con [uis/start.sh](../../../uis/start.sh).
   - `services`: la API FastAPI en el puerto 8000, construida desde `services/`.
 - La guía para personas del equipo está en [docs/DOCKER.md](../../../docs/DOCKER.md).
 - Antes de proponer cualquier cambio, lee `docker-compose.yml`, los Dockerfile ([uis/Dockerfile](../../../uis/Dockerfile) y [services/Dockerfile](../../../services/Dockerfile)) y [uis/start.sh](../../../uis/start.sh).
@@ -47,9 +47,9 @@ description: Usa esta skill cuando se agrega o cambia una dependencia (npm o Pyt
 
 ### App nueva en `uis/`
 
-- [ ] [uis/start.sh](../../../uis/start.sh): agrega una línea que arranque la app en un puerto libre, con `-H 0.0.0.0`, igual que las otras.
+- [ ] [uis/start.sh](../../../uis/start.sh): agrega una línea que arranque la app en un puerto libre, con `-H 0.0.0.0` (o `-a 0.0.0.0` si usa http-server), igual que las otras.
 - [ ] [uis/Dockerfile](../../../uis/Dockerfile): copia su `package.json` y `package-lock.json`, ejecuta `npm ci` y agrega su puerto a `EXPOSE`.
-- [ ] [docker-compose.yml](../../../docker-compose.yml), servicio `uis`: agrega el puerto en `ports`, y un volumen anónimo para `node_modules` y otro para `.next` de la app.
+- [ ] [docker-compose.yml](../../../docker-compose.yml), servicio `uis`: agrega el puerto en `ports`, y un volumen anónimo para `node_modules`. Si la app es Next.js, agrega también un volumen anónimo para `.next`.
 - [ ] Revisa [uis/.dockerignore](../../../uis/.dockerignore) para confirmar que no excluye ni incluye nada de la app por error.
 
 ### Nueva llamada a la API desde una app

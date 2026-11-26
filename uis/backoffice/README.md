@@ -97,7 +97,7 @@ npm run dev
 
 La variable `API_URL` indica la URL base de la API, sin barra final. Si no está definida, se usa `http://localhost:8000`. Con Docker vale `http://services:8000` y viene del `.env` de la raíz del repo. Como `next.config.ts` la lee al cargar la configuración, reinicia `npm run dev` después de cambiarla.
 
-Abre http://localhost:3000 y elige una página en el menú.
+Abre http://localhost:3001 y elige una página en el menú.
 Si el puerto está ocupado, Next.js indicará otro puerto en la terminal.
 
 ## Conexión con la API (rewrites)
@@ -139,7 +139,7 @@ El backoffice usa la API FastAPI de Brasaland (`services/api`) para iniciar sesi
 
 ### Cómo correrlo
 1. Levantar la API: `cd services/api && uv run uvicorn main:app --reload` (puerto 8000).
-2. Levantar el backoffice: `cd uis/backoffice && npm run dev` (puerto 3000).
+2. Levantar el backoffice: `cd uis/backoffice && npm run dev` (puerto 3001).
 
 Las llamadas a `/api/auth/...`, `/api/users/...` y `/api/profiles/...` se reenvían a la API mediante los rewrites de `next.config.ts`.
 

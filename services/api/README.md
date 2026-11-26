@@ -73,14 +73,14 @@ Se leen de `services/api/.env`, que **no se sube a Git**. Los nombres y valores 
 | `SECRET_KEY` | Firma los tokens JWT. Obligatoria. | un texto largo y secreto |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | Duración de la sesión. | `30` |
 | `RESET_TOKEN_EXPIRE_MINUTES` | Duración del enlace de restablecimiento. | `30` |
-| `FRONTEND_URL` | Dirección del backoffice, usada para armar el enlace del correo. Sin `/` al final. | `http://localhost:3000` |
+| `FRONTEND_URL` | Dirección del backoffice, usada para armar el enlace del correo. Sin `/` al final. | `http://localhost:3001` |
 | `RESEND_API_KEY` | API key de [Resend](https://resend.com) con permiso *Sending access*. Obligatoria para enviar correos. | `re_...` |
 | `EMAIL_FROM` | Remitente del correo. Opcional. | `Brasaland <onboarding@resend.dev>` |
 | `DATABASE_URL` | Cadena de conexión a Supabase PostgreSQL con el **Transaction pooler** (puerto 6543), en formato URI. Obligatoria: sin ella la API no arranca. Si la contraseña tiene caracteres especiales, codificala en URL. | `postgresql://postgres.<ref>:<password>@<region>.pooler.supabase.com:6543/postgres` |
 
 > **Nota sobre Resend:** con el remitente de prueba `onboarding@resend.dev` solo se pueden enviar correos al email de la cuenta de Resend. Para probar, registrá un usuario con ese mismo email.
 
-> **Nota sobre Codespaces:** si el backoffice corre en GitHub Codespaces, `FRONTEND_URL` tiene que ser la dirección del puerto 3000 que aparece en la pestaña *Ports* (por ejemplo `https://nombre-3000.app.github.dev`), no `localhost`.
+> **Nota sobre Codespaces:** si el backoffice corre en GitHub Codespaces, `FRONTEND_URL` tiene que ser la dirección del puerto 3001 que aparece en la pestaña *Ports* (por ejemplo `https://nombre-3001.app.github.dev`), no `localhost`.
 
 ## Endpoints
 
