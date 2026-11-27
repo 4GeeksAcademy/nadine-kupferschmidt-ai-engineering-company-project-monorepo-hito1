@@ -82,7 +82,7 @@ function ResetPasswordForm() {
   return (
     <section className="w-full rounded-[18px] border border-bo-border bg-bo-surface p-6 shadow-sm sm:p-8">
       <div className="mb-7">
-        <p className="mb-2 font-serif text-xl font-semibold tracking-wide text-bo-logo">
+        <p className="mb-2 font-serif text-xl font-bold tracking-wide text-bo-logo">
           Brasaland
         </p>
         <h1 className="text-2xl font-semibold text-bo-text">

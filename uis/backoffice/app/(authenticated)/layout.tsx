@@ -124,7 +124,7 @@ export default function AuthenticatedLayout({ children }: AuthenticatedLayoutPro
         <aside className="border-b border-bo-border bg-bo-surface md:sticky md:top-0 md:flex md:h-screen md:w-[220px] md:shrink-0 md:flex-col md:border-r md:border-b-0">
           <div className="flex items-center justify-between border-b border-bo-border pr-5 md:block md:pr-0">
             <Link href="/" aria-label="Brasaland, inicio" className="flex flex-col items-start gap-1 px-5 py-6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bo-text">
-              <span className="font-serif text-xl font-semibold tracking-wide text-bo-logo">Brasaland</span>
+              <span className="font-serif text-xl font-bold tracking-wide text-bo-logo">Brasaland</span>
               <span className="text-sm text-bo-muted">Backoffice interno</span>
             </Link>
             <div className="md:hidden">
