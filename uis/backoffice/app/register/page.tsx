@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import PasswordInput from "@/components/PasswordInput";
+import BrandLogo from "@/components/BrandLogo";
 import { setToken } from "@/lib/auth";
 
 type ApiValidationError = {
@@ -177,9 +178,7 @@ export default function RegisterPage() {
     <div className="mx-auto flex min-h-[calc(100vh-8rem)] w-full max-w-md items-center justify-center py-8">
       <section className="w-full rounded-[18px] border border-bo-border bg-bo-surface p-6 shadow-sm sm:p-8">
         <div className="mb-7">
-          <p className="mb-2 font-serif text-xl font-bold tracking-wide text-bo-logo">
-            Brasaland
-          </p>
+          <BrandLogo className="mb-2" />
           <h1 className="text-2xl font-semibold text-bo-text">Crear una cuenta</h1>
           <p className="mt-2 text-sm text-bo-muted">
             Completá tus datos para acceder al backoffice.

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState, type FormEvent } from "react";
 import PasswordInput from "@/components/PasswordInput";
+import BrandLogo from "@/components/BrandLogo";
 
 const inputClassName =
   "min-h-11 w-full rounded-xl border border-bo-border bg-bo-surface px-4 text-sm text-bo-text outline-none focus-visible:border-bo-text focus-visible:ring-2 focus-visible:ring-bo-accent";
@@ -82,9 +83,7 @@ function ResetPasswordForm() {
   return (
     <section className="w-full rounded-[18px] border border-bo-border bg-bo-surface p-6 shadow-sm sm:p-8">
       <div className="mb-7">
-        <p className="mb-2 font-serif text-xl font-bold tracking-wide text-bo-logo">
-          Brasaland
-        </p>
+        <BrandLogo className="mb-2" />
         <h1 className="text-2xl font-semibold text-bo-text">
           Restablecer contraseña
         </h1>
