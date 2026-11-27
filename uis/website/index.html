@@ -74,8 +74,8 @@
       <!-- Language Selector + CTA -->
       <div class="flex items-center gap-4">
         <div class="flex items-center text-xs font-medium uppercase tracking-wider" role="radiogroup" aria-label="Selector de idioma">
-          <button id="lang-es" class="inline-flex items-center justify-center min-w-11 min-h-11 px-2 py-1 text-brand-ochre border border-brand-ochre rounded-l focus-visible:outline-2 focus-visible:outline-brand-ochre focus-visible:outline-offset-2" aria-pressed="true" data-lang="es" role="radio" aria-checked="true">ES</button>
-          <button id="lang-en" class="inline-flex items-center justify-center min-w-11 min-h-11 px-2 py-1 text-brand-ivory/70 border border-brand-ivory/20 rounded-r hover:text-brand-ochre hover:border-brand-ochre transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-brand-ochre focus-visible:outline-offset-2" aria-pressed="false" data-lang="en" role="radio" aria-checked="false">EN</button>
+          <button id="lang-es" class="inline-flex items-center justify-center min-w-11 min-h-11 px-2 py-1 text-brand-ochre border border-brand-ochre rounded-l focus-visible:outline-2 focus-visible:outline-brand-ochre focus-visible:outline-offset-2" data-lang="es" role="radio" aria-checked="true">ES</button>
+          <button id="lang-en" class="inline-flex items-center justify-center min-w-11 min-h-11 px-2 py-1 text-brand-ivory/70 border border-brand-ivory/20 rounded-r hover:text-brand-ochre hover:border-brand-ochre transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-brand-ochre focus-visible:outline-offset-2" data-lang="en" role="radio" aria-checked="false">EN</button>
         </div>
 
         <!-- Mobile menu button -->
@@ -599,17 +599,15 @@
       document.documentElement.lang = safeLang;
       document.documentElement.dataset.lang = safeLang;
 
-      document.querySelectorAll('[data-lang]').forEach(btn => {
+      document.querySelectorAll('button[data-lang]').forEach(btn => {
         const btnLang = btn.dataset.lang;
         if (btnLang === safeLang) {
           btn.classList.remove('text-brand-ivory/70', 'border-brand-ivory/20');
           btn.classList.add('text-brand-ochre', 'border-brand-ochre');
-          btn.setAttribute('aria-pressed', 'true');
           btn.setAttribute('aria-checked', 'true');
         } else {
           btn.classList.remove('text-brand-ochre', 'border-brand-ochre');
           btn.classList.add('text-brand-ivory/70', 'border-brand-ivory/20');
-          btn.setAttribute('aria-pressed', 'false');
           btn.setAttribute('aria-checked', 'false');
         }
       });
@@ -631,7 +629,7 @@
       applyLanguage('es');
 
       // Language toggle
-      document.querySelectorAll('[data-lang]').forEach(btn => {
+      document.querySelectorAll('button[data-lang]').forEach(btn => {
         btn.addEventListener('click', () => {
           const lang = btn.dataset.lang;
           if (lang !== currentLang) {

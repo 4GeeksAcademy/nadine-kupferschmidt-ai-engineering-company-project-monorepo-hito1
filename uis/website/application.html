@@ -50,8 +50,8 @@
         <!-- Language selector + back link -->
         <div class="flex items-center gap-4">
           <div class="flex border border-brand-ochre/30 rounded" role="radiogroup" aria-label="Seleccionar idioma">
-            <button data-lang="es" aria-pressed="true" aria-checked="true" class="inline-flex items-center justify-center min-w-11 min-h-11 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-brand-ochre border-brand-ochre bg-brand-ochre/10 transition-all duration-300 motion-reduce:transition-none" onclick="toggleLanguage()">ES</button>
-            <button data-lang="en" aria-pressed="false" aria-checked="false" class="inline-flex items-center justify-center min-w-11 min-h-11 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-brand-ivory/70 border-l border-brand-ochre/30 bg-transparent transition-all duration-300 motion-reduce:transition-none" onclick="toggleLanguage()">EN</button>
+            <button data-lang="es" aria-pressed="true" class="inline-flex items-center justify-center min-w-11 min-h-11 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-brand-ochre border-brand-ochre bg-brand-ochre/10 transition-all duration-300 motion-reduce:transition-none" onclick="toggleLanguage()">ES</button>
+            <button data-lang="en" aria-pressed="false" class="inline-flex items-center justify-center min-w-11 min-h-11 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-brand-ivory/70 border-l border-brand-ochre/30 bg-transparent transition-all duration-300 motion-reduce:transition-none" onclick="toggleLanguage()">EN</button>
           </div>
           <a href="index.html" class="text-brand-ivory/75 hover:text-brand-ochre text-xs uppercase tracking-wider font-medium transition-colors duration-300 hidden sm:inline-block" data-i18n="back">← Volver al inicio</a>
         </div>
@@ -515,18 +515,16 @@
       document.documentElement.lang = safeLang;
       document.documentElement.dataset.lang = safeLang;
 
-      document.querySelectorAll('[data-lang]').forEach(btn => {
+      document.querySelectorAll('button[data-lang]').forEach(btn => {
         const btnLang = btn.dataset.lang;
         if (btnLang === safeLang) {
           btn.classList.remove('text-brand-ivory/70', 'border-brand-ivory/20');
           btn.classList.add('text-brand-ochre', 'border-brand-ochre', 'bg-brand-ochre/10');
           btn.setAttribute('aria-pressed', 'true');
-          btn.setAttribute('aria-checked', 'true');
         } else {
           btn.classList.remove('text-brand-ochre', 'border-brand-ochre', 'bg-brand-ochre/10');
           btn.classList.add('text-brand-ivory/70', 'border-brand-ivory/20');
           btn.setAttribute('aria-pressed', 'false');
-          btn.setAttribute('aria-checked', 'false');
         }
       });
 
