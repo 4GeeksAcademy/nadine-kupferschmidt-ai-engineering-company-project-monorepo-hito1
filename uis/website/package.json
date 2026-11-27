@@ -5,13 +5,15 @@
   "main": "validation.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "http-server . -c-1",
+    "dev": "npm run build && http-server . -c-1",
+    "build": "tailwindcss -i ./src/input.css -o ./dist/output.css --minify",
     "start": "http-server . -p 3000"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "http-server": "^14.1.1"
+    "http-server": "^14.1.1",
+    "tailwindcss": "^3.4.19"
   }
 }
