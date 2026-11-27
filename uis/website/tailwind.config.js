@@ -14,6 +14,7 @@ module.exports = {
           darkbrown: '#1A1410',
           earth: '#8B7355',
           ochre: '#C9A96E',
+          ochredeep: '#8F6000',
           gold: '#B8860B',
           warmgray: '#6B6258',
         },
